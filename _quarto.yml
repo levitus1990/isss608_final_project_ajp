@@ -1,0 +1,44 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Your Project Title"
+  navbar:
+    left:
+      - text: "Proposal"
+        href: proposal.qmd
+      - text: "Methodology"
+        menu:
+          - text: "Data Preparation"
+            href: methodology/data_preparation.qmd
+          - text: "Statistical Analysis"
+            href: methodology/statistical_analysis.qmd
+          - text: "Data Exploration and Visualization"
+            href: methodology/data_exploration.qmd
+      - text: "Findings"
+        href: findings.qmd
+      - text: "Poster"
+        href: poster.qmd
+      - text: "Meeting Minutes"
+        href: meeting_minutes.qmd
+    right:
+      - text: "The Team"
+        href: about.qmd
+      - text: "Shiny App"
+        menu:
+          - text: "User Guide"
+            href: user_guide.qmd
+          - text: "Shiny App"
+            href: "https://your-shinyapp-url.shinyapps.io/"
+      - text: "Github"
+        menu:
+          - text: "Project Site"
+            href: "https://github.com/levitus1990/isss608_final_project_ajp"
+          - text: "Shiny App"
+            href: "https://github.com/levitus1990/isss608_final_project_ajp"
+
+format:
+  html:
+    theme: cosmo
+    toc: true

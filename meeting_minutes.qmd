@@ -1,0 +1,10 @@
+---
+title: "meeting_minutes"
+format: html
+---
+
+## Meeting 1
+**Date:**
+**Attendees:**
+
+### Agenda

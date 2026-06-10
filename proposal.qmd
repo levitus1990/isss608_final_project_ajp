@@ -1,0 +1,16 @@
+---
+title: "Project Proposal"
+format: html
+---
+
+## Motivation
+
+## Objectives
+
+## Data
+
+## Methodology
+
+## R Packages
+
+## Project Schedule

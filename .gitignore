@@ -4,3 +4,6 @@
 .Ruserdata
 node_modules/
 .env
+
+/.quarto/
+**/*.quarto_ipynb

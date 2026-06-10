@@ -1,0 +1,6 @@
+---
+title: "poster"
+format: html
+---
+
+Click the poster to view full size.
