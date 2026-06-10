@@ -28,7 +28,7 @@ website:
           - text: "User Guide"
             href: user_guide.qmd
           - text: "Shiny App"
-            href: shiny_app/my_shiny_app/app.r
+            href: "https://isss608amk.shinyapps.io/isss608-finalproject/"
       - text: "Github"
         menu:
           - text: "Project Site"
