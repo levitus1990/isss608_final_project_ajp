@@ -21,6 +21,13 @@
     "text": "Click the poster to view full size."
   },
   {
+    "objectID": "methodology/data_preparation/data_preparation.html",
+    "href": "methodology/data_preparation/data_preparation.html",
+    "title": "data_preparation",
+    "section": "",
+    "text": "To be determined"
+  },
+  {
     "objectID": "meeting_minutes.html",
     "href": "meeting_minutes.html",
     "title": "meeting_minutes",
@@ -47,6 +54,20 @@
     "title": "Your Project Title",
     "section": "",
     "text": "Write your project introduction here."
+  },
+  {
+    "objectID": "methodology/data_exploration/data_exploration.html",
+    "href": "methodology/data_exploration/data_exploration.html",
+    "title": "data_exploration",
+    "section": "",
+    "text": "To be determined"
+  },
+  {
+    "objectID": "methodology/statistical_analysis/statistical_analysis.html",
+    "href": "methodology/statistical_analysis/statistical_analysis.html",
+    "title": "statistical_analysis",
+    "section": "",
+    "text": "To be determined."
   },
   {
     "objectID": "proposal.html#objectives",
@@ -82,26 +103,5 @@
     "title": "Project Proposal",
     "section": "Project Schedule",
     "text": "Project Schedule"
-  },
-  {
-    "objectID": "methodology/data_exploration/data_exploration.html",
-    "href": "methodology/data_exploration/data_exploration.html",
-    "title": "data_exploration",
-    "section": "",
-    "text": "To be determined"
-  },
-  {
-    "objectID": "methodology/data_preparation/data_preparation.html",
-    "href": "methodology/data_preparation/data_preparation.html",
-    "title": "data_preparation",
-    "section": "",
-    "text": "To be determined"
-  },
-  {
-    "objectID": "methodology/statistical_analysis/statistical_analysis.html",
-    "href": "methodology/statistical_analysis/statistical_analysis.html",
-    "title": "statistical_analysis",
-    "section": "",
-    "text": "To be determined."
   }
 ]

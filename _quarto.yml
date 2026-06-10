@@ -3,7 +3,7 @@ project:
   output-dir: _site
 
 website:
-  title: "MC1"
+  title: "MC1 - Who leaked the merger?"
   navbar:
     left:
       - text: "Proposal"
