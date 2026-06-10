@@ -3,7 +3,7 @@ project:
   output-dir: _site
 
 website:
-  title: "Your Project Title"
+  title: "MC1"
   navbar:
     left:
       - text: "Proposal"
