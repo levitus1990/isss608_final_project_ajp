@@ -28,7 +28,7 @@ website:
           - text: "User Guide"
             href: user_guide.qmd
           - text: "Shiny App"
-            href: "https://your-shinyapp-url.shinyapps.io/"
+            href: shiny_app/my_shiny_app/app.r
       - text: "Github"
         menu:
           - text: "Project Site"
