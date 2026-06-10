@@ -1,5 +1,3 @@
 {
-  "buildCommand": "quarto render",
-  "outputDirectory": "_site",
-  "installCommand": "quarto install"
+  "outputDirectory": "_site"
 }

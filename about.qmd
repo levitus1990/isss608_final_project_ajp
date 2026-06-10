@@ -1,7 +1,5 @@
 ---
-title: "User Guide"
+title: "about"
+format: html
 ---
 
-About this site
-
-## How to Use the Shiny App

@@ -11,11 +11,9 @@ website:
       - text: "Methodology"
         menu:
           - text: "Data Preparation"
-            href: methodology/data_preparation.qmd
-          - text: "Statistical Analysis"
-            href: methodology/statistical_analysis.qmd
+            href: methodology/data_preparation/data_preparation.qmd
           - text: "Data Exploration and Visualization"
-            href: methodology/data_exploration.qmd
+            href: methodology/data_exploration/data_exploration.qmd
       - text: "Findings"
         href: findings.qmd
       - text: "Poster"
