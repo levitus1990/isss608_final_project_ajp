@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Project Proposal – Unmasking the Leak</title>
+<title>mc1-data-description – Unmasking the Leak</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,28 +23,63 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-47e94522f7b68a213387676069a32f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-47e94522f7b68a213387676069a32f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,9 +107,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 </head>
@@ -86,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Unmasking the Leak</span>
     </a>
   </div>
@@ -97,7 +129,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./proposal.html" aria-current="page"> 
+    <a class="nav-link" href="../proposal.html"> 
 <span class="menu-text"><i class="fa-solid fa-file-lines" aria-label="file-lines"></i> Proposal</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -106,31 +138,31 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-methodology">    
         <li>
-    <a class="dropdown-item" href="./methodology/data_preparation/data_preparation.html">
+    <a class="dropdown-item" href="../methodology/data_preparation/data_preparation.html">
  <span class="dropdown-text"><i class="fa-solid fa-database" aria-label="database"></i> Data Preparation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./methodology/data_exploration/data_exploration.html">
+    <a class="dropdown-item" href="../methodology/data_exploration/data_exploration.html">
  <span class="dropdown-text"><i class="fa-solid fa-chart-bar" aria-label="chart-bar"></i> Data Exploration and Visualization</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="./findings.html"> 
+    <a class="nav-link" href="../findings.html"> 
 <span class="menu-text"><i class="fa-solid fa-magnifying-glass" aria-label="magnifying-glass"></i> Findings</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./poster.html"> 
+    <a class="nav-link" href="../poster.html"> 
 <span class="menu-text"><i class="fa-solid fa-image" aria-label="image"></i> Poster</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./meeting_minutes.html"> 
+    <a class="nav-link" href="../meeting_minutes.html"> 
 <span class="menu-text"><i class="fa-solid fa-clipboard" aria-label="clipboard"></i> Meeting Minutes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../about.html"> 
 <span class="menu-text"><i class="fa-solid fa-users" aria-label="users"></i> The Team</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -139,7 +171,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-shiny-app">    
         <li>
-    <a class="dropdown-item" href="./user_guide.html">
+    <a class="dropdown-item" href="../user_guide.html">
  <span class="dropdown-text"><i class="fa-solid fa-book" aria-label="book"></i> User Guide</span></a>
   </li>  
         <li>
@@ -179,156 +211,218 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation" class="nav-link active" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Motivation</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objectives</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data"><i class="fa-solid fa-database" aria-label="database"></i> Data</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology"><i class="fa-solid fa-sitemap" aria-label="sitemap"></i> Methodology</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages"><i class="fa-solid fa-box-open" aria-label="box-open"></i> R Packages</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule"><i class="fa-solid fa-calendar-days" aria-label="calendar-days"></i> Project Schedule</a></li>
+  <li><a href="#mc1-multi-agent-crisis-data" id="toc-mc1-multi-agent-crisis-data" class="nav-link active" data-scroll-target="#mc1-multi-agent-crisis-data">MC1 — Multi-Agent Crisis Data</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#files" id="toc-files" class="nav-link" data-scroll-target="#files">Files</a></li>
+  <li><a href="#agents" id="toc-agents" class="nav-link" data-scroll-target="#agents">Agents</a></li>
+  <li><a href="#companies-codenames" id="toc-companies-codenames" class="nav-link" data-scroll-target="#companies-codenames">Companies &amp; Codenames</a></li>
+  <li><a href="#communication-channels" id="toc-communication-channels" class="nav-link" data-scroll-target="#communication-channels">Communication Channels</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Project Proposal</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation"><i class="fa-solid fa-lightbulb" aria-label="lightbulb"></i> Motivation</h2>
-<p>Corporate mergers are sensitive events subject to strict information embargoes — yet breaches still occur, sometimes in ways that are difficult to attribute to a single actor or decision. This project is motivated by the TenantThread embargo breach of June 5, 2046, in which a premature public disclosure of a pending merger violated an active information embargo, exposing the company to significant legal and reputational risk.</p>
-<p>What makes this case particularly compelling for visual analytics is that TenantThread’s communications were managed by a network of AI agents — each with defined roles, communication channels, and compliance responsibilities. The breach did not arise from a simple human error but from a sequence of coordinated decisions across multiple agents over nearly three weeks.</p>
-<p>This project seeks to reconstruct that sequence visually, identify the behavioural patterns that enabled the breach, and uncover the leading indicators that, in hindsight, signalled the eventual failure — findings with direct implications for AI governance, compliance system design, and corporate liability.</p>
+<section id="mc1-multi-agent-crisis-data" class="level1">
+<h1>MC1 — Multi-Agent Crisis Data</h1>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This folder contains the data for the <strong>multi-agent LLM crisis</strong> for our corporate communications team. There was an exposé, an communications embargo around a company merger, and social media firestorm recently. The data is based on 7 interacting AI agents who communicate across multiple channels and make real-time decisions about what to publish and what not to.</p>
+<hr>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Objectives</h2>
-<p>This project aims to build an interactive visual analytics tool to enable analysts to investigate the TenantThread embargo breach through the following lenses:</p>
-<ol type="1">
-<li><p><strong>Event Reconstruction</strong>: Visualise the causal chain of key actions, decision points, and actor relationships leading up to the June 5 breach, with emphasis on how the post bypassed embargo enforcement.</p></li>
-<li><p><strong>Behavioural Norm Profiling</strong>: Profile the typical communication behaviour of each agent and system across the baseline period, then contrast it against anomalous conduct observed in the lead-up to and on the breach day.</p></li>
-<li><p><strong>Leading Indicator Detection</strong>: Identify prior occasions where agents deviated from expected behaviour, assess whether those episodes structurally resembled the eventual breach, and explain why they did not trigger corrective action at the time.</p></li>
-<li><p><strong>Intent vs.&nbsp;Systemic Failure</strong>: Determine, through evidence-based visual analysis, whether the breach represented deliberate orchestration or an emergent failure of the compliance architecture.</p></li>
-</ol>
+<section id="files" class="level2">
+<h2 class="anchored" data-anchor-id="files">Files</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 75%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Description</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MC1_final.json</code></td>
+<td>MC1 dataset containing the two weeks leading up to the release of information</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>README.md</code></td>
+<td>This documentation file</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Each JSON file follows this structure.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"rounds"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"hour"</span><span class="fu">:</span> <span class="st">"2046-05-17 9 AM"</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"environment_context"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"event_narrative"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"market_snapshot"</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"media_events"</span><span class="fu">:</span> <span class="ot">[</span> <span class="er">...</span> <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"agents_unavailable"</span><span class="fu">:</span> <span class="ot">[</span> <span class="er">...</span> <span class="ot">]</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"agent_outputs"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"agent_id"</span><span class="fu">:</span> <span class="st">"legal_agent"</span><span class="fu">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"internal_state"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"reacting"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"rationalizing"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"deliberating"</span><span class="fu">:</span> <span class="st">"..."</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"communications"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"message_id"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"channel"</span><span class="fu">:</span> <span class="st">"comms_huddle"</span><span class="fu">,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"message_text"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>          <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"declared_action"</span><span class="fu">:</span> <span class="st">"MONITORING"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data"><i class="fa-solid fa-database" aria-label="database"></i> Data</h2>
-<p>The project uses data from <a href="https://vast-challenge.github.io/2026/MC1.html">VAST Challenge 2026 Mini-Challenge 1</a>. The dataset consists of AI agent communication logs from TenantThread’s corporate communication system, spanning <strong>May 17 to June 5, 2046</strong> across 23 hourly rounds.</p>
-<p>The data captures:</p>
-<ul>
-<li><strong>Messages</strong>: Internal deliberations, direct agent communications, and public posts</li>
-<li><strong>Agents</strong>: Multiple AI agents with defined roles (e.g.&nbsp;Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)</li>
-<li><strong>Channels</strong>: Six distinct channels classified into Internal and Public channel types</li>
-<li><strong>Metadata</strong>: Message IDs, agent roles, timestamps, response chains, and embargo-sensitivity flags</li>
-</ul>
-<p>The key analytical variable is <code>channel_type</code> — a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary.</p>
+<section id="agents" class="level2">
+<h2 class="anchored" data-anchor-id="agents">Agents</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Agent ID</th>
+<th>Role</th>
+<th>Label</th>
+<th>Seniority</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>legal_agent</code></td>
+<td>legal</td>
+<td>Legal-Agent</td>
+<td>Senior</td>
+<td>General legal counsel.</td>
+</tr>
+<tr class="even">
+<td><code>quality_agent</code></td>
+<td>platform_trust</td>
+<td>Platform-Trust</td>
+<td>Senior</td>
+<td>VP of Platform Trust &amp; Safety.</td>
+</tr>
+<tr class="odd">
+<td><code>social_manager_agent</code></td>
+<td>social_manager</td>
+<td>Social-Manager</td>
+<td>Senior</td>
+<td>Manages Social messaging</td>
+</tr>
+<tr class="even">
+<td><code>pr_agent</code></td>
+<td>pr</td>
+<td>PR-Agent</td>
+<td>Senior</td>
+<td>Head of Communications and Public Relationships</td>
+</tr>
+<tr class="odd">
+<td><code>intern_agent</code></td>
+<td>intern</td>
+<td>Intern</td>
+<td>Junior</td>
+<td>General intern.</td>
+</tr>
+<tr class="even">
+<td><code>pr_intern_agent</code></td>
+<td>pr_intern</td>
+<td>PR-Intern</td>
+<td>Junior</td>
+<td>PR team intern with access to the official TenantThread Flex account.</td>
+</tr>
+<tr class="odd">
+<td><code>judge_eval_agent</code></td>
+<td>judge</td>
+<td>Judge</td>
+<td>Compliance officer</td>
+<td>Evaluates risks, mediates conflicts, provides compliance guidance.</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology"><i class="fa-solid fa-sitemap" aria-label="sitemap"></i> Methodology</h2>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart TD
-  A[/MC1_final_00.json/] --&gt; B[Load &amp; Parse JSON]
-  B --&gt; C[Wrangle Data]
-  C --&gt; D[/comms_df — flat communications table/]
-  C --&gt; E[/agents_df — agent profiles/]
-  C --&gt; F[/edges_df — response network/]
-
-  D --&gt; G[Sentiment Scoring]
-  D --&gt; H[Channel Type Classification]
-  F --&gt; I[Network Graph Construction]
-
-  G --&gt; J[Behavioural Norm Profiling]
-  H --&gt; J
-  I --&gt; J
-
-  J --&gt; K[Event Timeline Visualisation]
-  J --&gt; L[Near-Miss &amp; Anomaly Detection]
-  J --&gt; M[Intent-Flag Analysis]
-
-  K --&gt; N[Shiny App]
-  L --&gt; N
-  M --&gt; N
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-<ol type="1">
-<li><p><strong>Data Preparation</strong>: Loading the raw JSON via <code>fromJSON()</code> with <code>simplifyDataFrame = FALSE</code> to preserve the nested structure. Wrangling into three analytical tables — a flat communications data frame, an agent profile table, and a directed response-chain edge list. Deriving <code>channel_type</code> (Internal/Public) and parsing all ISO timestamps to POSIXct.</p></li>
-<li><p><strong>Sentiment &amp; Behavioural Analysis</strong>: Applying <code>sentimentr</code> to score message sentiment across rounds. Profiling per-agent baseline behaviour (channel usage, message frequency, sentiment trajectory) over the pre-breach period (May 17–June 4) to establish the norm against which June 5 deviations are measured.</p></li>
-<li><p><strong>Network Analysis</strong>: Building directed communication graphs using <code>igraph</code> and <code>visNetwork</code> to map agent-to-agent response chains, identify authority concentration, and visualise information flow. Detecting structural anomalies such as unilateral communication freezes and cross-channel escalations.</p></li>
-<li><p><strong>Event Reconstruction &amp; Visualisation</strong>: Constructing annotated timelines of key events using <code>ggplot2</code> and <code>plotly</code>. Layering causal flags, near-miss indicators, and intent markers to produce a sequential evidence chain from the May 22 early deviation through to the June 5 breach.</p></li>
-<li><p><strong>Shiny App</strong>: Delivering all analyses through an interactive Shiny application, enabling analysts to filter by agent, date range, and channel type, and to inspect individual flagged messages in context.</p></li>
-</ol>
+<section id="companies-codenames" class="level2">
+<h2 class="anchored" data-anchor-id="companies-codenames">Companies &amp; Codenames</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 82%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entity</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>TenantThread</strong></td>
+<td>The company being acquired whose records are being presented. A proptech platform providing tenant management tools including the controversial “Retention Optimizer” scoring system.</td>
+</tr>
+<tr class="even">
+<td><strong>CivicLoom</strong></td>
+<td>The company acquiring TenantThread in the merger. Identity is embargoed until 6:00 PM on the crisis day.</td>
+</tr>
+<tr class="odd">
+<td><strong>Project HarborCrest</strong></td>
+<td>Internal codename for the CivicLoom–TenantThread merger.</td>
+</tr>
+<tr class="even">
+<td><strong>ResidentIQ</strong></td>
+<td>Another PropTech company being discussed in the SaltWind Journal.</td>
+</tr>
+<tr class="odd">
+<td><strong>SaltWind Journal</strong></td>
+<td>Local newspaper running stories on the property tech industry.</td>
+</tr>
+<tr class="even">
+<td><strong>OceanCrunch</strong></td>
+<td>Tech media outlet. Sarah Kowalski is a reporter.</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="citation" data-cites="HorizonMgmt">@HorizonMgmt</span>, <span class="citation" data-cites="PinnacleResidential">@PinnacleResidential</span></strong></td>
+<td>Major clients of TennatThread.</td>
+</tr>
+</tbody>
+</table>
+<hr>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages"><i class="fa-solid fa-box-open" aria-label="box-open"></i> R Packages</h2>
-<p>The following R packages are used in this project:</p>
-<p><strong>Data Ingestion &amp; Wrangling</strong></p>
-<ul>
-<li><a href="https://cran.r-project.org/web/packages/jsonlite/index.html">jsonlite</a> — Parsing the nested JSON communications data</li>
-<li><a href="https://www.tidyverse.org/">tidyverse</a> — Core data manipulation and transformation</li>
-<li><a href="https://lubridate.tidyverse.org/">lubridate</a> — Parsing and handling ISO datetime fields</li>
-<li><a href="https://cran.r-project.org/web/packages/zoo/index.html">zoo</a> — Rolling window calculations for behavioural trend analysis</li>
-</ul>
-<p><strong>Text &amp; Sentiment Analysis</strong></p>
-<ul>
-<li><a href="https://juliasilge.github.io/tidytext/">tidytext</a> — Tokenisation and text feature extraction</li>
-<li><a href="https://cran.r-project.org/web/packages/sentimentr/index.html">sentimentr</a> — Sentence-level sentiment scoring of agent messages</li>
-</ul>
-<p><strong>Visualisation</strong></p>
-<ul>
-<li><a href="https://ggplot2.tidyverse.org/">ggplot2</a> — Core static visualisations and annotated timelines</li>
-<li><a href="https://plotly.com/r/">plotly</a> — Interactive chart rendering</li>
-<li><a href="https://patchwork.data-imaginist.com/">patchwork</a> — Composing multi-panel ggplot figures</li>
-<li><a href="https://ggrepel.slowkow.com/">ggrepel</a> — Non-overlapping labels on scatter and timeline plots</li>
-<li><a href="https://scales.r-lib.org/">scales</a> — Axis formatting and colour scaling</li>
-<li><a href="https://haozhu233.github.io/kableExtra/">kableExtra</a> — Styled summary tables</li>
-</ul>
-<p><strong>Network Analysis</strong></p>
-<ul>
-<li><a href="https://cran.r-project.org/web/packages/igraph/index.html">igraph</a> — Graph construction and network metrics</li>
-<li><a href="https://datastorm-open.github.io/visNetwork/">visNetwork</a> — Interactive network visualisations</li>
-</ul>
-<p><strong>Shiny App</strong></p>
-<ul>
-<li><a href="https://shiny.posit.co/">shiny</a> — Interactive application framework</li>
-<li><a href="https://shinyapps.dreamrs.fr/shinyWidgets/">shinyWidgets</a> — Extended UI input controls</li>
-</ul>
+<section id="communication-channels" class="level2">
+<h2 class="anchored" data-anchor-id="communication-channels">Communication Channels</h2>
+<p>Agents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight.</p>
+
+
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule"><i class="fa-solid fa-calendar-days" aria-label="calendar-days"></i> Project Schedule</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="proposal_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-
-
 </section>
 
 </main> <!-- /main -->
