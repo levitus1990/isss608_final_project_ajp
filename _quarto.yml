@@ -5,38 +5,42 @@ project:
 website:
   title: "MC1 - Who leaked the merger?"
   navbar:
+    background: primary          # ← makes navbar use your theme's primary colour
     left:
-      - text: "Proposal"
+      - text: "{{< fa file-lines >}} Proposal"
         href: proposal.qmd
       - text: "Methodology"
         menu:
-          - text: "Data Preparation"
+          - text: "{{< fa database >}} Data Preparation"
             href: methodology/data_preparation/data_preparation.qmd
-          - text: "Data Exploration and Visualization"
+          - text: "{{< fa chart-bar >}} Data Exploration and Visualization"
             href: methodology/data_exploration/data_exploration.qmd
-      - text: "Findings"
+      - text: "{{< fa magnifying-glass >}} Findings"
         href: findings.qmd
-      - text: "Poster"
+      - text: "{{< fa image >}} Poster"
         href: poster.qmd
-      - text: "Meeting Minutes"
+      - text: "{{< fa clipboard >}} Meeting Minutes"
         href: meeting_minutes.qmd
     right:
-      - text: "The Team"
+      - text: "{{< fa users >}} The Team"
         href: about.qmd
       - text: "Shiny App"
         menu:
-          - text: "User Guide"
+          - text: "{{< fa book >}} User Guide"
             href: user_guide.qmd
-          - text: "Shiny App"
+          - text: "{{< fa rocket >}} Shiny App"
             href: "https://isss608amk.shinyapps.io/isss608-finalproject/"
       - text: "Github"
         menu:
-          - text: "Project Site"
+          - text: "{{< fa code >}} Project Site"
             href: "https://github.com/levitus1990/isss608_final_project_ajp"
-          - text: "Shiny App"
+          - text: "{{< fa brands github >}} Shiny App"
             href: "https://github.com/levitus1990/isss608_final_project_ajp"
 
 format:
   html:
-    theme: cosmo
+    theme: [cosmo, custom.scss]   # ← loads your custom purple theme on top of cosmo
     toc: true
+
+filters:                          # ← enables the Font Awesome shortcode extension
+  - fontawesome

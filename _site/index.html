@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Your Project Title – MC1 - Who leaked the merger?</title>
+<title>Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach – MC1 - Who leaked the merger?</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -42,7 +42,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-47e94522f7b68a213387676069a32f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -93,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="./proposal.html"> 
-<span class="menu-text">Proposal</span></a>
+<span class="menu-text"><i class="fa-solid fa-file-lines" aria-label="file-lines"></i> Proposal</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-methodology" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -102,31 +104,31 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-methodology">    
         <li>
     <a class="dropdown-item" href="./methodology/data_preparation/data_preparation.html">
- <span class="dropdown-text">Data Preparation</span></a>
+ <span class="dropdown-text"><i class="fa-solid fa-database" aria-label="database"></i> Data Preparation</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./methodology/data_exploration/data_exploration.html">
- <span class="dropdown-text">Data Exploration and Visualization</span></a>
+ <span class="dropdown-text"><i class="fa-solid fa-chart-bar" aria-label="chart-bar"></i> Data Exploration and Visualization</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="./findings.html"> 
-<span class="menu-text">Findings</span></a>
+<span class="menu-text"><i class="fa-solid fa-magnifying-glass" aria-label="magnifying-glass"></i> Findings</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./poster.html"> 
-<span class="menu-text">Poster</span></a>
+<span class="menu-text"><i class="fa-solid fa-image" aria-label="image"></i> Poster</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./meeting_minutes.html"> 
-<span class="menu-text">Meeting Minutes</span></a>
+<span class="menu-text"><i class="fa-solid fa-clipboard" aria-label="clipboard"></i> Meeting Minutes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
-<span class="menu-text">The Team</span></a>
+<span class="menu-text"><i class="fa-solid fa-users" aria-label="users"></i> The Team</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-shiny-app" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -135,11 +137,11 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-shiny-app">    
         <li>
     <a class="dropdown-item" href="./user_guide.html">
- <span class="dropdown-text">User Guide</span></a>
+ <span class="dropdown-text"><i class="fa-solid fa-book" aria-label="book"></i> User Guide</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="https://isss608amk.shinyapps.io/isss608-finalproject/">
- <span class="dropdown-text">Shiny App</span></a>
+ <span class="dropdown-text"><i class="fa-solid fa-rocket" aria-label="rocket"></i> Shiny App</span></a>
   </li>  
     </ul>
   </li>
@@ -150,11 +152,11 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-github">    
         <li>
     <a class="dropdown-item" href="https://github.com/levitus1990/isss608_final_project_ajp">
- <span class="dropdown-text">Project Site</span></a>
+ <span class="dropdown-text"><i class="fa-solid fa-code" aria-label="code"></i> Project Site</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="https://github.com/levitus1990/isss608_final_project_ajp">
- <span class="dropdown-text">Shiny App</span></a>
+ <span class="dropdown-text"><i class="fa-brands fa-github" aria-label="github"></i> Shiny App</span></a>
   </li>  
     </ul>
   </li>
@@ -174,7 +176,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview" class="nav-link active" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Overview</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions"><i class="fa-solid fa-circle-question" aria-label="circle-question"></i> Key Questions</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team"><i class="fa-solid fa-users" aria-label="users"></i> The Team</a></li>
   </ul>
 </nav>
     </div>
@@ -183,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Your Project Title</h1>
+<h1 class="title">Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach</h1>
 </div>
 
 
@@ -200,9 +204,24 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="welcome" class="level2">
-<h2 class="anchored" data-anchor-id="welcome">Welcome</h2>
-<p>Write your project introduction here.</p>
+<p><img src="image/data_leak.jpeg" class="img-fluid"></p>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview" class="level2">
+<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview"><i class="fa-solid fa-bullseye" aria-label="bullseye"></i> Overview</h2>
+<p>This project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.</p>
+<p>The data originates from AI agents managing TenantThread’s corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels.</p>
+</section>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions" class="level2">
+<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions"><i class="fa-solid fa-circle-question" aria-label="circle-question"></i> Key Questions</h2>
+<p>Our investigation is structured around three core questions:</p>
+<ol type="1">
+<li><p><strong>What were the key events and relationships</strong> that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.</p></li>
+<li><p><strong>How did the breach-day behaviour differ from established norms?</strong> We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.</p></li>
+<li><p><strong>Were there leading indicators?</strong> We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time.</p></li>
+</ol>
+</section>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team" class="level2">
+<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team"><i class="fa-solid fa-users" aria-label="users"></i> The Team</h2>
+<p>We are a team of Visual Analytics students from SMU’s Master of IT in Business programme, tackling the <a href="https://vast-challenge.github.io/2026/MC1.html">VAST Challenge 2026 MC1</a>. Meet the team on the <a href="./about.html">About page</a>.</p>
 
 
 </section>

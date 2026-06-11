@@ -1,9 +1,26 @@
 ---
-title: "Your Project Title"
+title: "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach"
 format: html
 ---
 
-## Welcome
+![](image/data_leak.jpeg)
 
-Write your project introduction here.
+## {{< fa bullseye >}} Overview
 
+This project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.
+
+The data originates from AI agents managing TenantThread's corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels.
+
+## {{< fa circle-question >}} Key Questions
+
+Our investigation is structured around three core questions:
+
+1.  **What were the key events and relationships** that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.
+
+2.  **How did the breach-day behaviour differ from established norms?** We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.
+
+3.  **Were there leading indicators?** We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time.
+
+## {{< fa users >}} The Team
+
+We are a team of Visual Analytics students from SMU's Master of IT in Business programme, tackling the [VAST Challenge 2026 MC1](https://vast-challenge.github.io/2026/MC1.html). Meet the team on the [About page](about.qmd).

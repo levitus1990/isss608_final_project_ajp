@@ -42,18 +42,46 @@
     "text": "Date: Attendees:"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Your Project Title",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "The Team",
     "section": "",
-    "text": "Write your project introduction here."
+    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
   },
   {
-    "objectID": "index.html#welcome",
-    "href": "index.html#welcome",
-    "title": "Your Project Title",
+    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
+    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
+    "title": "The Team",
     "section": "",
-    "text": "Write your project introduction here."
+    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+  },
+  {
+    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
+    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
+    "title": "The Team",
+    "section": " Team Members",
+    "text": "Team Members\n\n Ang Ming Kwan\nRole: Data Preparation & EDA\nBrief bio or role description.\n\n\n Persie Evangeline\nRole: Visualisation & Shiny App\nBrief bio or role description.\n\n\n Yap Jit Wei\nRole: Findings & Report Writing\nBrief bio or role description."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": " Overview",
+    "text": "Overview\nThis project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.\nThe data originates from AI agents managing TenantThread’s corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": " Key Questions",
+    "text": "Key Questions\nOur investigation is structured around three core questions:\n\nWhat were the key events and relationships that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.\nHow did the breach-day behaviour differ from established norms? We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.\nWere there leading indicators? We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": " The Team",
+    "text": "The Team\nWe are a team of Visual Analytics students from SMU’s Master of IT in Business programme, tackling the VAST Challenge 2026 MC1. Meet the team on the About page."
   },
   {
     "objectID": "methodology/data_exploration/data_exploration.html",

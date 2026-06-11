@@ -1,0 +1,33 @@
+/*-- scss:defaults --*/
+$primary:        #008B8B;   /* deep cyan */
+$navbar-bg:      $primary;
+$navbar-fg:      #ffffff;
+$link-color:     $primary;
+$headings-font-weight: 700;
+
+/*-- scss:rules --*/
+
+/* Adds a coloured left-border accent to every h2 */
+h2 {
+  border-left: 4px solid $primary;
+  padding-left: 0.6rem;
+  margin-top: 2rem;
+}
+
+/* Slightly smaller accent for h3 */
+h3 {
+  border-left: 3px solid lighten($primary, 20%);
+  padding-left: 0.5rem;
+}
+
+/* Navbar brand / title */
+.navbar-brand {
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+/* Make Font Awesome icons in headings sit inline and match heading colour */
+h2 .fa, h3 .fa {
+  color: $primary;
+  margin-right: 0.4rem;
+}

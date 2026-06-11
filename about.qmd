@@ -1,5 +1,25 @@
 ---
-title: "about"
+title: "The Team"
 format: html
 ---
 
+## {{< fa users >}} About Us
+
+We developed this project for **ISSS608** (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in [Singapore Management University](https://www.smu.edu.sg/) under the guidance of [Dr. Kam Tin Seong](https://faculty.smu.edu.sg/profile/kam-tin-seong-486), Associate Professor of Information Systems.
+
+## {{< fa id-card >}} Team Members
+
+### {{< fa user >}} Ang Ming Kwan
+
+**Role:** Data Preparation & EDA\
+Brief bio or role description.
+
+### {{< fa user >}} Persie Evangeline
+
+**Role:** Visualisation & Shiny App\
+Brief bio or role description.
+
+### {{< fa user >}} Yap Jit Wei
+
+**Role:** Findings & Report Writing\
+Brief bio or role description.
