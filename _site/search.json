@@ -63,125 +63,6 @@
     "text": "Team Members\n\n Ang Ming Kwan\nRole: Data Preparation & EDA\nBrief bio or role description.\n\n\n Persie Evangeline\nRole: Visualisation & Shiny App\nBrief bio or role description.\n\n\n Yap Jit Wei\nRole: Findings & Report Writing\nBrief bio or role description."
   },
   {
-    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
-    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
-    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
-    "section": " Overview",
-    "text": "Overview\nThis project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.\nThe data originates from AI agents managing TenantThread’s corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels."
-  },
-  {
-    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
-    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
-    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
-    "section": " Key Questions",
-    "text": "Key Questions\nOur investigation is structured around three core questions:\n\nWhat were the key events and relationships that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.\nHow did the breach-day behaviour differ from established norms? We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.\nWere there leading indicators? We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time."
-  },
-  {
-    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
-    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
-    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
-    "section": " The Team",
-    "text": "The Team\nWe are a team of Visual Analytics students from SMU’s Master of IT in Business programme, tackling the VAST Challenge 2026 MC1. Meet the team on the About page."
-  },
-  {
-    "objectID": "methodology/data_exploration/data_exploration.html",
-    "href": "methodology/data_exploration/data_exploration.html",
-    "title": "data_exploration",
-    "section": "",
-    "text": "To be determined"
-  },
-  {
-    "objectID": "methodology/statistical_analysis/statistical_analysis.html",
-    "href": "methodology/statistical_analysis/statistical_analysis.html",
-    "title": "statistical_analysis",
-    "section": "",
-    "text": "To be determined."
-  },
-  {
-    "objectID": "proposal.html#objectives",
-    "href": "proposal.html#objectives",
-    "title": "Project Proposal",
-    "section": "Objectives",
-    "text": "Objectives"
-  },
-  {
-    "objectID": "proposal.html#data",
-    "href": "proposal.html#data",
-    "title": "Project Proposal",
-    "section": "Data",
-    "text": "Data"
-  },
-  {
-    "objectID": "proposal.html#methodology",
-    "href": "proposal.html#methodology",
-    "title": "Project Proposal",
-    "section": "Methodology",
-    "text": "Methodology"
-  },
-  {
-    "objectID": "proposal.html#r-packages",
-    "href": "proposal.html#r-packages",
-    "title": "Project Proposal",
-    "section": "R Packages",
-    "text": "R Packages"
-  },
-  {
-    "objectID": "proposal.html#project-schedule",
-    "href": "proposal.html#project-schedule",
-    "title": "Project Proposal",
-    "section": "Project Schedule",
-    "text": "Project Schedule"
-  },
-  {
-    "objectID": "proposal.html",
-    "href": "proposal.html",
-    "title": "Project Proposal",
-    "section": "",
-    "text": "Corporate mergers are sensitive events subject to strict information embargoes — yet breaches still occur, sometimes in ways that are difficult to attribute to a single actor or decision. This project is motivated by the TenantThread embargo breach of June 5, 2046, in which a premature public disclosure of a pending merger violated an active information embargo, exposing the company to significant legal and reputational risk.\nWhat makes this case particularly compelling for visual analytics is that TenantThread’s communications were managed by a network of AI agents — each with defined roles, communication channels, and compliance responsibilities. The breach did not arise from a simple human error but from a sequence of coordinated decisions across multiple agents over nearly three weeks.\nThis project seeks to reconstruct that sequence visually, identify the behavioural patterns that enabled the breach, and uncover the leading indicators that, in hindsight, signalled the eventual failure — findings with direct implications for AI governance, compliance system design, and corporate liability."
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation",
-    "title": "Project Proposal",
-    "section": "",
-    "text": "Corporate mergers are sensitive events subject to strict information embargoes — yet breaches still occur, sometimes in ways that are difficult to attribute to a single actor or decision. This project is motivated by the TenantThread embargo breach of June 5, 2046, in which a premature public disclosure of a pending merger violated an active information embargo, exposing the company to significant legal and reputational risk.\nWhat makes this case particularly compelling for visual analytics is that TenantThread’s communications were managed by a network of AI agents — each with defined roles, communication channels, and compliance responsibilities. The breach did not arise from a simple human error but from a sequence of coordinated decisions across multiple agents over nearly three weeks.\nThis project seeks to reconstruct that sequence visually, identify the behavioural patterns that enabled the breach, and uncover the leading indicators that, in hindsight, signalled the eventual failure — findings with direct implications for AI governance, compliance system design, and corporate liability."
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives",
-    "title": "Project Proposal",
-    "section": " Objectives",
-    "text": "Objectives\nThis project aims to build an interactive visual analytics tool to enable analysts to investigate the TenantThread embargo breach through the following lenses:\n\nEvent Reconstruction: Visualise the causal chain of key actions, decision points, and actor relationships leading up to the June 5 breach, with emphasis on how the post bypassed embargo enforcement.\nBehavioural Norm Profiling: Profile the typical communication behaviour of each agent and system across the baseline period, then contrast it against anomalous conduct observed in the lead-up to and on the breach day.\nLeading Indicator Detection: Identify prior occasions where agents deviated from expected behaviour, assess whether those episodes structurally resembled the eventual breach, and explain why they did not trigger corrective action at the time.\nIntent vs. Systemic Failure: Determine, through evidence-based visual analysis, whether the breach represented deliberate orchestration or an emergent failure of the compliance architecture."
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data",
-    "title": "Project Proposal",
-    "section": " Data",
-    "text": "Data\nThe project uses data from VAST Challenge 2026 Mini-Challenge 1. The dataset consists of AI agent communication logs from TenantThread’s corporate communication system, spanning May 17 to June 5, 2046 across 23 hourly rounds.\nThe data captures:\n\nMessages: Internal deliberations, direct agent communications, and public posts\nAgents: Multiple AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)\nChannels: Six distinct channels classified into Internal and Public channel types\nMetadata: Message IDs, agent roles, timestamps, response chains, and embargo-sensitivity flags\n\nThe key analytical variable is channel_type — a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary."
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology",
-    "title": "Project Proposal",
-    "section": " Methodology",
-    "text": "Methodology\n\n\n\n\n\nflowchart TD\n  A[/MC1_final_00.json/] --&gt; B[Load & Parse JSON]\n  B --&gt; C[Wrangle Data]\n  C --&gt; D[/comms_df — flat communications table/]\n  C --&gt; E[/agents_df — agent profiles/]\n  C --&gt; F[/edges_df — response network/]\n\n  D --&gt; G[Sentiment Scoring]\n  D --&gt; H[Channel Type Classification]\n  F --&gt; I[Network Graph Construction]\n\n  G --&gt; J[Behavioural Norm Profiling]\n  H --&gt; J\n  I --&gt; J\n\n  J --&gt; K[Event Timeline Visualisation]\n  J --&gt; L[Near-Miss & Anomaly Detection]\n  J --&gt; M[Intent-Flag Analysis]\n\n  K --&gt; N[Shiny App]\n  L --&gt; N\n  M --&gt; N\n\n\n\n\n\n\n\nData Preparation: Loading the raw JSON via fromJSON() with simplifyDataFrame = FALSE to preserve the nested structure. Wrangling into three analytical tables — a flat communications data frame, an agent profile table, and a directed response-chain edge list. Deriving channel_type (Internal/Public) and parsing all ISO timestamps to POSIXct.\nSentiment & Behavioural Analysis: Applying sentimentr to score message sentiment across rounds. Profiling per-agent baseline behaviour (channel usage, message frequency, sentiment trajectory) over the pre-breach period (May 17–June 4) to establish the norm against which June 5 deviations are measured.\nNetwork Analysis: Building directed communication graphs using igraph and visNetwork to map agent-to-agent response chains, identify authority concentration, and visualise information flow. Detecting structural anomalies such as unilateral communication freezes and cross-channel escalations.\nEvent Reconstruction & Visualisation: Constructing annotated timelines of key events using ggplot2 and plotly. Layering causal flags, near-miss indicators, and intent markers to produce a sequential evidence chain from the May 22 early deviation through to the June 5 breach.\nShiny App: Delivering all analyses through an interactive Shiny application, enabling analysts to filter by agent, date range, and channel type, and to inspect individual flagged messages in context."
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages",
-    "title": "Project Proposal",
-    "section": " R Packages",
-    "text": "R Packages\nThe following R packages are used in this project:\nData Ingestion & Wrangling\n\njsonlite — Parsing the nested JSON communications data\ntidyverse — Core data manipulation and transformation\nlubridate — Parsing and handling ISO datetime fields\nzoo — Rolling window calculations for behavioural trend analysis\n\nText & Sentiment Analysis\n\ntidytext — Tokenisation and text feature extraction\nsentimentr — Sentence-level sentiment scoring of agent messages\n\nVisualisation\n\nggplot2 — Core static visualisations and annotated timelines\nplotly — Interactive chart rendering\npatchwork — Composing multi-panel ggplot figures\nggrepel — Non-overlapping labels on scatter and timeline plots\nscales — Axis formatting and colour scaling\nkableExtra — Styled summary tables\n\nNetwork Analysis\n\nigraph — Graph construction and network metrics\nvisNetwork — Interactive network visualisations\n\nShiny App\n\nshiny — Interactive application framework\nshinyWidgets — Extended UI input controls"
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule",
-    "title": "Project Proposal",
-    "section": " Project Schedule",
-    "text": "Project Schedule"
-  },
-  {
     "objectID": "data/mc1 data description.html",
     "href": "data/mc1 data description.html",
     "title": "MC1 — Multi-Agent Crisis Data",
@@ -222,5 +103,96 @@
     "title": "MC1 — Multi-Agent Crisis Data",
     "section": "",
     "text": "Agents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": " Overview",
+    "text": "Overview\nThis project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.\nThe data originates from AI agents managing TenantThread’s corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": " Key Questions",
+    "text": "Key Questions\nOur investigation is structured around three core questions:\n\nWhat were the key events and relationships that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.\nHow did the breach-day behaviour differ from established norms? We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.\nWere there leading indicators? We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": " The Team",
+    "text": "The Team\nWe are a team of Visual Analytics students from SMU’s Master of IT in Business programme, tackling the VAST Challenge 2026 MC1. Meet the team on the About page."
+  },
+  {
+    "objectID": "methodology/data_exploration/data_exploration.html",
+    "href": "methodology/data_exploration/data_exploration.html",
+    "title": "data_exploration",
+    "section": "",
+    "text": "To be determined"
+  },
+  {
+    "objectID": "methodology/statistical_analysis/statistical_analysis.html",
+    "href": "methodology/statistical_analysis/statistical_analysis.html",
+    "title": "statistical_analysis",
+    "section": "",
+    "text": "To be determined."
+  },
+  {
+    "objectID": "proposal.html",
+    "href": "proposal.html",
+    "title": "Project Proposal",
+    "section": "",
+    "text": "Corporate mergers are sensitive events subject to strict information embargoes — yet breaches still occur, sometimes in ways that are difficult to attribute to a single actor or decision. This project is motivated by the TenantThread embargo breach of June 5, 2046, in which a premature public disclosure of a pending merger violated an active information embargo, exposing the company to significant legal and reputational risk.\nWhat makes this case particularly compelling for visual analytics is that TenantThread’s communications were managed by a network of AI agents — each with defined roles, communication channels, and compliance responsibilities. The breach did not arise from a simple human error but from a sequence of coordinated decisions across multiple agents over nearly three weeks.\nThis project seeks to reconstruct that sequence visually, identify the behavioural patterns that enabled the breach, and uncover the leading indicators that, in hindsight, signalled the eventual failure — findings with direct implications for AI governance, compliance system design, and corporate liability."
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206c6967687462756c62203e7d7d-motivation",
+    "title": "Project Proposal",
+    "section": "",
+    "text": "Corporate mergers are sensitive events subject to strict information embargoes — yet breaches still occur, sometimes in ways that are difficult to attribute to a single actor or decision. This project is motivated by the TenantThread embargo breach of June 5, 2046, in which a premature public disclosure of a pending merger violated an active information embargo, exposing the company to significant legal and reputational risk.\nWhat makes this case particularly compelling for visual analytics is that TenantThread’s communications were managed by a network of AI agents — each with defined roles, communication channels, and compliance responsibilities. The breach did not arise from a simple human error but from a sequence of coordinated decisions across multiple agents over nearly three weeks.\nThis project seeks to reconstruct that sequence visually, identify the behavioural patterns that enabled the breach, and uncover the leading indicators that, in hindsight, signalled the eventual failure — findings with direct implications for AI governance, compliance system design, and corporate liability."
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-objectives",
+    "title": "Project Proposal",
+    "section": " Objectives",
+    "text": "Objectives\nThis project aims to build an interactive visual analytics tool to enable analysts to investigate the TenantThread embargo breach through the following lenses:\n\nEvent Reconstruction: Visualise the causal chain of key actions, decision points, and actor relationships leading up to the June 5 breach, with emphasis on how the post bypassed embargo enforcement.\nBehavioural Norm Profiling: Profile the typical communication behaviour of each agent and system across the baseline period, then contrast it against anomalous conduct observed in the lead-up to and on the breach day.\nLeading Indicator Detection: Identify prior occasions where agents deviated from expected behaviour, assess whether those episodes structurally resembled the eventual breach, and explain why they did not trigger corrective action at the time.\nIntent vs. Systemic Failure: Determine, through evidence-based visual analysis, whether the breach represented deliberate orchestration or an emergent failure of the compliance architecture."
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661206461746162617365203e7d7d-data",
+    "title": "Project Proposal",
+    "section": " Data",
+    "text": "Data\nThe project uses data from VAST Challenge 2026 Mini-Challenge 1. The dataset consists of AI agent communication logs from TenantThread’s corporate communication system, spanning May 17 to June 5, 2046 across 23 hourly rounds.\nThe data captures:\n\nMessages: Internal deliberations, direct agent communications, and public posts\nAgents: Multiple AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)\nChannels: Six distinct channels classified into Internal and Public channel types\nMetadata: Message IDs, agent roles, timestamps, response chains, and embargo-sensitivity flags\n\nThe key analytical variable is channel_type — a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary."
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120736974656d6170203e7d7d-methodology",
+    "title": "Project Proposal",
+    "section": " Methodology",
+    "text": "Methodology\n\n\n\n\n\nflowchart TD\n  A[/MC1_final_00.json/] --&gt; B[Load & Parse JSON]\n  B --&gt; C[Wrangle Data]\n  C --&gt; D[/comms_df — flat communications table/]\n  C --&gt; E[/agents_df — agent profiles/]\n  C --&gt; F[/edges_df — response network/]\n\n  D --&gt; G[Sentiment Scoring]\n  D --&gt; H[Channel Type Classification]\n  F --&gt; I[Network Graph Construction]\n\n  G --&gt; J[Behavioural Norm Profiling]\n  H --&gt; J\n  I --&gt; J\n\n  J --&gt; K[Event Timeline Visualisation]\n  J --&gt; L[Near-Miss & Anomaly Detection]\n  J --&gt; M[Intent-Flag Analysis]\n\n  K --&gt; N[Shiny App]\n  L --&gt; N\n  M --&gt; N\n\n\n\n\n\n\n\nData Preparation: Loading the raw JSON via fromJSON() with simplifyDataFrame = FALSE to preserve the nested structure. Wrangling into three analytical tables — a flat communications data frame, an agent profile table, and a directed response-chain edge list. Deriving channel_type (Internal/Public) and parsing all ISO timestamps to POSIXct.\nSentiment & Behavioural Analysis: Applying sentimentr to score message sentiment across rounds. Profiling per-agent baseline behaviour (channel usage, message frequency, sentiment trajectory) over the pre-breach period (May 17–June 4) to establish the norm against which June 5 deviations are measured.\nNetwork Analysis: Building directed communication graphs using igraph and visNetwork to map agent-to-agent response chains, identify authority concentration, and visualise information flow. Detecting structural anomalies such as unilateral communication freezes and cross-channel escalations.\nEvent Reconstruction & Visualisation: Constructing annotated timelines of key events using ggplot2 and plotly. Layering causal flags, near-miss indicators, and intent markers to produce a sequential evidence chain from the May 22 early deviation through to the June 5 breach.\nShiny App: Delivering all analyses through an interactive Shiny application, enabling analysts to filter by agent, date range, and channel type, and to inspect individual flagged messages in context."
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612070656e63696c2d72756c6572203e7d7d-prototype",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612070656e63696c2d72756c6572203e7d7d-prototype",
+    "title": "Project Proposal",
+    "section": " Prototype",
+    "text": "Prototype\nOur Shiny app will look at network and temporal patterns, with the agent communication network as the core visualisation, supported by flagged message tables, sentiment trends, and event timelines as accompanying views.\n\n\n\n\n\n\nInputsOutputs\n\n\nThe Shiny app will have 3 main parts of the input.\n\nAgent Filter\nAs TenantThread’s communication network involves multiple AI agents across distinct roles, it is not practical to visualise all agent interactions simultaneously without visual clutter.\nHence, we will use a reference agent selector to narrow down the network and only render the nodes in proximity to the selected agent — making it easier to trace specific communication chains relevant to the embargo breach investigation.\n\n\nNetwork Depth\nIn relation to the selected agent, this serves to narrow down the network to view. The depth dictates how far from the reference agent to traverse the network.\nAs agents differ in communication volume and centrality, some sub-networks would be fully shown at depth 2, but for highly connected agents such as Legal-Agent, a depth of 5 or more may be needed to capture all relevant connections.\nHence, we will add an option to toggle whether to render the full agent network or use the option to render by hop distance from the selected reference agent.\n\n\nDate Range\nAs we are interested in temporal patterns leading up to the June 5, 2046 embargo breach, we also need to know the date range to use in rendering. This is used to filter which edges and messages need to show, and agents will only be shown in the network graph if they have active communications within the selected time window.\n\n\n\n\nPlot Area\nShows the agent communication network plot rendered using visNetwork. It will be interactive to enable closer inspection of individual agents and their communication links — clicking on a node will display that agent’s recent messages, role, and flag status in a detail panel below the graph.\n\n\nFlagged Messages Table\nShows a filterable table of communications flagged for anomalous behaviour, rendered using DT::datatable. Each row is colour-coded by flag type:\n\nAmber rows indicate near-miss leading indicators observed prior to June 5\nRed rows indicate intent-flagged messages directly involved in the breach execution\n\n\n\nTemporal Graph\nShows a plot of message activity and sentiment with respect to time, rendered using plotly. This includes message volume per agent per day, public vs. internal channel split over time, and a sentiment trajectory line tracking the shift from Neutral to Critical across the two-week observation window."
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120626f782d6f70656e203e7d7d-r-packages",
+    "title": "Project Proposal",
+    "section": " R Packages",
+    "text": "R Packages\nThe following R packages are used in this project:\nData Ingestion & Wrangling\n\njsonlite — Parsing the nested JSON communications data\ntidyverse — Core data manipulation and transformation\nlubridate — Parsing and handling ISO datetime fields\nzoo — Rolling window calculations for behavioural trend analysis\n\nText & Sentiment Analysis\n\ntidytext — Tokenisation and text feature extraction\nsentimentr — Sentence-level sentiment scoring of agent messages\n\nVisualisation\n\nggplot2 — Core static visualisations and annotated timelines\nplotly — Interactive chart rendering\npatchwork — Composing multi-panel ggplot figures\nggrepel — Non-overlapping labels on scatter and timeline plots\nscales — Axis formatting and colour scaling\nkableExtra — Styled summary tables\n\nNetwork Analysis\n\nigraph — Graph construction and network metrics\nvisNetwork — Interactive network visualisations\n\nShiny App\n\nshiny — Interactive application framework\nshinyWidgets — Extended UI input controls"
+  },
+  {
+    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule",
+    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule",
+    "title": "Project Proposal",
+    "section": " Project Schedule",
+    "text": "Project Schedule"
   }
 ]

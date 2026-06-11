@@ -73,6 +73,53 @@ flowchart TD
 
 5.  **Shiny App**: Delivering all analyses through an interactive Shiny application, enabling analysts to filter by agent, date range, and channel type, and to inspect individual flagged messages in context.
 
+## {{< fa pencil-ruler >}} Prototype
+
+Our Shiny app will look at network and temporal patterns, with the agent communication network as the core visualisation, supported by flagged message tables, sentiment trends, and event timelines as accompanying views.
+
+![](image/prototype.png){fig-align="center"}
+
+::: panel-tabset
+## Inputs
+
+The Shiny app will have 3 main parts of the input.
+
+### Agent Filter
+
+As TenantThread's communication network involves multiple AI agents across distinct roles, it is not practical to visualise all agent interactions simultaneously without visual clutter.
+
+Hence, we will use a reference agent selector to narrow down the network and only render the nodes in proximity to the selected agent — making it easier to trace specific communication chains relevant to the embargo breach investigation.
+
+### Network Depth
+
+In relation to the selected agent, this serves to narrow down the network to view. The depth dictates how far from the reference agent to traverse the network.
+
+As agents differ in communication volume and centrality, some sub-networks would be fully shown at depth 2, but for highly connected agents such as Legal-Agent, a depth of 5 or more may be needed to capture all relevant connections.
+
+Hence, we will add an option to toggle whether to render the full agent network or use the option to render by hop distance from the selected reference agent.
+
+### Date Range
+
+As we are interested in temporal patterns leading up to the June 5, 2046 embargo breach, we also need to know the date range to use in rendering. This is used to filter which edges and messages need to show, and agents will only be shown in the network graph if they have active communications within the selected time window.
+
+## Outputs
+
+### Plot Area
+
+Shows the agent communication network plot rendered using `visNetwork`. It will be interactive to enable closer inspection of individual agents and their communication links — clicking on a node will display that agent's recent messages, role, and flag status in a detail panel below the graph.
+
+### Flagged Messages Table
+
+Shows a filterable table of communications flagged for anomalous behaviour, rendered using `DT::datatable`. Each row is colour-coded by flag type:
+
+-   **Amber** rows indicate near-miss leading indicators observed prior to June 5
+-   **Red** rows indicate intent-flagged messages directly involved in the breach execution
+
+### Temporal Graph
+
+Shows a plot of message activity and sentiment with respect to time, rendered using `plotly`. This includes message volume per agent per day, public vs. internal channel split over time, and a sentiment trajectory line tracking the shift from Neutral to Critical across the two-week observation window.
+:::
+
 ## {{< fa box-open >}} R Packages
 
 The following R packages are used in this project:
