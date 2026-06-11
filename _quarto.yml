@@ -39,7 +39,7 @@ website:
 
 format:
   html:
-    theme: [cosmo, custom.scss]   # ← loads your custom purple theme on top of cosmo
+    theme: [cosmo, custom.scss]   # ← loads your custom cyan theme on top of cosmo
     toc: true
 
 filters:                          # ← enables the Font Awesome shortcode extension
