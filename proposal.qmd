@@ -1,21 +1,28 @@
 ---
 title: "Project Proposal"
 format: html
+
+execute:
+  echo: false
+  message: false
+  warning: false
 ---
+
+# Project Proposal
 
 ## {{< fa lightbulb >}} Motivation
 
-Corporate mergers are sensitive events subject to strict information embargoes — yet breaches still occur, sometimes in ways that are difficult to attribute to a single actor or decision. This project is motivated by the TenantThread embargo breach of June 5, 2046, in which a premature public disclosure of a pending merger violated an active information embargo, exposing the company to significant legal and reputational risk.
+Corporate mergers are sensitive events subject to strict information embargoes, yet breaches still occur in ways that are difficult to attribute to a single actor or decision. On June 5, 2046, news of TenantThread's pending merger reached the public ahead of the agreed 6 PM embargo, exposing the company to significant legal and reputational risk.
 
-What makes this case particularly compelling for visual analytics is that TenantThread's communications were managed by a network of AI agents — each with defined roles, communication channels, and compliance responsibilities. The breach did not arise from a simple human error but from a sequence of coordinated decisions across multiple agents over nearly three weeks.
+What makes this case compelling for visual analytics is that TenantThread's communications were managed by a network of AI agents, each with defined roles, channels and compliance responsibilities. Whether the early disclosure was deliberate agent action, a failure of the compliance architecture, or something in between is not obvious from any single view of the data. Two of our team members analysed these same logs independently during Take-home Exercise 2 and reached opposite conclusions on exactly this question, one attributing the disclosure to deliberate agent action ([report](https://isss-608-vaa-ten.vercel.app/Take-home_Ex/Take-home_Ex02/Take-home_Ex02)) and the other to a failure of the compliance system ([report](https://isss-608-vaa-demo-t85z.vercel.app/TH_EX02_report.html)). That divergence between two careful analyses of identical data is the motivating problem this application is designed to resolve.
 
-This project seeks to reconstruct that sequence visually, identify the behavioural patterns that enabled the breach, and uncover the leading indicators that, in hindsight, signalled the eventual failure — findings with direct implications for AI governance, compliance system design, and corporate liability.
+This project reconstructs the sequence visually, profiles the behaviours that surrounded the breach, and surfaces the leading indicators that signalled trouble in advance. The goal is a tool that lets an analyst weigh each layer of evidence and reach a verdict that survives scrutiny, with implications for AI governance, compliance system design and corporate liability.
 
 ## {{< fa bullseye >}} Objectives
 
 This project aims to build an interactive visual analytics tool to enable analysts to investigate the TenantThread embargo breach through the following lenses:
 
-1.  **Event Reconstruction**: Visualise the causal chain of key actions, decision points, and actor relationships leading up to the June 5 breach, with emphasis on how the post bypassed embargo enforcement.
+1.  **Event Reconstruction**: Visualise the causal chain of key actions, decision points, and actor relationships leading up to the June 5 breach, with emphasis on how the disclosure bypassed embargo enforcement.
 
 2.  **Behavioural Norm Profiling**: Profile the typical communication behaviour of each agent and system across the baseline period, then contrast it against anomalous conduct observed in the lead-up to and on the breach day.
 
@@ -25,16 +32,17 @@ This project aims to build an interactive visual analytics tool to enable analys
 
 ## {{< fa database >}} Data
 
-The project uses data from [VAST Challenge 2026 Mini-Challenge 1](https://vast-challenge.github.io/2026/MC1.html). The dataset consists of AI agent communication logs from TenantThread's corporate communication system, spanning **May 17 to June 5, 2046** across 23 hourly rounds.
+The project uses data from [VAST Challenge 2026 Mini-Challenge 1](https://vast-challenge.github.io/2026/MC1.html). The dataset consists of AI agent communication logs from TenantThread's corporate communication system, spanning May 17 to June 5, 2046 across 23 rounds: 13 daily baseline rounds (May 17 to June 4) and 10 hourly rounds on the crisis day (June 5, 9 AM to 6 PM). The shift from daily to hourly sampling means baseline and crisis behaviour must be compared on a per round basis rather than by raw counts.
 
 The data captures:
 
--   **Messages**: Internal deliberations, direct agent communications, and public posts
--   **Agents**: Multiple AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)
--   **Channels**: Six distinct channels classified into Internal and Public channel types
--   **Metadata**: Message IDs, agent roles, timestamps, response chains, and embargo-sensitivity flags
+- **Messages**: Internal deliberations, direct agent communications, and public posts across 912 messages
+- **Agents**: Seven AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)
+- **Channels**: Six distinct channels classified into Internal and Public channel types
+- **Metadata**: Message IDs, agent roles and labels, channels, recipients, message types, response chains and timestamps
+- **Internal state**: Private free text fields capturing each agent's reacting, deliberating and rationalizing at the moment of sending, present in 86 of the 912 messages. These fields are the primary source for intent analysis and are treated as sparse but high value evidence rather than a complete record
 
-The key analytical variable is `channel_type` — a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary.
+The key analytical variable is `channel_type`, a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary.
 
 ## {{< fa sitemap >}} Methodology
 
@@ -42,9 +50,9 @@ The key analytical variable is `channel_type` — a derived binary classificatio
 flowchart TD
   A[/MC1_final_00.json/] --> B[Load & Parse JSON]
   B --> C[Wrangle Data]
-  C --> D[/comms_df — flat communications table/]
-  C --> E[/agents_df — agent profiles/]
-  C --> F[/edges_df — response network/]
+  C --> D[/comms_df: flat communications table/]
+  C --> E[/agents_df: agent profiles/]
+  C --> F[/edges_df: response network/]
 
   D --> G[Sentiment Scoring]
   D --> H[Channel Type Classification]
@@ -58,26 +66,28 @@ flowchart TD
   J --> L[Near-Miss & Anomaly Detection]
   J --> M[Intent-Flag Analysis]
 
-  K --> N[Shiny App]
-  L --> N
-  M --> N
+  K --> O[Evidence Consolidation & Verdict]
+  L --> O
+  M --> O
+
+  O --> N[Shiny App]
 ```
 
-1.  **Data Preparation**: Loading the raw JSON via `fromJSON()` with `simplifyDataFrame = FALSE` to preserve the nested structure. Wrangling into three analytical tables — a flat communications data frame, an agent profile table, and a directed response-chain edge list. Deriving `channel_type` (Internal/Public) and parsing all ISO timestamps to POSIXct.
+1.  **Data Preparation**: Loading the raw JSON via `fromJSON()` with `simplifyDataFrame = FALSE` to preserve the nested structure. Wrangling into three analytical tables: a flat communications data frame, an agent profile table, and a directed response-chain edge list. Deriving `channel_type` (Internal/Public) and parsing all ISO timestamps to POSIXct.
 
-2.  **Sentiment & Behavioural Analysis**: Applying `sentimentr` to score message sentiment across rounds. Profiling per-agent baseline behaviour (channel usage, message frequency, sentiment trajectory) over the pre-breach period (May 17–June 4) to establish the norm against which June 5 deviations are measured.
+2.  **Sentiment & Behavioural Analysis**: Applying `sentimentr` to score message sentiment across rounds, validated against the sentiment states provided in the dataset's round metadata. Profiling per-agent baseline behaviour (channel usage, message frequency, sentiment trajectory) over the pre-breach period (May 17 to June 4) to establish the norm against which June 5 deviations are measured.
 
 3.  **Network Analysis**: Building directed communication graphs using `igraph` and `visNetwork` to map agent-to-agent response chains, identify authority concentration, and visualise information flow. Detecting structural anomalies such as unilateral communication freezes and cross-channel escalations.
 
-4.  **Event Reconstruction & Visualisation**: Constructing annotated timelines of key events using `ggplot2` and `plotly`. Layering causal flags, near-miss indicators, and intent markers to produce a sequential evidence chain from the May 22 early deviation through to the June 5 breach.
+4.  **Event Reconstruction & Visualisation**: Constructing annotated timelines of key events using `ggplot2` and `plotly`. Layering causal flags, near-miss indicators, and intent markers to produce a sequential evidence chain from the earliest observed deviations through to the June 5 breach.
 
-5.  **Shiny App**: Delivering all analyses through an interactive Shiny application, enabling analysts to filter by agent, date range, and channel type, and to inspect individual flagged messages in context.
+5.  **Shiny App**: Delivering all analyses through an interactive Shiny application, enabling analysts to filter by agent, date range, and channel type, to inspect individual flagged messages in context, and to consolidate the evidence into a verdict.
 
 ## {{< fa pencil-ruler >}} Prototype
 
-Our Shiny app will look at network and temporal patterns, with the agent communication network as the core visualisation, supported by flagged message tables, sentiment trends, and event timelines as accompanying views.
+Our Shiny app will look at network and temporal patterns, with the agent communication network as the core visualisation, supported by flagged message tables, sentiment trends, and event timelines as accompanying views, and an evidence and verdict panel that consolidates the analysis.
 
-![](image/prototype.png){fig-align="center"}
+![](image/prototype v2.png)
 
 ::: panel-tabset
 ## Inputs
@@ -88,7 +98,7 @@ The Shiny app will have 3 main parts of the input.
 
 As TenantThread's communication network involves multiple AI agents across distinct roles, it is not practical to visualise all agent interactions simultaneously without visual clutter.
 
-Hence, we will use a reference agent selector to narrow down the network and only render the nodes in proximity to the selected agent — making it easier to trace specific communication chains relevant to the embargo breach investigation.
+Hence, we will use a reference agent selector to narrow down the network and only render the nodes in proximity to the selected agent, making it easier to trace specific communication chains relevant to the embargo breach investigation.
 
 ### Network Depth
 
@@ -106,18 +116,26 @@ As we are interested in temporal patterns leading up to the June 5, 2046 embargo
 
 ### Plot Area
 
-Shows the agent communication network plot rendered using `visNetwork`. It will be interactive to enable closer inspection of individual agents and their communication links — clicking on a node will display that agent's recent messages, role, and flag status in a detail panel below the graph.
+Shows the agent communication network plot rendered using `visNetwork`. It will be interactive to enable closer inspection of individual agents and their communication links. Clicking on a node will display that agent's recent messages, role, and flag status in a detail panel below the graph.
 
 ### Flagged Messages Table
 
-Shows a filterable table of communications flagged for anomalous behaviour, rendered using `DT::datatable`. Each row is colour-coded by flag type:
+Shows a filterable table of communications flagged for anomalous behaviour, rendered using `DT::datatable`. Each row is colour coded by flag type:
 
--   **Amber** rows indicate near-miss leading indicators observed prior to June 5
--   **Red** rows indicate intent-flagged messages directly involved in the breach execution
+- **Amber** rows indicate near-miss leading indicators observed prior to June 5
+- **Red** rows indicate intent-flagged messages directly involved in the breach execution
 
 ### Temporal Graph
 
-Shows a plot of message activity and sentiment with respect to time, rendered using `plotly`. This includes message volume per agent per day, public vs. internal channel split over time, and a sentiment trajectory line tracking the shift from Neutral to Critical across the two-week observation window.
+Shows a plot of message activity and sentiment with respect to time, rendered using `plotly`. This includes message volume per agent per round, public vs. internal channel split over time, and a sentiment trajectory line tracking the shift from Neutral to Critical across the observation window.
+
+### Evidence and Verdict Panel
+
+While the network, table and temporal views answer what happened and when, Objective 4 requires the analyst to weigh the evidence as a whole. This panel addresses that directly.
+
+The evidence is organised into four layers: the public timeline, behavioural anomalies, the intent chain reconstructed from internal state text, and anonymous channel authorship. Each layer can be admitted or excluded using toggle controls. A verdict readout updates as layers are admitted, answering two questions side by side: who put the merger into the public domain, and whether any agent engaged in deliberate misconduct.
+
+The design choice is deliberate. Admitting only some layers reproduces the partial conclusions that single perspective analyses reach, while admitting all four shows how the verdict changes when the full evidence is considered. The readout logic is a simple mapping from layer combinations to verdict text, keeping the panel computationally light while making the analytical point that partial evidence produces confident but incomplete answers.
 :::
 
 ## {{< fa box-open >}} R Packages
@@ -126,34 +144,39 @@ The following R packages are used in this project:
 
 **Data Ingestion & Wrangling**
 
--   [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html) — Parsing the nested JSON communications data
--   [tidyverse](https://www.tidyverse.org/) — Core data manipulation and transformation
--   [lubridate](https://lubridate.tidyverse.org/) — Parsing and handling ISO datetime fields
--   [zoo](https://cran.r-project.org/web/packages/zoo/index.html) — Rolling window calculations for behavioural trend analysis
+- [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html): Parsing the nested JSON communications data
+- [tidyverse](https://www.tidyverse.org/): Core data manipulation and transformation
+- [lubridate](https://lubridate.tidyverse.org/): Parsing and handling ISO datetime fields
+- [zoo](https://cran.r-project.org/web/packages/zoo/index.html): Rolling window calculations for behavioural trend analysis
 
 **Text & Sentiment Analysis**
 
--   [tidytext](https://juliasilge.github.io/tidytext/) — Tokenisation and text feature extraction
--   [sentimentr](https://cran.r-project.org/web/packages/sentimentr/index.html) — Sentence-level sentiment scoring of agent messages
+- [tidytext](https://juliasilge.github.io/tidytext/): Tokenisation and text feature extraction
+- [sentimentr](https://cran.r-project.org/web/packages/sentimentr/index.html): Sentence-level sentiment scoring of agent messages
 
 **Visualisation**
 
--   [ggplot2](https://ggplot2.tidyverse.org/) — Core static visualisations and annotated timelines
--   [plotly](https://plotly.com/r/) — Interactive chart rendering
--   [patchwork](https://patchwork.data-imaginist.com/) — Composing multi-panel ggplot figures
--   [ggrepel](https://ggrepel.slowkow.com/) — Non-overlapping labels on scatter and timeline plots
--   [scales](https://scales.r-lib.org/) — Axis formatting and colour scaling
--   [kableExtra](https://haozhu233.github.io/kableExtra/) — Styled summary tables
+- [ggplot2](https://ggplot2.tidyverse.org/): Core static visualisations and annotated timelines
+- [plotly](https://plotly.com/r/): Interactive chart rendering
+- [patchwork](https://patchwork.data-imaginist.com/): Composing multi-panel ggplot figures
+- [ggrepel](https://ggrepel.slowkow.com/): Non-overlapping labels on scatter and timeline plots
+- [scales](https://scales.r-lib.org/): Axis formatting and colour scaling
+- [kableExtra](https://haozhu233.github.io/kableExtra/): Styled summary tables
 
 **Network Analysis**
 
--   [igraph](https://cran.r-project.org/web/packages/igraph/index.html) — Graph construction and network metrics
--   [visNetwork](https://datastorm-open.github.io/visNetwork/) — Interactive network visualisations
+- [igraph](https://cran.r-project.org/web/packages/igraph/index.html): Graph construction and network metrics
+- [visNetwork](https://datastorm-open.github.io/visNetwork/): Interactive network visualisations
 
 **Shiny App**
 
--   [shiny](https://shiny.posit.co/) — Interactive application framework
--   [shinyWidgets](https://shinyapps.dreamrs.fr/shinyWidgets/) — Extended UI input controls
+- [shiny](https://shiny.posit.co/): Interactive application framework
+- [shinyWidgets](https://shinyapps.dreamrs.fr/shinyWidgets/): Extended UI input controls
+
+**Reproducibility & Testing**
+
+- [renv](https://rstudio.github.io/renv/): Locking package versions so all collaborators run identical environments
+- [shinytest2](https://rstudio.github.io/shinytest2/): Automated testing of the Shiny application
 
 ## {{< fa calendar-days >}} Project Schedule
 
