@@ -3,7 +3,7 @@ project:
   output-dir: _site
 
 website:
-  title: "MC1 - Who leaked the merger?"
+  title: "Unmasking the Leak"
   navbar:
     background: primary          # ← makes navbar use your theme's primary colour
     left:
