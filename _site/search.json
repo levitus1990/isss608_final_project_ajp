@@ -187,12 +187,5 @@
     "title": "Project Proposal",
     "section": "",
     "text": "The following R packages are used in this project:\nData Ingestion & Wrangling\n\njsonlite: Parsing the nested JSON communications data\ntidyverse: Core data manipulation and transformation\nlubridate: Parsing and handling ISO datetime fields\nzoo: Rolling window calculations for behavioural trend analysis\n\nText & Sentiment Analysis\n\ntidytext: Tokenisation and text feature extraction\nsentimentr: Sentence-level sentiment scoring of agent messages\n\nVisualisation\n\nggplot2: Core static visualisations and annotated timelines\nplotly: Interactive chart rendering\npatchwork: Composing multi-panel ggplot figures\nggrepel: Non-overlapping labels on scatter and timeline plots\nscales: Axis formatting and colour scaling\nkableExtra: Styled summary tables\n\nNetwork Analysis\n\nigraph: Graph construction and network metrics\nvisNetwork: Interactive network visualisations\n\nShiny App\n\nshiny: Interactive application framework\nshinyWidgets: Extended UI input controls\n\nReproducibility & Testing\n\nrenv: Locking package versions so all collaborators run identical environments\nshinytest2: Automated testing of the Shiny application"
-  },
-  {
-    "objectID": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule",
-    "href": "proposal.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612063616c656e6461722d64617973203e7d7d-project-schedule",
-    "title": "Project Proposal",
-    "section": "",
-    "text": "package 'vistime' successfully unpacked and MD5 sums checked\n\nThe downloaded binary packages are in\n    C:\\Users\\jwyap\\AppData\\Local\\Temp\\Rtmpe0b3Az\\downloaded_packages"
   }
 ]
