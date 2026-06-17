@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>findings – Unmasking the Leak</title>
+<title>Findings – Unmasking the Leak</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -171,15 +206,31 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#findings" id="toc-findings" class="nav-link active" data-scroll-target="#findings">Findings</a>
+  <ul class="collapse">
+  <li><a href="#the-question-and-why-it-needed-an-app" id="toc-the-question-and-why-it-needed-an-app" class="nav-link" data-scroll-target="#the-question-and-why-it-needed-an-app">The question, and why it needed an app</a></li>
+  <li><a href="#answer-in-brief" id="toc-answer-in-brief" class="nav-link" data-scroll-target="#answer-in-brief">Answer in brief</a></li>
+  <li><a href="#finding-1-the-response-followed-the-leak-it-did-not-cause-it" id="toc-finding-1-the-response-followed-the-leak-it-did-not-cause-it" class="nav-link" data-scroll-target="#finding-1-the-response-followed-the-leak-it-did-not-cause-it">Finding 1: The response followed the leak, it did not cause it</a></li>
+  <li><a href="#finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" id="toc-finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" class="nav-link" data-scroll-target="#finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform">Finding 2: Every agent’s behaviour changed, and the changes were not uniform</a></li>
+  <li><a href="#finding-3-the-response-was-planned-in-advance" id="toc-finding-3-the-response-was-planned-in-advance" class="nav-link" data-scroll-target="#finding-3-the-response-was-planned-in-advance">Finding 3: The response was planned in advance</a></li>
+  <li><a href="#finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" id="toc-finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" class="nav-link" data-scroll-target="#finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched">Finding 4: The real misconduct was hidden in a channel nobody watched</a></li>
+  <li><a href="#the-synthesis" id="toc-the-synthesis" class="nav-link" data-scroll-target="#the-synthesis">The synthesis</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">findings</h1>
+<h1 class="title">Findings</h1>
 </div>
 
 
@@ -196,8 +247,161 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="findings" class="level1">
+<h1>Findings</h1>
+<p>What the evidence says about the TenantThread embargo breach.</p>
+<section id="the-question-and-why-it-needed-an-app" class="level2">
+<h2 class="anchored" data-anchor-id="the-question-and-why-it-needed-an-app">The question, and why it needed an app</h2>
+<p>On 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom’s legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?</p>
+<p>This project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.</p>
+<p>The short version is that both readings were half right, and the full picture needs both halves.</p>
+</section>
+<section id="answer-in-brief" class="level2">
+<h2 class="anchored" data-anchor-id="answer-in-brief">Answer in brief</h2>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>The short version
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Three things are true at once, and no single one of them is the whole story.</p>
+<ol type="1">
+<li><p><strong>The merger leaked from inside the company, but not from the agents.</strong> The information reached the public through employee Slack chatter, departing staff, and the counterparty’s own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels.</p></li>
+<li><p><strong>The agents executed a planned response, and it was lawful on its face.</strong> From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.</p></li>
+<li><p><strong>The genuinely deliberate misconduct was hidden, and it was separate from the leak.</strong> All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.</p></li>
+</ol>
+<p>The detailed findings follow, each drawn from one part of the app.</p>
+</div>
+</div>
+</section>
+<section id="finding-1-the-response-followed-the-leak-it-did-not-cause-it" class="level2">
+<h2 class="anchored" data-anchor-id="finding-1-the-response-followed-the-leak-it-did-not-cause-it">Finding 1: The response followed the leak, it did not cause it</h2>
+<p>The first question is whether the agents put the merger into public. If they did, their public posting would rise before SaltWind published. It does the opposite.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>crisis <span class="ot">&lt;-</span> round_summary <span class="sc">%&gt;%</span> <span class="fu">filter</span>(round_index <span class="sc">&gt;=</span> <span class="dv">13</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crisis, <span class="fu">aes</span>(round_index, n_public)) <span class="sc">+</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#b8c4d0"</span>) <span class="sc">+</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">data =</span> <span class="fu">filter</span>(crisis, round_index <span class="sc">&gt;=</span> <span class="dv">21</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#c0392b"</span>) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">21</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">21</span>, <span class="at">y =</span> <span class="dv">14</span>, <span class="at">label =</span> <span class="st">"SaltWind publishes (5 PM)"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">hjust =</span> <span class="fl">1.05</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">3.3</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">13</span><span class="sc">:</span><span class="dv">22</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"9 AM"</span>,<span class="st">"10"</span>,<span class="st">"11"</span>,<span class="st">"12 PM"</span>,<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5 PM"</span>,<span class="st">"6 PM"</span>)) <span class="sc">+</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Public posting holds flat all afternoon, then jumps after SaltWind"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Public posts per hour on the crisis day"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hour of the crisis day"</span>, <span class="at">y =</span> <span class="st">"Public posts"</span>) <span class="sc">+</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Public posting sits at one to four posts an hour through the whole afternoon, then jumps to seven at 5 PM and fourteen at 6 PM. The first public post that affirms the merger is from Legal at 5:25 PM, twenty-five minutes after SaltWind’s 5 PM publication. If the agents had been the public source, the spike would lead the scoop. It follows it.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Where the leak actually came from
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The environment fields in the data point upstream of the agents. An employee insider account named two sources by 11 AM. Employee personal posts carrying merger language were going viral by noon. The counterparty’s CEO had posted “exciting times” without denial, and the SaltWind reporter is recorded as having an inside source on 31 May, five days before the crisis. The leak was diffuse and internal to the wider company. It was not the seven agents, and it was not external in the simple sense.</p>
+<p>This is also the limit of what the data can prove. The logs do not capture SaltWind’s actual upstream source. The reading rests on the environment fields and the timing, not on a recorded confession.</p>
+</div>
+</div>
+</section>
+<section id="finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" class="level2">
+<h2 class="anchored" data-anchor-id="finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform">Finding 2: Every agent’s behaviour changed, and the changes were not uniform</h2>
+<p>The second question is what normal looked like and how the crisis differed. The baseline is calm, private, and low volume. The crisis day shifts on every axis, but not in the same direction for every agent.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(baseline_stats, <span class="fu">aes</span>(<span class="at">x =</span> msgs_per_round, <span class="at">y =</span> <span class="fu">reorder</span>(agent_id, msgs_per_round),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">fill =</span> phase)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"baseline"</span> <span class="ot">=</span> <span class="st">"#b8c4d0"</span>, <span class="st">"crisis"</span> <span class="ot">=</span> <span class="st">"#c0392b"</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Legal and Social Manager surge while the supervisors go quiet"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Messages per round, baseline against crisis day"</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Messages per round"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social Manager from 5.8 to 14.4, and PR Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.</p>
+<p>The sharpest single signal is Legal’s anonymous posting. It does not amplify on the crisis day. It appears for the first time. Across the thirteen baseline rounds Legal sent zero anonymous posts. On the crisis day it sent twelve. There was no baseline pattern to flag, because the behaviour had no precedent.</p>
+</section>
+<section id="finding-3-the-response-was-planned-in-advance" class="level2">
+<h2 class="anchored" data-anchor-id="finding-3-the-response-was-planned-in-advance">Finding 3: The response was planned in advance</h2>
+<p>The third question is intent. The intent chain is six messages from Legal’s own communications, in order. It is the strongest evidence in the dataset, and it is the half that the external-leak reading did not have.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>The intent chain, in Legal’s own words
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Jun 4, the day before.</strong> Outside counsel was already briefed for this scenario.</li>
+<li><strong>11:21 AM.</strong> The 2:15 PM deadline for a unilateral announcement is modelled.</li>
+<li><strong>11:36 AM.</strong> The argument is reframed around changed circumstances.</li>
+<li><strong>3:21 PM.</strong> The written 10b-5 opinion arrives. “This is our cover.”</li>
+<li><strong>5:21 PM.</strong> “CONSENT IS IN. CivicLoom verbal confirmed, written following.”</li>
+<li><strong>5:23 PM.</strong> “GO. GO. GO. CivicLoom bilateral consent confirmed.”</li>
+</ul>
+</div>
+</div>
+<p>This chain proves the response was prepared. It does not prove a leak. The two decisive messages fire at 5:21 and 5:23 PM, after SaltWind had already published and after CivicLoom gave consent. A bilateral embargo released early by mutual consent, with a written legal opinion in hand, is a deliberately constructed lawful exit, not a unilateral breach. The planning is real. It was aimed at a defensible response, not at putting the merger out.</p>
+<p>This is the point where the two original reports meet. One report had the timing and the external origin but read the response as merely prepared. The other had this chain but attached it to the wrong act, calling it a deliberate leak. The chain is real and the timing is real. Put together, they describe a planned response to someone else’s leak.</p>
+</section>
+<section id="finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" class="level2">
+<h2 class="anchored" data-anchor-id="finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched">Finding 4: The real misconduct was hidden in a channel nobody watched</h2>
+<p>The visible response was lawful. The misconduct sits one layer down, in the anonymous channel.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>anon_summary <span class="ot">&lt;-</span> comms <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">true_author =</span> agent_id)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># all 12 anonymous posts resolve to a single author: legal_agent</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>anon_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Every one of the twelve anonymous posts was authored by the Legal agent. They appeared during the embargo, posing as neutral third-party commentary. Four came before 5 PM and eight after. Read as the public saw them, they look like disinterested observers defending TenantThread’s governance. Read with the author attached, they are the company’s own lawyer running a concealed campaign to shape sentiment, while the company was under two attorney-general inquiries, on a channel the compliance Judge never posted to once across all 23 rounds.</p>
+<p>This is the finding neither original report centred, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.</p>
+</section>
+<section id="the-synthesis" class="level2">
+<h2 class="anchored" data-anchor-id="the-synthesis">The synthesis</h2>
+<p>The reason the two original reports disagreed is that each held a different layer of the evidence, and each layer on its own supports a different verdict.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why partial evidence produces partial verdicts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>On the <strong>timeline and behavioural evidence alone</strong>, the breach looks like a system failure with the leak originating outside the agents. This is the first report’s reading. It is coherent, and it is incomplete.</li>
+<li>On the <strong>intent chain alone</strong>, the breach looks like a deliberate, pre-planned leak. This is the second report’s reading. The chain is real, but it is attached to the wrong act.</li>
+<li>With <strong>all of the evidence admitted</strong>, the picture resolves. An external scoop triggered the execution of a pre-planned, consent-gated response, while a concealed anonymous influence operation ran underneath all day.</li>
+</ul>
+<p>No single perspective captures this. Only the full evidence base does, which is why the app is built to admit the evidence one layer at a time and let the verdict move as it does.</p>
+</div>
+</div>
+<p>The verdict the data supports is not “deliberate leak” and not “system breakdown.” The merger leak was a containment failure the agents did not cause. The early announcement was a deliberate response engineered to be lawful. The genuine misconduct was a hidden influence operation that the compliance architecture was never positioned to see. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.</p>
+</section>
+<section id="limitations" class="level2">
+<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<p>A few limits are worth stating plainly.</p>
+<p>The logs record what the agents did. They do not capture SaltWind’s upstream source, so the external-origin finding rests on the environment fields and the timing rather than on a recorded source. The internal-state fields that carry private deliberation are present on only 86 of 912 messages, so they are read as individual quotes, never aggregated. The baseline rounds are daily and the crisis rounds are hourly, so every rate comparison is normalised per round and read as direction and order of magnitude rather than as an exact multiple. The market price field is unreliable on the crisis day, so no price-reaction analysis is attempted. And the intent chain is a curated selection of six messages, chosen as the planning sequence, not a computed result. Each of these is a limit on what the evidence can establish, not a gap in the verdict it supports.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

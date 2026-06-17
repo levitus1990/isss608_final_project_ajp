@@ -1,9 +1,9 @@
 # =====================================================================
-# app.R  —  Unmasking the Leak (VAST Challenge 2026 MC1)
-#   Tab 1  The Day     (Module 1) — crisis scrubber: timeline + feed + metrics
-#   Tab 2  The Norm    (Module 2) — baseline vs crisis, z-score anomaly
-#   Tab 3  The Intent  (Module 3) — intent chain + anonymous reveal
-#   Tab 4  The Verdict (Module 4) — evidence-layer toggles + readouts
+# app.R   Unmasking the Leak (VAST Challenge 2026 MC1)
+#   Tab 1  The Day     (Module 1): crisis scrubber, timeline, feed, metrics
+#   Tab 2  The Norm    (Module 2): baseline vs crisis, z-score anomaly
+#   Tab 3  The Intent  (Module 3): intent chain and anonymous reveal
+#   Tab 4  The Verdict (Module 4): evidence-layer toggles and readouts
 # Data: .rds files produced by data_prep.R (in ./data/)
 # =====================================================================
 
@@ -27,7 +27,7 @@ event_pins     <- readRDS(file.path(data_dir, "event_pins.rds"))
 
 agent_choices <- setNames(agents$agent_id, agents$agent_label)
 
-# round_index -> human label for the slider
+# round_index to human label for the slider
 round_labels <- setNames(
   format(round_summary$ts, "%b %d, %H:%M"),
   as.character(round_summary$round_index)
@@ -42,12 +42,12 @@ chain_headline <- c(
   "20460605_21_024" = "GO. GO. GO. CivicLoom bilateral consent confirmed."
 )
 chain_tag <- c(
-  "20460604_12_012" = "Jun 4 — the day before the crisis",
-  "20460605_15_022" = "11:21 AM — planning the deadline",
-  "20460605_15_037" = "11:36 AM — building the legal argument",
-  "20460605_19_022" = "3:21 PM — the written opinion arrives",
-  "20460605_21_022" = "5:21 PM — AFTER SaltWind published (5:00), AFTER consent",
-  "20460605_21_024" = "5:23 PM — AFTER SaltWind published (5:00), AFTER consent"
+  "20460604_12_012" = "Jun 4. The day before the crisis.",
+  "20460605_15_022" = "11:21 AM. Planning the deadline.",
+  "20460605_15_037" = "11:36 AM. Building the legal argument.",
+  "20460605_19_022" = "3:21 PM. The written opinion arrives.",
+  "20460605_21_022" = "5:21 PM. After SaltWind published at 5:00, after consent.",
+  "20460605_21_024" = "5:23 PM. After SaltWind published at 5:00, after consent."
 )
 
 theme_house <- function() {
@@ -124,7 +124,7 @@ ui <- navbarPage(
   tabPanel(
     "The Day",
     div(class = "app-sub",
-        "Module 1 — drag through the timeline and watch the leak unfold"),
+        "Module 1. Drag through the timeline and watch the leak unfold."),
     sliderInput("rnd", NULL, min = 0, max = 22, value = 15, step = 1,
                 width = "100%", ticks = FALSE,
                 animate = animationOptions(interval = 900)),
@@ -142,14 +142,14 @@ ui <- navbarPage(
   # ===== TAB 2: THE NORM =====
   tabPanel(
     "The Norm",
-    div(class = "app-sub", "Module 2 — baseline behaviour vs the crisis day"),
+    div(class = "app-sub", "Module 2. Baseline behaviour against the crisis day."),
     sidebarLayout(
       sidebarPanel(
         width = 3,
         selectInput("agent", "Select agent",
                     choices = agent_choices, selected = "legal_agent"),
-        helpText("Baseline = rounds 1 to 13 (May 17 to Jun 4, daily).",
-                 "Crisis = rounds 14 to 23 (Jun 5, hourly)."),
+        helpText("Baseline is rounds 1 to 13 (May 17 to Jun 4, daily).",
+                 "Crisis is rounds 14 to 23 (Jun 5, hourly)."),
         hr(),
         helpText("Cards compare the selected agent's baseline against the",
                  "crisis day. The chart shows each round's deviation from",
@@ -184,19 +184,19 @@ ui <- navbarPage(
   # ===== TAB 3: THE INTENT =====
   tabPanel(
     "The Intent",
-    div(class = "app-sub", "Module 3 — the planned response, and who was really posting"),
+    div(class = "app-sub", "Module 3. The planned response, and who was really posting."),
     fluidRow(
       column(6,
              h4("The intent chain"),
              p(style = "color:#777; font-size:13px;",
                "Six messages, in order, from Legal's own communications.",
-               "Read top to bottom: the response was planned in advance and",
+               "Read top to bottom. The response was planned in advance and",
                "executed only after the merger was already public."),
              uiOutput("chain_cards")),
       column(6,
              h4("The anonymous channel"),
              p(style = "color:#777; font-size:13px;",
-               "Twelve posts that appeared to the public as neutral, third-party",
+               "Twelve posts that appeared to the public as neutral, third party",
                "commentary during the embargo. Who actually wrote them?"),
              div(style = "margin-bottom:12px;",
                  actionButton("reveal_btn", "Reveal authors",
@@ -210,7 +210,7 @@ ui <- navbarPage(
   tabPanel(
     "The Verdict",
     div(class = "app-sub",
-        "Module 4 — admit each layer of evidence and watch the verdict change"),
+        "Module 4. Admit each layer of evidence and watch the verdict change."),
     sidebarLayout(
       sidebarPanel(
         width = 4,
@@ -287,7 +287,7 @@ server <- function(input, output, session) {
                         guide = "none") +
       scale_x_continuous(breaks = seq(0, 22, 2)) +
       labs(title = "Message volume across the timeline",
-           subtitle = "Dark = elapsed up to the slider; line = current position",
+           subtitle = "Dark is elapsed up to the slider. The line is the current position.",
            x = "Round", y = "Messages") +
       theme_house()
   })
@@ -389,7 +389,7 @@ server <- function(input, output, session) {
     is_rev <- revealed()
     cards <- lapply(seq_len(nrow(anon_posts)), function(i) {
       row <- anon_posts[i, ]
-      auth_txt <- if (is_rev) paste0("\u2014 ", row$true_author_label) else "\u2014 Anonymous"
+      auth_txt <- if (is_rev) paste0(row$true_author_label) else "Anonymous"
       div(class = "anon-card",
           div(class = "anon-body", row$content),
           div(class = paste("anon-auth", if (is_rev) "revealed" else ""),
@@ -416,9 +416,9 @@ server <- function(input, output, session) {
     } else if (L["L1"] && !L["L2"]) {
       tagList(p(class = "verdict-a", "Appears to originate outside the agent system"),
               p(class = "verdict-note",
-                "SaltWind published at 5:00 PM; the agents' public posts follow the scoop, not precede it."))
+                "SaltWind published at 5:00 PM. The agents' public posts follow the scoop, they do not precede it."))
     } else {
-      tagList(p(class = "verdict-a", "Diffuse internal leak \u2014 not the comms agents"),
+      tagList(p(class = "verdict-a", "Diffuse internal leak. Not the comms agents."),
               p(class = "verdict-note",
                 "Employee Slack, departing staff and the counterparty CEO, aggregated by a reporter with an inside source since May 31. The seven agents did not originate it."))
     }
@@ -430,15 +430,15 @@ server <- function(input, output, session) {
       tagList(p(class = "verdict-a", "Not yet established"),
               p(class = "verdict-note", "Admit the intent chain and anonymous authorship to assess."))
     } else if (L["L3"] && !L["L4"]) {
-      tagList(p(class = "verdict-a", "Planned response \u2014 but lawful on its face"),
+      tagList(p(class = "verdict-a", "Planned response, but lawful on its face"),
               p(class = "verdict-note",
-                "The intent chain shows a pre-planned, consent-gated announcement. It fires only after SaltWind and after CivicLoom consent \u2014 a deliberate response, not a leak."))
+                "The intent chain shows a pre-planned, consent-gated announcement. It fires only after SaltWind and after CivicLoom consent. A deliberate response, not a leak."))
     } else if (!L["L3"] && L["L4"]) {
-      tagList(p(class = "verdict-a bad", "Yes \u2014 concealed influence operation"),
+      tagList(p(class = "verdict-a bad", "Yes. A concealed influence operation."),
               p(class = "verdict-note",
                 "All 12 anonymous posts were authored by Legal-Agent, during the embargo, on a channel the compliance Judge never observed."))
     } else {
-      tagList(p(class = "verdict-a bad", "Yes \u2014 deliberate, on two fronts"),
+      tagList(p(class = "verdict-a bad", "Yes. Deliberate, on two fronts."),
               p(class = "verdict-note",
                 "A pre-planned consent-gated announcement, plus a concealed anonymous influence operation run by Legal throughout the day."))
     }
@@ -449,26 +449,26 @@ server <- function(input, output, session) {
     if (n == 0) {
       tagList(h5("Interpretation"),
               p(style="color:#777; font-size:13px;",
-                "No evidence admitted. Each combination of layers reproduces a different analyst's conclusion \u2014 admit some to see how."))
+                "No evidence admitted. Each combination of layers reproduces a different analyst's conclusion. Admit some to see how."))
     } else if (L["L1"] && L["L2"] && !L["L3"] && !L["L4"]) {
       tagList(h5("Interpretation"),
               p(style="font-size:13px;",
-                "On the timeline and behavioural evidence alone, this looks like a system failure with the leak originating outside the agents \u2014 a coherent but incomplete reading."),
+                "On the timeline and behavioural evidence alone, this looks like a system failure with the leak originating outside the agents. A coherent reading, but an incomplete one."),
               span(class="report-tag", "Reproduces Report A"))
     } else if (!L["L1"] && !L["L2"] && L["L3"] && !L["L4"]) {
       tagList(h5("Interpretation"),
               p(style="font-size:13px;",
-                "On the intent chain alone, this looks like a deliberate, pre-planned leak \u2014 a real evidential chain, but attached to the wrong act."),
+                "On the intent chain alone, this looks like a deliberate, pre-planned leak. A real evidential chain, but attached to the wrong act."),
               span(class="report-tag", "Reproduces Report B"))
     } else if (all(L)) {
-      tagList(h5("Interpretation \u2014 the synthesis"),
+      tagList(h5("Interpretation: the synthesis"),
               p(style="font-size:13px;",
-                "With all four layers admitted: an external scoop triggered the execution of a pre-planned, consent-gated response, while a concealed anonymous influence operation ran underneath all day. Neither single perspective captures this \u2014 only the full evidence base does."),
+                "With all four layers admitted: an external scoop triggered the execution of a pre-planned, consent-gated response, while a concealed anonymous influence operation ran underneath all day. Neither single perspective captures this. Only the full evidence base does."),
               span(class="report-tag synth", "The complete picture"))
     } else {
       tagList(h5("Interpretation"),
               p(style="font-size:13px;",
-                sprintf("%d of 4 layers admitted. Partial evidence yields a partial verdict \u2014 keep admitting layers to see the picture resolve.", n)))
+                sprintf("%d of 4 layers admitted. Partial evidence yields a partial verdict. Keep admitting layers and the picture resolves.", n)))
     }
   })
 }

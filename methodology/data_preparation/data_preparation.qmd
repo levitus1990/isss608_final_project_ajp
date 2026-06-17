@@ -1,6 +1,134 @@
 ---
-title: "data_preparation"
-format: html
+title: "Data Preparation"
 ---
 
-To be determined
+# Data Preparation
+
+Turning the raw challenge file into the tables the app runs on.
+
+## Overview
+
+This page covers how we got from the raw JSON to a set of clean tables the Shiny app can use. All of it happens in one script, `data_prep.R`, which sits in the app folder. We run it once. It reads the raw file, builds the tables, and saves them as `.rds` files. The app then loads those files at startup instead of parsing the JSON every time, which keeps it fast.
+
+We kept the work in one place on purpose. If the data changes, we rerun the script and every table updates together.
+
+## The raw data
+
+The source is a single file, `MC1_final_00.json`, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.
+
+Each round carries three blocks:
+
+1. `communications`, every message sent that round, with the sender, channel, recipients, message type, what it was responding to, the full text, and a private internal-state field.
+2. `participants`, the agents present that round and their declared action.
+3. `environment_context`, the surrounding world, including the market snapshot, news, alerts, and external actor activity.
+
+Across all rounds there are 912 messages and 7 agents.
+
+## Loading and flattening
+
+The JSON is deeply nested, so the first job was to pull every message into one flat table with a single row per message. We read the file with `simplifyVector = FALSE` so the nested structure stays intact while we walk through it, then build the table round by round.
+
+```{r}
+#| eval: false
+raw    <- fromJSON("../../data/MC1_final_00.json", simplifyVector = FALSE)
+rounds <- raw$rounds
+
+comms <- map(seq_along(rounds), function(ri) {
+  rd <- rounds[[ri]]
+  map(rd$communications, function(m) {
+    ist <- m$internal_state %or% list()
+    tibble(
+      message_id   = m$message_id,
+      round_index  = ri - 1L,
+      agent_id     = m$agent_id,
+      agent_label  = m$agent_label,
+      channel      = m$channel,
+      message_type = m$message_type,
+      responding_to= m$responding_to,
+      content      = m$content,
+      timestamp    = m$timestamp,
+      reacting     = ist$reacting,
+      deliberating = ist$deliberating,
+      rationalizing= ist$rationalizing
+    )
+  }) %>% bind_rows()
+}) %>% bind_rows()
+```
+
+This gives us `comms`, the table everything else is built from. It has 912 rows and carries the round number, a parsed timestamp, and the sender details for each message.
+
+## Splitting internal from public
+
+The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tagged every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.
+
+```{r}
+#| eval: false
+public_channels <- c("anonymous_post", "official_post", "personal_post")
+comms$channel_type <- ifelse(comms$channel %in% public_channels,
+                             "Public", "Internal")
+```
+
+This single derived field is the backbone of the rest of the work. It is what the timeline and verdict views use to show the embargo boundary being crossed.
+
+## The internal-state fields
+
+Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. We kept them as columns on the main table so they are available when needed, but we never assume they exist for a given message.
+
+::: callout-note
+## Internal state is missing-not-random
+
+Because only 86 of 912 messages carry these fields, any view that draws on them is illustrative rather than representative. No table in the app aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.
+:::
+
+## Cleaning the market data
+
+The market snapshot gives a stock price each round, and this one needed care. The baseline prices fall steadily from \$38.70 down to \$31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of \$180, which is the distressed-sale valuation from the news narrative bleeding into the price field.
+
+::: callout-note
+## Interpretive decision: how we handled the broken price field
+
+Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day's overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.
+:::
+
+```{r}
+#| eval: false
+parse_price <- function(x) {
+  v <- suppressWarnings(as.numeric(str_remove_all(x, "[$,]")))
+  ifelse(!is.na(v) & v >= 10 & v <= 60, v, NA_real_)
+}
+```
+
+## Building the analytical tables
+
+From the flat table we built a small set of focused tables, each one feeding a specific part of the app.
+
+- **Round summary** gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.
+- **Baseline stats** compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.
+- **Z-scores** measure how far each agent's volume in a given round sits from their own baseline average. This is what flags abnormal activity.
+- **Network edges** resolve each reply back to the message it answered, then to that message's author, giving a who-replied-to-whom table.
+- **Intent chain** is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.
+- **Anonymous posts** pulls all 12 anonymous messages, keeping the true author stored separately so the app can hide it until the user chooses to reveal it.
+- **Event pins** are the timeline markers, anchored to real hours on the crisis day.
+
+::: callout-note
+## Interpretive decision: selecting the intent chain by id
+
+The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.
+:::
+
+## Output
+
+The script saves 11 `.rds` files and prints a short check so we can confirm the build came out right. The key counts are below.
+
+| Item | Count |
+|------|-------|
+| Messages | 912 |
+| Agents | 7 |
+| Rounds | 23 |
+| Messages with internal state | 86 |
+| Public messages | 77 |
+| Anonymous posts, all by Legal-Agent | 12 |
+| Intent chain messages | 6 |
+| Network edges | 33 |
+
+With these files in place, the app reads clean tables and never touches the raw JSON again. The next page walks through what the data looks like once it is prepared.

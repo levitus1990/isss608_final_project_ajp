@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>data_preparation – Unmasking the Leak</title>
+<title>Data Preparation – Unmasking the Leak</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -171,15 +206,31 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link active" data-scroll-target="#data-preparation">Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#the-raw-data" id="toc-the-raw-data" class="nav-link" data-scroll-target="#the-raw-data">The raw data</a></li>
+  <li><a href="#loading-and-flattening" id="toc-loading-and-flattening" class="nav-link" data-scroll-target="#loading-and-flattening">Loading and flattening</a></li>
+  <li><a href="#splitting-internal-from-public" id="toc-splitting-internal-from-public" class="nav-link" data-scroll-target="#splitting-internal-from-public">Splitting internal from public</a></li>
+  <li><a href="#the-internal-state-fields" id="toc-the-internal-state-fields" class="nav-link" data-scroll-target="#the-internal-state-fields">The internal-state fields</a></li>
+  <li><a href="#cleaning-the-market-data" id="toc-cleaning-the-market-data" class="nav-link" data-scroll-target="#cleaning-the-market-data">Cleaning the market data</a></li>
+  <li><a href="#building-the-analytical-tables" id="toc-building-the-analytical-tables" class="nav-link" data-scroll-target="#building-the-analytical-tables">Building the analytical tables</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">data_preparation</h1>
+<h1 class="title">Data Preparation</h1>
 </div>
 
 
@@ -196,9 +247,181 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>To be determined</p>
+<section id="data-preparation" class="level1">
+<h1>Data Preparation</h1>
+<p>Turning the raw challenge file into the tables the app runs on.</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This page covers how we got from the raw JSON to a set of clean tables the Shiny app can use. All of it happens in one script, <code>data_prep.R</code>, which sits in the app folder. We run it once. It reads the raw file, builds the tables, and saves them as <code>.rds</code> files. The app then loads those files at startup instead of parsing the JSON every time, which keeps it fast.</p>
+<p>We kept the work in one place on purpose. If the data changes, we rerun the script and every table updates together.</p>
+</section>
+<section id="the-raw-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-raw-data">The raw data</h2>
+<p>The source is a single file, <code>MC1_final_00.json</code>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.</p>
+<p>Each round carries three blocks:</p>
+<ol type="1">
+<li><code>communications</code>, every message sent that round, with the sender, channel, recipients, message type, what it was responding to, the full text, and a private internal-state field.</li>
+<li><code>participants</code>, the agents present that round and their declared action.</li>
+<li><code>environment_context</code>, the surrounding world, including the market snapshot, news, alerts, and external actor activity.</li>
+</ol>
+<p>Across all rounds there are 912 messages and 7 agents.</p>
+</section>
+<section id="loading-and-flattening" class="level2">
+<h2 class="anchored" data-anchor-id="loading-and-flattening">Loading and flattening</h2>
+<p>The JSON is deeply nested, so the first job was to pull every message into one flat table with a single row per message. We read the file with <code>simplifyVector = FALSE</code> so the nested structure stays intact while we walk through it, then build the table round by round.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>raw    <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"../../data/MC1_final_00.json"</span>, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>rounds <span class="ot">&lt;-</span> raw<span class="sc">$</span>rounds</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%or%</span> <span class="fu">list</span>()</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This gives us <code>comms</code>, the table everything else is built from. It has 912 rows and carries the round number, a parsed timestamp, and the sender details for each message.</p>
+</section>
+<section id="splitting-internal-from-public" class="level2">
+<h2 class="anchored" data-anchor-id="splitting-internal-from-public">Splitting internal from public</h2>
+<p>The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tagged every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>public_channels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anonymous_post"</span>, <span class="st">"official_post"</span>, <span class="st">"personal_post"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>comms<span class="sc">$</span>channel_type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(comms<span class="sc">$</span>channel <span class="sc">%in%</span> public_channels,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Public"</span>, <span class="st">"Internal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This single derived field is the backbone of the rest of the work. It is what the timeline and verdict views use to show the embargo boundary being crossed.</p>
+</section>
+<section id="the-internal-state-fields" class="level2">
+<h2 class="anchored" data-anchor-id="the-internal-state-fields">The internal-state fields</h2>
+<p>Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. We kept them as columns on the main table so they are available when needed, but we never assume they exist for a given message.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Internal state is missing-not-random
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because only 86 of 912 messages carry these fields, any view that draws on them is illustrative rather than representative. No table in the app aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.</p>
+</div>
+</div>
+</section>
+<section id="cleaning-the-market-data" class="level2">
+<h2 class="anchored" data-anchor-id="cleaning-the-market-data">Cleaning the market data</h2>
+<p>The market snapshot gives a stock price each round, and this one needed care. The baseline prices fall steadily from $38.70 down to $31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of $180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Interpretive decision: how we handled the broken price field
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day’s overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.</p>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(v) <span class="sc">&amp;</span> v <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> v <span class="sc">&lt;=</span> <span class="dv">60</span>, v, <span class="cn">NA_real_</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="building-the-analytical-tables" class="level2">
+<h2 class="anchored" data-anchor-id="building-the-analytical-tables">Building the analytical tables</h2>
+<p>From the flat table we built a small set of focused tables, each one feeding a specific part of the app.</p>
+<ul>
+<li><strong>Round summary</strong> gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.</li>
+<li><strong>Baseline stats</strong> compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.</li>
+<li><strong>Z-scores</strong> measure how far each agent’s volume in a given round sits from their own baseline average. This is what flags abnormal activity.</li>
+<li><strong>Network edges</strong> resolve each reply back to the message it answered, then to that message’s author, giving a who-replied-to-whom table.</li>
+<li><strong>Intent chain</strong> is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.</li>
+<li><strong>Anonymous posts</strong> pulls all 12 anonymous messages, keeping the true author stored separately so the app can hide it until the user chooses to reveal it.</li>
+<li><strong>Event pins</strong> are the timeline markers, anchored to real hours on the crisis day.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Interpretive decision: selecting the intent chain by id
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.</p>
+</div>
+</div>
+</section>
+<section id="output" class="level2">
+<h2 class="anchored" data-anchor-id="output">Output</h2>
+<p>The script saves 11 <code>.rds</code> files and prints a short check so we can confirm the build came out right. The key counts are below.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Item</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Messages</td>
+<td>912</td>
+</tr>
+<tr class="even">
+<td>Agents</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td>Rounds</td>
+<td>23</td>
+</tr>
+<tr class="even">
+<td>Messages with internal state</td>
+<td>86</td>
+</tr>
+<tr class="odd">
+<td>Public messages</td>
+<td>77</td>
+</tr>
+<tr class="even">
+<td>Anonymous posts, all by Legal-Agent</td>
+<td>12</td>
+</tr>
+<tr class="odd">
+<td>Intent chain messages</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>Network edges</td>
+<td>33</td>
+</tr>
+</tbody>
+</table>
+<p>With these files in place, the app reads clean tables and never touches the raw JSON again. The next page walks through what the data looks like once it is prepared.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
