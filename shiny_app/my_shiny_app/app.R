@@ -11,6 +11,7 @@ library(shiny)
 library(dplyr)
 library(ggplot2)
 library(scales)
+library(visNetwork)
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -26,6 +27,13 @@ round_summary  <- readRDS(file.path(data_dir, "round_summary.rds"))
 event_pins     <- readRDS(file.path(data_dir, "event_pins.rds"))
 
 agent_choices <- setNames(agents$agent_id, agents$agent_label)
+
+# fixed node table for the Day-tab network (positions stay put; only edges change)
+net_nodes <- data.frame(
+  id    = agents$agent_id,
+  label = agents$agent_label,
+  stringsAsFactors = FALSE
+)
 
 # round_index to human label for the slider
 round_labels <- setNames(
@@ -132,7 +140,12 @@ ui <- navbarPage(
       column(8,
              uiOutput("day_now"),
              uiOutput("day_pins"),
-             plotOutput("day_plot", height = "260px")),
+             plotOutput("day_plot", height = "230px"),
+             div(style = "margin-top:8px;",
+                 p(style = "font-size:12px; color:#888; margin-bottom:2px;",
+                   "Who replied to whom this hour. Node size shows messages sent; Legal stays central."),
+                 visNetworkOutput("day_network", height = "230px"))),
+
       column(4,
              uiOutput("day_feed_head"),
              div(style = "max-height:520px; overflow-y:auto;", uiOutput("day_feed")))
@@ -302,7 +315,36 @@ server <- function(input, output, session) {
                 format(rs$ts, "%H:%M"), min(10, nrow(cm)), nrow(cm)))
     )
   })
-  
+  # ----- per-round communication network (safe redraw) -----
+  output$day_network <- renderVisNetwork({
+    cr <- cur_round()
+    # resolve this round's replies into edges: responding_to -> author
+    id_author <- setNames(comms$agent_id, comms$message_id)
+    cm <- comms %>% filter(round_index == cr, !is.na(responding_to))
+    e <- cm %>%
+      mutate(from = unname(id_author[responding_to]), to = agent_id) %>%
+      filter(!is.na(from), !is.na(to), from != to) %>%
+      count(from, to, name = "value")
+    
+    # node size = messages this agent sent this round
+    sent <- comms %>% filter(round_index == cr) %>% count(agent_id, name = "n")
+    nodes <- net_nodes %>%
+      left_join(sent, by = c("id" = "agent_id")) %>%
+      mutate(value = ifelse(is.na(n), 1, n + 2),
+             color = ifelse(id == "legal_agent", "#c0392b", "#9aa7b4"))
+    
+    edges <- if (nrow(e) == 0) {
+      data.frame(from = character(0), to = character(0), value = numeric(0))
+    } else e
+    
+    visNetwork(nodes, edges) %>%
+      visNodes(font = list(size = 16), borderWidth = 1) %>%
+      visEdges(arrows = "to", color = list(color = "#b8c4d0", opacity = 0.7),
+               smooth = FALSE) %>%
+      visIgraphLayout(layout = "layout_in_circle", randomSeed = 42) %>%
+      visOptions(highlightNearest = TRUE) %>%
+      visInteraction(dragNodes = FALSE, dragView = FALSE, zoomView = FALSE)
+  })
   output$day_feed <- renderUI({
     cm <- comms %>% filter(round_index == cur_round()) %>% head(10)
     if (nrow(cm) == 0) return(p("No messages this round."))
