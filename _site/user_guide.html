@@ -211,7 +211,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#how-to-use-the-shiny-app" id="toc-how-to-use-the-shiny-app" class="nav-link active" data-scroll-target="#how-to-use-the-shiny-app"><span class="header-section-number">1</span> How to Use the Shiny App</a></li>
+  <li><a href="#user-guide" id="toc-user-guide" class="nav-link active" data-scroll-target="#user-guide"><span class="header-section-number">1</span> User Guide</a></li>
+  <li><a href="#the-day" id="toc-the-day" class="nav-link" data-scroll-target="#the-day"><span class="header-section-number">2</span> The Day</a></li>
+  <li><a href="#the-norm" id="toc-the-norm" class="nav-link" data-scroll-target="#the-norm"><span class="header-section-number">3</span> The Norm</a></li>
+  <li><a href="#the-intent" id="toc-the-intent" class="nav-link" data-scroll-target="#the-intent"><span class="header-section-number">4</span> The Intent</a></li>
+  <li><a href="#the-verdict" id="toc-the-verdict" class="nav-link" data-scroll-target="#the-verdict"><span class="header-section-number">5</span> The Verdict</a></li>
   </ul>
 </nav>
     </div>
@@ -237,9 +241,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>About this site</p>
-<section id="how-to-use-the-shiny-app" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="how-to-use-the-shiny-app"><span class="header-section-number">1</span> How to Use the Shiny App</h2>
+<section id="user-guide" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> User Guide</h1>
+<p>The application, <em>Unmasking the Leak</em>, is an evidence room for the TenantThread embargo breach. It is organised into four tabs, each answering one part of the investigation. This guide walks through what each tab shows and how to use it.</p>
+<p>The application is live at the link in the navigation bar. You can follow along in the app as you read.</p>
+</section>
+<section id="the-day" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> The Day</h1>
+<p>The first tab replays the crisis as it happened, hour by hour.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src=".\image/guide_day.png" class="img-fluid figure-img"></p>
+<figcaption>The Day tab: the timeline scrubber, event pins, message volume, the reply network, and the live message feed.</figcaption>
+</figure>
+</div>
+<p><strong>How to use it.</strong> Drag the slider at the top through the 23 rounds, or press the play button to the right of it to advance automatically. As you move, everything on the tab updates to that moment:</p>
+<ul>
+<li>The <strong>event pins</strong> below the slider mark key moments. A filled grey pin has already happened, a red pin is the current hour, and a faint pin is still ahead. The leak-related pins are tinted red.</li>
+<li>The <strong>volume chart</strong> fills in dark up to your current position, so you can see how much of the conversation has elapsed.</li>
+<li>The <strong>reply network</strong> shows who replied to whom that hour. Node size is the number of messages an agent sent, and Legal stays at the centre in red.</li>
+<li>The <strong>message feed</strong> on the right lists the actual messages from that round. Public messages are marked with a red bar on the left.</li>
+</ul>
+<p>The tab is built so the surge is visible as you scrub: the baseline rounds are quiet, and the volume and public posting climb sharply once you pass the crisis-day line.</p>
+</section>
+<section id="the-norm" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> The Norm</h1>
+<p>The second tab compares each agent’s normal behaviour against the crisis day.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src=".\image/guide_norm1.png" class="img-fluid figure-img"></p>
+<figcaption>The Norm tab: the agent selector, the baseline-versus-crisis metric cards, and the per-round anomaly chart.</figcaption>
+</figure>
+</div>
+<p><strong>How to use it.</strong> Pick an agent from the dropdown on the left. The four cards along the top show that agent’s shift from baseline to crisis: messages per round, public share, anonymous posts, and the peak anomaly score. The red triangles show the size and direction of each change.</p>
+<p>Below the cards, the <strong>anomaly chart</strong> plots each round’s deviation from that agent’s own baseline average. Bars to the right of the dashed line are the crisis day, shown in red. For Legal, the crisis bars sit far above the baseline, which is the behavioural signature the investigation looks for.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src=".\image/guide_norm2.png" class="img-fluid figure-img"></p>
+<figcaption>Lower on the same tab: the dumbbell comparison of all agents, and the per-agent summary table with sparklines.</figcaption>
+</figure>
+</div>
+<p>Scrolling down, two more views compare all seven agents at once. The <strong>dumbbell chart</strong> shows each agent’s move from baseline to crisis, with red for the agents that surged and blue for those that reduced activity. The <strong>summary table</strong> gives each agent’s net change, colour-coded, alongside a sparkline of their full trajectory across all 23 rounds.</p>
+</section>
+<section id="the-intent" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> The Intent</h1>
+<p>The third tab presents the planned response and the question of who was really posting.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src=".\image/guide_intent.png" class="img-fluid figure-img"></p>
+<figcaption>The Intent tab: the six-step intent chain on the left, and the anonymous channel with the reveal button on the right.</figcaption>
+</figure>
+</div>
+<p><strong>How to use it.</strong> The left column is the <strong>intent chain</strong>, six messages from Legal’s own communications in order. Read them top to bottom. The first cards are the planning, and the final two, tagged in red, fire only after the merger was already public.</p>
+<p>The right column is the <strong>anonymous channel</strong>, twelve posts that appeared to the public as neutral third-party commentary during the embargo. Click the red <strong>Reveal authors</strong> button to unmask who actually wrote them. Click <strong>Reset</strong> to hide the authors again. The reveal is the point of the tab, so it is worth reading a few posts as anonymous first, then revealing.</p>
+</section>
+<section id="the-verdict" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> The Verdict</h1>
+<p>The fourth tab lets you build the verdict from the evidence, one layer at a time.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src=".\image/guide_verdict.png" class="img-fluid figure-img"></p>
+<figcaption>The Verdict tab: the four evidence-layer toggles on the left, and the two verdict readouts plus the interpretation on the right.</figcaption>
+</figure>
+</div>
+<p><strong>How to use it.</strong> Tick the evidence layers on the left to admit them into the analysis. As you do, the two readouts on the right update: who put the merger into public, and whether there was deliberate misconduct. The interpretation box at the bottom names which reading the current evidence reproduces.</p>
+<p>The tab is designed to be explored:</p>
+<ul>
+<li>Admit only the <strong>public timeline and behavioural anomalies</strong> (layers 1 and 2) and the analysis reproduces the first report’s reading, an external leak and a system failure.</li>
+<li>Admit only the <strong>intent chain</strong> (layer 3) and it reproduces the second report’s reading, a deliberate leak.</li>
+<li>Use <strong>Admit all four</strong> to see the full synthesis, where the partial readings resolve into a single picture.</li>
+</ul>
+<p>This is the novel piece of the application. It shows not just the conclusion, but why two careful analysts, each holding part of the evidence, reached opposite verdicts.</p>
 
 
 <!-- -->
@@ -702,9 +774,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "User Guide"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>About this site</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># User Guide</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## How to Use the Shiny App</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>The application, *Unmasking the Leak*, is an evidence room for the TenantThread embargo breach. It is organised into four tabs, each answering one part of the investigation. This guide walks through what each tab shows and how to use it.</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>The application is live at the link in the navigation bar. You can follow along in the app as you read.</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Day</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>The first tab replays the crisis as it happened, hour by hour.</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="al">![The Day tab: the timeline scrubber, event pins, message volume, the reply network, and the live message feed.](/image/guide_day.png)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>**How to use it.** Drag the slider at the top through the 23 rounds, or press the play button to the right of it to advance automatically. As you move, everything on the tab updates to that moment:</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The **event pins** below the slider mark key moments. A filled grey pin has already happened, a red pin is the current hour, and a faint pin is still ahead. The leak-related pins are tinted red.</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The **volume chart** fills in dark up to your current position, so you can see how much of the conversation has elapsed.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The **reply network** shows who replied to whom that hour. Node size is the number of messages an agent sent, and Legal stays at the centre in red.</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The **message feed** on the right lists the actual messages from that round. Public messages are marked with a red bar on the left.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>The tab is built so the surge is visible as you scrub: the baseline rounds are quiet, and the volume and public posting climb sharply once you pass the crisis-day line.</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Norm</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>The second tab compares each agent's normal behaviour against the crisis day.</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="al">![The Norm tab: the agent selector, the baseline-versus-crisis metric cards, and the per-round anomaly chart.](/image/guide_norm1.png)</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>**How to use it.** Pick an agent from the dropdown on the left. The four cards along the top show that agent's shift from baseline to crisis: messages per round, public share, anonymous posts, and the peak anomaly score. The red triangles show the size and direction of each change.</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>Below the cards, the **anomaly chart** plots each round's deviation from that agent's own baseline average. Bars to the right of the dashed line are the crisis day, shown in red. For Legal, the crisis bars sit far above the baseline, which is the behavioural signature the investigation looks for.</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="al">![Lower on the same tab: the dumbbell comparison of all agents, and the per-agent summary table with sparklines.](/image/guide_norm2.png)</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>Scrolling down, two more views compare all seven agents at once. The **dumbbell chart** shows each agent's move from baseline to crisis, with red for the agents that surged and blue for those that reduced activity. The **summary table** gives each agent's net change, colour-coded, alongside a sparkline of their full trajectory across all 23 rounds.</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Intent</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>The third tab presents the planned response and the question of who was really posting.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="al">![The Intent tab: the six-step intent chain on the left, and the anonymous channel with the reveal button on the right.](/image/guide_intent.png)</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>**How to use it.** The left column is the **intent chain**, six messages from Legal's own communications in order. Read them top to bottom. The first cards are the planning, and the final two, tagged in red, fire only after the merger was already public.</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>The right column is the **anonymous channel**, twelve posts that appeared to the public as neutral third-party commentary during the embargo. Click the red **Reveal authors** button to unmask who actually wrote them. Click **Reset** to hide the authors again. The reveal is the point of the tab, so it is worth reading a few posts as anonymous first, then revealing.</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu"># The Verdict</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>The fourth tab lets you build the verdict from the evidence, one layer at a time.</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="al">![The Verdict tab: the four evidence-layer toggles on the left, and the two verdict readouts plus the interpretation on the right.](/image/guide_verdict.png)</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>**How to use it.** Tick the evidence layers on the left to admit them into the analysis. As you do, the two readouts on the right update: who put the merger into public, and whether there was deliberate misconduct. The interpretation box at the bottom names which reading the current evidence reproduces.</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>The tab is designed to be explored:</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Admit only the **public timeline and behavioural anomalies** (layers 1 and 2) and the analysis reproduces the first report's reading, an external leak and a system failure.</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Admit only the **intent chain** (layer 3) and it reproduces the second report's reading, a deliberate leak.</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use **Admit all four** to see the full synthesis, where the partial readings resolve into a single picture.</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>This is the novel piece of the application. It shows not just the conclusion, but why two careful analysts, each holding part of the evidence, reached opposite verdicts.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
