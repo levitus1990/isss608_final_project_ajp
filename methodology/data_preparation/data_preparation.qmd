@@ -1,16 +1,30 @@
 ---
 title: "Data Preparation"
+execute:
+  warning: false
+  message: false
 ---
 
 # Data Preparation
 
-Turning the raw challenge file into the tables the app runs on.
+This page documents how the raw challenge file becomes the clean tables the Shiny application runs on. All of it happens in one script, `data_prep.R`, which lives in the app folder. We run it once. It reads the raw JSON, builds the tables, and saves them as `.rds` files. The application then loads those files at startup instead of parsing the JSON every time, which keeps it fast.
 
-## Overview
+# Setup
 
-This page covers how we got from the raw JSON to a set of clean tables the Shiny app can use. All of it happens in one script, `data_prep.R`, which sits in the app folder. We run it once. It reads the raw file, builds the tables, and saves them as `.rds` files. The app then loads those files at startup instead of parsing the JSON every time, which keeps it fast.
+## Loading packages
 
-We kept the work in one place on purpose. If the data changes, we rerun the script and every table updates together.
+We use the following packages to prepare the data.
+
+- [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html) to parse the JSON
+- [tidyverse](https://www.tidyverse.org/) for data manipulation
+- [knitr](https://cran.r-project.org/web/packages/knitr/index.html) for table displays
+
+```{r}
+#| label: load-packages
+library(jsonlite)
+library(tidyverse)
+library(knitr)
+```
 
 ## The raw data
 
@@ -22,17 +36,22 @@ Each round carries three blocks:
 2. `participants`, the agents present that round and their declared action.
 3. `environment_context`, the surrounding world, including the market snapshot, news, alerts, and external actor activity.
 
-Across all rounds there are 912 messages and 7 agents.
-
-## Loading and flattening
-
-The JSON is deeply nested, so the first job was to pull every message into one flat table with a single row per message. We read the file with `simplifyVector = FALSE` so the nested structure stays intact while we walk through it, then build the table round by round.
+The code below reads the file. We use `simplifyVector = FALSE` so the nested structure stays intact while we walk through it.
 
 ```{r}
+#| label: read-json
 #| eval: false
 raw    <- fromJSON("../../data/MC1_final_00.json", simplifyVector = FALSE)
 rounds <- raw$rounds
+```
 
+# Flattening the communications
+
+The JSON is deeply nested, so the first job is to pull every message into one flat table with a single row per message. We walk the structure round by round, lifting the sender details, the channel, the content, and the three internal-state fields onto each row.
+
+```{r}
+#| label: flatten-code
+#| eval: false
 comms <- map(seq_along(rounds), function(ri) {
   rd <- rounds[[ri]]
   map(rd$communications, function(m) {
@@ -55,42 +74,50 @@ comms <- map(seq_along(rounds), function(ri) {
 }) %>% bind_rows()
 ```
 
-This gives us `comms`, the table everything else is built from. It has 912 rows and carries the round number, a parsed timestamp, and the sender details for each message.
-
-## Splitting internal from public
-
-The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tagged every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.
+This produces `comms`, the table everything else is built from. Loading the saved result, we can confirm its shape.
 
 ```{r}
+#| label: comms-glimpse
+comms <- readRDS("../../shiny_app/my_shiny_app/data/comms.rds")
+glimpse(comms)
+```
+
+There are **912 messages** across **7 agents** and **23 rounds**.
+
+# Splitting internal from public
+
+The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tag every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.
+
+```{r}
+#| label: channel-code
 #| eval: false
 public_channels <- c("anonymous_post", "official_post", "personal_post")
 comms$channel_type <- ifelse(comms$channel %in% public_channels,
                              "Public", "Internal")
 ```
 
-This single derived field is the backbone of the rest of the work. It is what the timeline and verdict views use to show the embargo boundary being crossed.
-
-## The internal-state fields
-
-Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. We kept them as columns on the main table so they are available when needed, but we never assume they exist for a given message.
-
-::: callout-note
-## Internal state is missing-not-random
-
-Because only 86 of 912 messages carry these fields, any view that draws on them is illustrative rather than representative. No table in the app aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.
-:::
-
-## Cleaning the market data
-
-The market snapshot gives a stock price each round, and this one needed care. The baseline prices fall steadily from \$38.70 down to \$31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of \$180, which is the distressed-sale valuation from the news narrative bleeding into the price field.
-
-::: callout-note
-## Interpretive decision: how we handled the broken price field
-
-Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day's overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.
-:::
+This single derived field is the backbone of the rest of the work. The table below confirms the split.
 
 ```{r}
+#| label: channel-table
+comms %>%
+  count(channel_type, channel, name = "messages") %>%
+  arrange(channel_type, desc(messages)) %>%
+  kable()
+```
+
+::: callout-note
+## Internal state is missing-not-random {.unnumbered}
+
+Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.
+:::
+
+# Cleaning the market data
+
+The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.
+
+```{r}
+#| label: price-code
 #| eval: false
 parse_price <- function(x) {
   v <- suppressWarnings(as.numeric(str_remove_all(x, "[$,]")))
@@ -98,37 +125,73 @@ parse_price <- function(x) {
 }
 ```
 
-## Building the analytical tables
+::: callout-note
+## Interpretive decision: how we handled the broken price field {.unnumbered}
 
-From the flat table we built a small set of focused tables, each one feeding a specific part of the app.
+Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day's overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.
+:::
+
+The per-round summary table holds the cleaned price alongside the message counts and sentiment that drive the timeline view.
+
+```{r}
+#| label: round-summary-table
+round_summary <- readRDS("../../shiny_app/my_shiny_app/data/round_summary.rds")
+round_summary %>%
+  select(round_index, n_msgs, n_public, sentiment_state, stock_price) %>%
+  kable()
+```
+
+# Building the analytical tables
+
+From the flat table we build a small set of focused tables, each one feeding a specific part of the application.
 
 - **Round summary** gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.
 - **Baseline stats** compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.
-- **Z-scores** measure how far each agent's volume in a given round sits from their own baseline average. This is what flags abnormal activity.
+- **Z-scores** measure how far each agent's volume in a given round sits from their own baseline average.
 - **Network edges** resolve each reply back to the message it answered, then to that message's author, giving a who-replied-to-whom table.
 - **Intent chain** is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.
-- **Anonymous posts** pulls all 12 anonymous messages, keeping the true author stored separately so the app can hide it until the user chooses to reveal it.
+- **Anonymous posts** pulls all 12 anonymous messages, keeping the true author stored separately so the application can hide it until the user chooses to reveal it.
 - **Event pins** are the timeline markers, anchored to real hours on the crisis day.
 
+The baseline-versus-crisis table is the clearest example. It shows how each agent's behaviour shifts between the two phases.
+
+```{r}
+#| label: baseline-stats-table
+baseline_stats <- readRDS("../../shiny_app/my_shiny_app/data/baseline_stats.rds")
+baseline_stats %>%
+  mutate(msgs_per_round = round(msgs_per_round, 1),
+         public_share = round(public_share, 2)) %>%
+  select(agent_id, phase, msgs_per_round, public_share, n_anon) %>%
+  arrange(agent_id, phase) %>%
+  kable()
+```
+
 ::: callout-note
-## Interpretive decision: selecting the intent chain by id
+## Interpretive decision: selecting the intent chain by id {.unnumbered}
 
 The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.
 :::
 
-## Output
+# Output
 
-The script saves 11 `.rds` files and prints a short check so we can confirm the build came out right. The key counts are below.
+The script saves 11 `.rds` files. The key counts are below, confirming the build came out as expected.
 
-| Item | Count |
-|------|-------|
-| Messages | 912 |
-| Agents | 7 |
-| Rounds | 23 |
-| Messages with internal state | 86 |
-| Public messages | 77 |
-| Anonymous posts, all by Legal-Agent | 12 |
-| Intent chain messages | 6 |
-| Network edges | 33 |
+```{r}
+#| label: output-summary
+tibble(
+  Item = c("Messages", "Agents", "Rounds", "Messages with internal state",
+           "Public messages", "Anonymous posts (all Legal)",
+           "Intent chain messages"),
+  Count = c(
+    nrow(comms),
+    n_distinct(comms$agent_id),
+    n_distinct(comms$round_index),
+    sum(!(is.na(comms$reacting) & is.na(comms$deliberating) & is.na(comms$rationalizing))),
+    sum(comms$channel_type == "Public"),
+    sum(comms$channel == "anonymous_post"),
+    6
+  )
+) %>% kable()
+```
 
-With these files in place, the app reads clean tables and never touches the raw JSON again. The next page walks through what the data looks like once it is prepared.
+With these files in place, the application reads clean tables and never touches the raw JSON again. The next page explores what the data looks like once it is prepared.

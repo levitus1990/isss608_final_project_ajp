@@ -1,6 +1,236 @@
 ---
-title: "data_exploration"
-format: html
+title: "Data Exploration and Visualization"
+execute:
+  warning: false
+  message: false
 ---
 
-To be determined
+# Data Exploration and Visualization
+
+Before building the application, we explored the prepared data to find what was worth investigating. This page is that first pass. It establishes the shape of the conversation, checks the signals we expected to use, and surfaces the patterns that shaped each part of the Shiny application.
+
+The dataset is 912 messages from seven communications agents, across 23 rounds. The first thirteen rounds are a daily baseline from 17 May to 4 June. The last ten are hourly snapshots of the crisis day, 5 June. Six channels carry the messages, three internal and three public. These patterns are what shaped the application.
+
+# Setup
+
+## Loading packages
+
+```{r}
+#| label: load-packages
+library(tidyverse)   # data manipulation and ggplot2
+library(scales)      # axis formatting
+library(tidygraph)   # graph structures
+library(ggraph)      # network plotting
+```
+
+## Loading the data
+
+The prepared `.rds` tables live in the application's data folder, two levels up from this page.
+
+```{r}
+#| label: load-data
+data_dir       <- "../../shiny_app/my_shiny_app/data"
+round_summary  <- readRDS(file.path(data_dir, "round_summary.rds"))
+baseline_stats <- readRDS(file.path(data_dir, "baseline_stats.rds"))
+comms          <- readRDS(file.path(data_dir, "comms.rds"))
+agents         <- readRDS(file.path(data_dir, "agents.rds"))
+edges_phase    <- readRDS(file.path(data_dir, "edges_phase.rds"))
+```
+
+## House theme
+
+A shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.
+
+```{r}
+#| label: house-theme
+theme_house <- function() {
+  theme_minimal(base_size = 13) +
+    theme(
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(color = "grey40"),
+      axis.title = element_text(color = "grey30")
+    )
+}
+```
+
+# The shape of the conversation
+
+The first question is simply what the data looks like over time. Message volume is flat and low through the baseline, then explodes on the crisis day.
+
+```{r}
+#| label: fig-volume
+#| fig-cap: "Total messages per round across all 23 rounds."
+ggplot(round_summary, aes(round_index, n_msgs)) +
+  geom_col(width = 0.8, fill = "#b8c4d0") +
+  geom_col(data = filter(round_summary, round_index >= 13),
+           width = 0.8, fill = "#c0392b") +
+  geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
+  annotate("text", x = 12.5, y = max(round_summary$n_msgs),
+           label = "crisis day begins", hjust = -0.05, vjust = 1,
+           size = 3.3, color = "grey45") +
+  scale_x_continuous(breaks = seq(0, 22, 2)) +
+  labs(title = "Activity is flat through the baseline, then explodes on the crisis day",
+       subtitle = "Total messages per round. Baseline in grey, crisis day in red.",
+       x = "Round", y = "Messages") +
+  theme_house()
+```
+
+::: callout-note
+## Findings {.unnumbered}
+
+The baseline rounds sit at a low, steady level. The crisis day is unmistakably different, several times the baseline volume. This single anomaly is what the rest of the analysis is about, and it is what the application's timeline view lets you replay hour by hour.
+:::
+
+# The market signal that broke
+
+We expected the stock price to be a clean market signal. It is not. The baseline prices fall steadily, which is sensible, but the crisis day is full of gaps and one impossible value. The sentiment state, by contrast, stays usable across the whole period.
+
+```{r}
+#| label: fig-sentiment
+#| fig-cap: "Market sentiment across all 23 rounds, mapped to an ordered scale."
+sent_levels <- c("neutral", "cautious", "negative", "critical", "collapsing")
+
+round_summary %>%
+  mutate(
+    sent = tolower(sentiment_state),
+    sent = case_when(
+      sent %in% c("low") ~ "critical",
+      sent %in% c("recovering") ~ "negative",
+      TRUE ~ sent
+    ),
+    sent = factor(sent, levels = sent_levels)
+  ) %>%
+  ggplot(aes(round_index, sent, group = 1)) +
+  geom_line(color = "#b8c4d0", linewidth = 1) +
+  geom_point(aes(color = round_index >= 13), size = 3) +
+  geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
+  scale_color_manual(values = c("FALSE" = "#b8c4d0", "TRUE" = "#c0392b"), guide = "none") +
+  scale_x_continuous(breaks = seq(0, 22, 2)) +
+  labs(title = "Market sentiment darkens steadily, then turns critical on the crisis day",
+       subtitle = "Sentiment state per round. The price field, by contrast, was unusable.",
+       x = "Round", y = NULL) +
+  theme_house()
+```
+
+::: callout-note
+## Findings: a signal we had to discard {.unnumbered}
+
+The stock price field carries no value on several crisis-day rounds, including the decisive late-afternoon hours, and one round records a price of 180, which is the distressed-sale figure from the news narrative bleeding into the field. We could not build a price-reaction view on a field that breaks on exactly the day that matters. So no market-data analysis went into the application. Sentiment is the signal that held, and it is shown only as context on the timeline. The verdict rests on communication behaviour, not market data.
+:::
+
+# Where the conversation lived
+
+The challenge is about information crossing from inside the company to the outside. So the next question is how the traffic splits between internal and public channels, and when that split changes.
+
+```{r}
+#| label: fig-channel
+#| fig-cap: "Internal and public message counts per round."
+comms %>%
+  count(round_index, channel_type, name = "n") %>%
+  ggplot(aes(round_index, n, fill = channel_type)) +
+  geom_col(width = 0.8) +
+  geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
+  scale_fill_manual(values = c("Internal" = "#b8c4d0", "Public" = "#c0392b"),
+                    name = NULL) +
+  scale_x_continuous(breaks = seq(0, 22, 2)) +
+  labs(title = "The conversation is overwhelmingly internal until the crisis day",
+       subtitle = "Messages per round, split by channel type",
+       x = "Round", y = "Messages") +
+  theme_house() +
+  theme(legend.position = "top")
+```
+
+::: callout-note
+## Findings {.unnumbered}
+
+Through the baseline, the conversation is almost entirely internal. Public posting barely registers. It is only on the crisis day that public messages appear in any number, and they cluster in the final hours. This internal-to-public boundary is the line the whole investigation watches: the question is not whether the agents talked, but when and why their talk crossed into public.
+:::
+
+# How behaviour shifted
+
+Volume rose, but not evenly. Breaking the change down by agent shows that the surge was driven by a few agents while others went the opposite way.
+
+```{r}
+#| label: fig-agent
+#| fig-cap: "Messages per round, baseline against crisis, by agent."
+baseline_stats %>%
+  left_join(agents %>% select(agent_id, agent_label), by = "agent_id") %>%
+  mutate(phase = factor(phase, levels = c("baseline", "crisis"),
+                        labels = c("Baseline", "Crisis"))) %>%
+  ggplot(aes(x = msgs_per_round, y = reorder(agent_label, msgs_per_round),
+             fill = phase)) +
+  geom_col(position = "dodge", width = 0.7) +
+  scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#c0392b"),
+                    name = NULL) +
+  labs(title = "A few agents surge while the supervisory agents go quiet",
+       subtitle = "Messages per round, baseline against crisis day",
+       x = "Messages per round", y = NULL) +
+  theme_house() +
+  theme(legend.position = "top")
+```
+
+::: callout-note
+## Findings {.unnumbered}
+
+Legal and Social-Manager climb sharply, and PR-Intern jumps from a low base. At the same time the supervisory agents reduce their activity, with Platform-Trust dropping most. The agents meant to provide oversight got quieter on the day that most needed them. This split is the observation that the application's behavioural module measures precisely, agent by agent, against each one's own baseline.
+:::
+
+# The network, before and after
+
+Volume and direction describe individual agents. The last exploratory question is structural: who was talking to whom, and did that structure change under crisis. We build a directed reply network for each phase from the prepared edge table.
+
+```{r}
+#| label: fig-network
+#| fig-cap: "Reply network by phase. Node and edge size scale with message volume."
+#| fig-width: 10
+#| fig-height: 5
+# label lookup and a Legal flag for colouring
+lab <- setNames(agents$agent_label, agents$agent_id)
+
+build_graph <- function(ph) {
+  e <- edges_phase %>% filter(phase == ph)
+  nodes <- tibble(name = agents$agent_id) %>%
+    mutate(label = lab[name],
+           is_legal = name == "legal_agent")
+  tbl_graph(nodes = nodes, edges = e, directed = TRUE) %>%
+    mutate(deg = centrality_degree(weights = weight, mode = "all"))
+}
+
+g_base   <- build_graph("baseline") %>% mutate(phase = "Baseline")
+g_crisis <- build_graph("crisis")   %>% mutate(phase = "Crisis")
+
+plot_net <- function(g, title) {
+  ggraph(g, layout = "circle") +
+    geom_edge_arc(aes(width = weight), strength = 0.12,
+                  color = "#c8d2db", alpha = 0.8,
+                  arrow = arrow(length = unit(2, "mm"), type = "closed"),
+                  end_cap = circle(4, "mm"), start_cap = circle(4, "mm")) +
+    geom_node_point(aes(size = deg + 2, color = is_legal)) +
+    geom_node_text(aes(label = label), size = 2.8, repel = TRUE, color = "grey25") +
+    scale_edge_width(range = c(0.3, 2.5), guide = "none") +
+    scale_size(range = c(3, 10), guide = "none") +
+    scale_color_manual(values = c("FALSE" = "#9aa7b4", "TRUE" = "#c0392b"), guide = "none") +
+    labs(title = title) +
+    theme_void() +
+    theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5,
+                                    color = "grey25"),
+          plot.margin = margin(6, 6, 6, 6))
+}
+
+library(patchwork)
+plot_net(g_base, "Baseline") + plot_net(g_crisis, "Crisis day")
+```
+
+::: callout-note
+## Findings {.unnumbered}
+
+In the baseline the reply structure is sparse and fairly even. On the crisis day the traffic thickens and tightens around Legal, shown in red, who becomes the busiest node by reply volume. The structure does not just get louder, it reorganises around one agent. The application's timeline carries an interactive version of this network, redrawn for each round.
+:::
+
+# Where this led
+
+The first pass surfaced a clear set of facts. There is one unmistakable anomaly, the crisis day. There is a boundary that matters, internal against public, that the agents crossed only late in the day. The surge was driven by a few agents while oversight receded, and the reply structure reorganised around Legal. We also found one dead end: the price field was too broken to use, so the project leans on communication data throughout.
+
+What exploration could not settle is intent. Volume, channels, and structure show what happened, but not why, and not who was really behind the public messaging. Those questions, the planning behind the response and the true authorship of the anonymous posts, are what the application's later modules and the Findings page take up.

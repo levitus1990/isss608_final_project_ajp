@@ -23,6 +23,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -42,7 +77,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-47e94522f7b68a213387676069a32f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9f2680816b757cdcf9d4c85310f84adb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -176,12 +211,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us" class="nav-link active" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us"><i class="fa-solid fa-users" aria-label="users"></i> About Us</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members"><i class="fa-solid fa-id-card" aria-label="id-card"></i> Team Members</a>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us" class="nav-link active" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us"><span class="header-section-number">1</span> <i class="fa-solid fa-users" aria-label="users"></i> About Us</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members"><span class="header-section-number">2</span> <i class="fa-solid fa-id-card" aria-label="id-card"></i> Team Members</a>
   <ul class="collapse">
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan"><i class="fa-solid fa-user" aria-label="user"></i> Ang Ming Kwan</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline"><i class="fa-solid fa-user" aria-label="user"></i> Persie Evangeline</a></li>
-  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei"><i class="fa-solid fa-user" aria-label="user"></i> Yap Jit Wei</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan"><span class="header-section-number">2.1</span> <i class="fa-solid fa-user" aria-label="user"></i> Ang Ming Kwan</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline"><span class="header-section-number">2.2</span> <i class="fa-solid fa-user" aria-label="user"></i> Persie Evangeline</a></li>
+  <li><a href="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei" id="toc-b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei" class="nav-link" data-scroll-target="#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei"><span class="header-section-number">2.3</span> <i class="fa-solid fa-user" aria-label="user"></i> Yap Jit Wei</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -191,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The Team</h1>
+<div class="quarto-title-block"><div><h1 class="title">The Team</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -208,27 +243,29 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us"><i class="fa-solid fa-users" aria-label="users"></i> About Us</h2>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us"><span class="header-section-number">1</span> <i class="fa-solid fa-users" aria-label="users"></i> About Us</h2>
 <p>We developed this project for&nbsp;<strong>ISSS608</strong>&nbsp;(Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in&nbsp;<a href="https://www.smu.edu.sg/">Singapore Management University</a>&nbsp;under the guidance of&nbsp;<a href="https://faculty.smu.edu.sg/profile/kam-tin-seong-486">Dr.&nbsp;Kam Tin Seong</a>, Associate Professor of Information Systems.</p>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members" class="level2">
-<h2 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members"><i class="fa-solid fa-id-card" aria-label="id-card"></i> Team Members</h2>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan" class="level3">
-<h3 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan"><i class="fa-solid fa-user" aria-label="user"></i> Ang Ming Kwan</h3>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members"><span class="header-section-number">2</span> <i class="fa-solid fa-id-card" aria-label="id-card"></i> Team Members</h2>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-ang-ming-kwan"><span class="header-section-number">2.1</span> <i class="fa-solid fa-user" aria-label="user"></i> Ang Ming Kwan</h3>
 <p><strong>Role:</strong> Data Preparation &amp; EDA<br>
 Brief bio or role description.</p>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline" class="level3">
-<h3 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline"><i class="fa-solid fa-user" aria-label="user"></i> Persie Evangeline</h3>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-persie-evangeline"><span class="header-section-number">2.2</span> <i class="fa-solid fa-user" aria-label="user"></i> Persie Evangeline</h3>
 <p><strong>Role:</strong> Visualisation &amp; Shiny App<br>
 Brief bio or role description.</p>
 </section>
-<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei" class="level3">
-<h3 class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei"><i class="fa-solid fa-user" aria-label="user"></i> Yap Jit Wei</h3>
+<section id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612075736572203e7d7d-yap-jit-wei"><span class="header-section-number">2.3</span> <i class="fa-solid fa-user" aria-label="user"></i> Yap Jit Wei</h3>
 <p><strong>Role:</strong> Findings &amp; Report Writing<br>
 Brief bio or role description.</p>
 
+
+<!-- -->
 
 </section>
 </section>
@@ -304,6 +341,57 @@ Brief bio or role description.</p>
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -633,7 +721,33 @@ Brief bio or role description.</p>
       }
     }
   });
-  </script>
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The Team"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span><span class="co"> html</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa users &gt;}} About Us</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>We developed this project for&nbsp;**ISSS608**&nbsp;(Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in&nbsp;<span class="co">[</span><span class="ot">Singapore Management University</span><span class="co">](https://www.smu.edu.sg/)</span>&nbsp;under the guidance of&nbsp;<span class="co">[</span><span class="ot">Dr.&nbsp;Kam Tin Seong</span><span class="co">](https://faculty.smu.edu.sg/profile/kam-tin-seong-486)</span>, Associate Professor of Information Systems.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa id-card &gt;}} Team Members</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">### {{&lt; fa user &gt;}} Ang Ming Kwan</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>**Role:** Data Preparation &amp; EDA\</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>Brief bio or role description.</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">### {{&lt; fa user &gt;}} Persie Evangeline</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>**Role:** Visualisation &amp; Shiny App\</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>Brief bio or role description.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">### {{&lt; fa user &gt;}} Yap Jit Wei</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>**Role:** Findings &amp; Report Writing\</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>Brief bio or role description.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 

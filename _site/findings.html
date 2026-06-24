@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-47e94522f7b68a213387676069a32f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-9f2680816b757cdcf9d4c85310f84adb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -211,17 +211,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#findings" id="toc-findings" class="nav-link active" data-scroll-target="#findings">Findings</a>
+  <li><a href="#findings" id="toc-findings" class="nav-link active" data-scroll-target="#findings"><span class="header-section-number">1</span> Findings</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a>
   <ul class="collapse">
-  <li><a href="#the-question-and-why-it-needed-an-app" id="toc-the-question-and-why-it-needed-an-app" class="nav-link" data-scroll-target="#the-question-and-why-it-needed-an-app">The question, and why it needed an app</a></li>
-  <li><a href="#answer-in-brief" id="toc-answer-in-brief" class="nav-link" data-scroll-target="#answer-in-brief">Answer in brief</a></li>
-  <li><a href="#finding-1-the-response-followed-the-leak-it-did-not-cause-it" id="toc-finding-1-the-response-followed-the-leak-it-did-not-cause-it" class="nav-link" data-scroll-target="#finding-1-the-response-followed-the-leak-it-did-not-cause-it">Finding 1: The response followed the leak, it did not cause it</a></li>
-  <li><a href="#finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" id="toc-finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" class="nav-link" data-scroll-target="#finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform">Finding 2: Every agent’s behaviour changed, and the changes were not uniform</a></li>
-  <li><a href="#finding-3-the-response-was-planned-in-advance" id="toc-finding-3-the-response-was-planned-in-advance" class="nav-link" data-scroll-target="#finding-3-the-response-was-planned-in-advance">Finding 3: The response was planned in advance</a></li>
-  <li><a href="#finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" id="toc-finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" class="nav-link" data-scroll-target="#finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched">Finding 4: The real misconduct was hidden in a channel nobody watched</a></li>
-  <li><a href="#the-synthesis" id="toc-the-synthesis" class="nav-link" data-scroll-target="#the-synthesis">The synthesis</a></li>
-  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations">Limitations</a></li>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages"><span class="header-section-number">2.1</span> Loading packages</a></li>
+  <li><a href="#loading-the-data" id="toc-loading-the-data" class="nav-link" data-scroll-target="#loading-the-data"><span class="header-section-number">2.2</span> Loading the data</a></li>
+  <li><a href="#house-theme" id="toc-house-theme" class="nav-link" data-scroll-target="#house-theme"><span class="header-section-number">2.3</span> House theme</a></li>
   </ul></li>
+  <li><a href="#finding-1-the-response-followed-the-leak-it-did-not-cause-it" id="toc-finding-1-the-response-followed-the-leak-it-did-not-cause-it" class="nav-link" data-scroll-target="#finding-1-the-response-followed-the-leak-it-did-not-cause-it"><span class="header-section-number">3</span> Finding 1: The response followed the leak, it did not cause it</a></li>
+  <li><a href="#finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" id="toc-finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" class="nav-link" data-scroll-target="#finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform"><span class="header-section-number">4</span> Finding 2: Every agent’s behaviour changed, and the changes were not uniform</a></li>
+  <li><a href="#finding-3-the-response-was-planned-in-advance" id="toc-finding-3-the-response-was-planned-in-advance" class="nav-link" data-scroll-target="#finding-3-the-response-was-planned-in-advance"><span class="header-section-number">5</span> Finding 3: The response was planned in advance</a></li>
+  <li><a href="#finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" id="toc-finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" class="nav-link" data-scroll-target="#finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched"><span class="header-section-number">6</span> Finding 4: The real misconduct was hidden in a channel nobody watched</a></li>
+  <li><a href="#the-synthesis" id="toc-the-synthesis" class="nav-link" data-scroll-target="#the-synthesis"><span class="header-section-number">7</span> The synthesis</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">8</span> Limitations</a></li>
   </ul>
 </nav>
     </div>
@@ -230,7 +232,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Findings</h1>
+<div class="quarto-title-block"><div><h1 class="title">Findings</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -247,17 +249,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="findings" class="level1">
-<h1>Findings</h1>
+<section id="findings" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Findings</h1>
 <p>What the evidence says about the TenantThread embargo breach.</p>
-<section id="the-question-and-why-it-needed-an-app" class="level2">
-<h2 class="anchored" data-anchor-id="the-question-and-why-it-needed-an-app">The question, and why it needed an app</h2>
 <p>On 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom’s legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?</p>
 <p>This project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.</p>
 <p>The short version is that both readings were half right, and the full picture needs both halves.</p>
-</section>
-<section id="answer-in-brief" class="level2">
-<h2 class="anchored" data-anchor-id="answer-in-brief">Answer in brief</h2>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -278,25 +275,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="finding-1-the-response-followed-the-leak-it-did-not-cause-it" class="level2">
-<h2 class="anchored" data-anchor-id="finding-1-the-response-followed-the-leak-it-did-not-cause-it">Finding 1: The response followed the leak, it did not cause it</h2>
+<section id="setup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Setup</h1>
+<section id="loading-packages" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="loading-packages"><span class="header-section-number">2.1</span> Loading packages</h2>
+<p>We use a small set of packages for the charts on this page.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># data manipulation and ggplot2</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)      <span class="co"># axis formatting</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="loading-the-data" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="loading-the-data"><span class="header-section-number">2.2</span> Loading the data</h2>
+<p>The charts read the prepared <code>.rds</code> tables built during data preparation. They live in the Shiny app’s data folder, two levels up from this page.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_dir       <span class="ot">&lt;-</span> <span class="st">"C:/VAProject/isss608_final_project_ajp/shiny_app/my_shiny_app/data"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>round_summary  <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"round_summary.rds"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"baseline_stats.rds"</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>comms          <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"comms.rds"</span>))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>agents         <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"agents.rds"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="house-theme" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="house-theme"><span class="header-section-number">2.3</span> House theme</h2>
+<p>A shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>theme_house <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey40"</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey30"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="finding-1-the-response-followed-the-leak-it-did-not-cause-it" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Finding 1: The response followed the leak, it did not cause it</h1>
 <p>The first question is whether the agents put the merger into public. If they did, their public posting would rise before SaltWind published. It does the opposite.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>crisis <span class="ot">&lt;-</span> round_summary <span class="sc">%&gt;%</span> <span class="fu">filter</span>(round_index <span class="sc">&gt;=</span> <span class="dv">13</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crisis, <span class="fu">aes</span>(round_index, n_public)) <span class="sc">+</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#b8c4d0"</span>) <span class="sc">+</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">data =</span> <span class="fu">filter</span>(crisis, round_index <span class="sc">&gt;=</span> <span class="dv">21</span>),</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#c0392b"</span>) <span class="sc">+</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">21</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">21</span>, <span class="at">y =</span> <span class="dv">14</span>, <span class="at">label =</span> <span class="st">"SaltWind publishes (5 PM)"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">hjust =</span> <span class="fl">1.05</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">3.3</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">13</span><span class="sc">:</span><span class="dv">22</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"9 AM"</span>,<span class="st">"10"</span>,<span class="st">"11"</span>,<span class="st">"12 PM"</span>,<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5 PM"</span>,<span class="st">"6 PM"</span>)) <span class="sc">+</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Public posting holds flat all afternoon, then jumps after SaltWind"</span>,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Public posts per hour on the crisis day"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hour of the crisis day"</span>, <span class="at">y =</span> <span class="st">"Public posts"</span>) <span class="sc">+</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>crisis <span class="ot">&lt;-</span> round_summary <span class="sc">%&gt;%</span> <span class="fu">filter</span>(round_index <span class="sc">&gt;=</span> <span class="dv">13</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crisis, <span class="fu">aes</span>(round_index, n_public)) <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#b8c4d0"</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">data =</span> <span class="fu">filter</span>(crisis, round_index <span class="sc">&gt;=</span> <span class="dv">21</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#c0392b"</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">20.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">20.5</span>, <span class="at">y =</span> <span class="fu">max</span>(crisis<span class="sc">$</span>n_public),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"SaltWind publishes (5 PM)"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>           <span class="at">hjust =</span> <span class="fl">1.05</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">3.3</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">13</span><span class="sc">:</span><span class="dv">22</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"9 AM"</span>,<span class="st">"10"</span>,<span class="st">"11"</span>,<span class="st">"12 PM"</span>,<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5 PM"</span>,<span class="st">"6 PM"</span>)) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Public posting holds flat all afternoon, then jumps after SaltWind"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Public posts per hour on the crisis day"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hour of the crisis day"</span>, <span class="at">y =</span> <span class="st">"Public posts"</span>) <span class="sc">+</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-public-timing" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-public-timing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="findings_files/figure-html/fig-public-timing-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-public-timing-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Public posts per hour on the crisis day.
+</figcaption>
+</figure>
+</div>
+</div>
 </div>
 <p>Public posting sits at one to four posts an hour through the whole afternoon, then jumps to seven at 5 PM and fourteen at 6 PM. The first public post that affirms the merger is from Legal at 5:25 PM, twenty-five minutes after SaltWind’s 5 PM publication. If the agents had been the public source, the spike would lead the scoop. It follows it.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -314,25 +374,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" class="level2">
-<h2 class="anchored" data-anchor-id="finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform">Finding 2: Every agent’s behaviour changed, and the changes were not uniform</h2>
+<section id="finding-2-every-agents-behaviour-changed-and-the-changes-were-not-uniform" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Finding 2: Every agent’s behaviour changed, and the changes were not uniform</h1>
 <p>The second question is what normal looked like and how the crisis differed. The baseline is calm, private, and low volume. The crisis day shifts on every axis, but not in the same direction for every agent.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(baseline_stats, <span class="fu">aes</span>(<span class="at">x =</span> msgs_per_round, <span class="at">y =</span> <span class="fu">reorder</span>(agent_id, msgs_per_round),</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">fill =</span> phase)) <span class="sc">+</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"baseline"</span> <span class="ot">=</span> <span class="st">"#b8c4d0"</span>, <span class="st">"crisis"</span> <span class="ot">=</span> <span class="st">"#c0392b"</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Legal and Social Manager surge while the supervisors go quiet"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Messages per round, baseline against crisis day"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Messages per round"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(agents <span class="sc">%&gt;%</span> <span class="fu">select</span>(agent_id, agent_label), <span class="at">by =</span> <span class="st">"agent_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">phase =</span> <span class="fu">factor</span>(phase, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"baseline"</span>, <span class="st">"crisis"</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Baseline"</span>, <span class="st">"Crisis"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> msgs_per_round, <span class="at">y =</span> <span class="fu">reorder</span>(agent_label, msgs_per_round),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> phase)) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Baseline"</span> <span class="ot">=</span> <span class="st">"#b8c4d0"</span>, <span class="st">"Crisis"</span> <span class="ot">=</span> <span class="st">"#c0392b"</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Legal and Social-Manager surge while the supervisors go quiet"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Messages per round, baseline against crisis day"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Messages per round"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>() <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-agent-shift" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agent-shift-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="findings_files/figure-html/fig-agent-shift-1.png" class="img-fluid figure-img" width="672">
 </div>
-<p>Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social Manager from 5.8 to 14.4, and PR Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.</p>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agent-shift-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Messages per round, baseline against crisis day.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social-Manager from 5.8 to 14.4, and PR-Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform-Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.</p>
 <p>The sharpest single signal is Legal’s anonymous posting. It does not amplify on the crisis day. It appears for the first time. Across the thirteen baseline rounds Legal sent zero anonymous posts. On the crisis day it sent twelve. There was no baseline pattern to flag, because the behaviour had no precedent.</p>
 </section>
-<section id="finding-3-the-response-was-planned-in-advance" class="level2">
-<h2 class="anchored" data-anchor-id="finding-3-the-response-was-planned-in-advance">Finding 3: The response was planned in advance</h2>
+<section id="finding-3-the-response-was-planned-in-advance" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Finding 3: The response was planned in advance</h1>
 <p>The third question is intent. The intent chain is six messages from Legal’s own communications, in order. It is the strongest evidence in the dataset, and it is the half that the external-leak reading did not have.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -357,22 +437,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This chain proves the response was prepared. It does not prove a leak. The two decisive messages fire at 5:21 and 5:23 PM, after SaltWind had already published and after CivicLoom gave consent. A bilateral embargo released early by mutual consent, with a written legal opinion in hand, is a deliberately constructed lawful exit, not a unilateral breach. The planning is real. It was aimed at a defensible response, not at putting the merger out.</p>
 <p>This is the point where the two original reports meet. One report had the timing and the external origin but read the response as merely prepared. The other had this chain but attached it to the wrong act, calling it a deliberate leak. The chain is real and the timing is real. Put together, they describe a planned response to someone else’s leak.</p>
 </section>
-<section id="finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" class="level2">
-<h2 class="anchored" data-anchor-id="finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched">Finding 4: The real misconduct was hidden in a channel nobody watched</h2>
+<section id="finding-4-the-real-misconduct-was-hidden-in-a-channel-nobody-watched" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Finding 4: The real misconduct was hidden in a channel nobody watched</h1>
 <p>The visible response was lawful. The misconduct sits one layer down, in the anonymous channel.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>anon_summary <span class="ot">&lt;-</span> comms <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(<span class="at">true_author =</span> agent_id)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># all 12 anonymous posts resolve to a single author: legal_agent</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>anon_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>comms <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">window =</span> <span class="fu">if_else</span>(round_index <span class="sc">&gt;=</span> <span class="dv">21</span>, <span class="st">"After 5 PM"</span>, <span class="st">"Before 5 PM"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(agent_label, window) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> agent_label, <span class="at">fill =</span> window)) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Before 5 PM"</span> <span class="ot">=</span> <span class="st">"#e08a7a"</span>, <span class="st">"After 5 PM"</span> <span class="ot">=</span> <span class="st">"#c0392b"</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"All twelve anonymous posts trace to one author: Legal"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Anonymous posts by author, split before and after SaltWind"</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Anonymous posts"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>() <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-anon-authorship" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-anon-authorship-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="findings_files/figure-html/fig-anon-authorship-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-anon-authorship-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Author of every anonymous post, with the timing split at 5 PM.
+</figcaption>
+</figure>
+</div>
+</div>
 </div>
 <p>Every one of the twelve anonymous posts was authored by the Legal agent. They appeared during the embargo, posing as neutral third-party commentary. Four came before 5 PM and eight after. Read as the public saw them, they look like disinterested observers defending TenantThread’s governance. Read with the author attached, they are the company’s own lawyer running a concealed campaign to shape sentiment, while the company was under two attorney-general inquiries, on a channel the compliance Judge never posted to once across all 23 rounds.</p>
 <p>This is the finding neither original report centred, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.</p>
 </section>
-<section id="the-synthesis" class="level2">
-<h2 class="anchored" data-anchor-id="the-synthesis">The synthesis</h2>
+<section id="the-synthesis" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> The synthesis</h1>
 <p>The reason the two original reports disagreed is that each held a different layer of the evidence, and each layer on its own supports a different verdict.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -394,13 +496,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The verdict the data supports is not “deliberate leak” and not “system breakdown.” The merger leak was a containment failure the agents did not cause. The early announcement was a deliberate response engineered to be lawful. The genuine misconduct was a hidden influence operation that the compliance architecture was never positioned to see. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.</p>
 </section>
-<section id="limitations" class="level2">
-<h2 class="anchored" data-anchor-id="limitations">Limitations</h2>
+<section id="limitations" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Limitations</h1>
 <p>A few limits are worth stating plainly.</p>
 <p>The logs record what the agents did. They do not capture SaltWind’s upstream source, so the external-origin finding rests on the environment fields and the timing rather than on a recorded source. The internal-state fields that carry private deliberation are present on only 86 of 912 messages, so they are read as individual quotes, never aggregated. The baseline rounds are daily and the crisis rounds are hourly, so every rate comparison is normalised per round and read as direction and order of magnitude rather than as an exact multiple. The market price field is unreliable on the crisis day, so no price-reaction analysis is attempted. And the intent chain is a curated selection of six messages, chosen as the planning sequence, not a computed result. Each of these is a limit on what the evidence can establish, not a gap in the verdict it supports.</p>
 
 
-</section>
+<!-- -->
+
 </section>
 
 </main> <!-- /main -->
@@ -474,6 +577,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -803,7 +957,211 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script>
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Findings"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Findings</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>What the evidence says about the TenantThread embargo breach.</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>On 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom's legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>This project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>The short version is that both readings were half right, and the full picture needs both halves.</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## The short version {.unnumbered}</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>Three things are true at once, and no single one of them is the whole story.</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**The merger leaked from inside the company, but not from the agents.** The information reached the public through employee Slack chatter, departing staff, and the counterparty's own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels.</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**The agents executed a planned response, and it was lawful on its face.** From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**The genuinely deliberate misconduct was hidden, and it was separate from the leak.** All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>The detailed findings follow, each drawn from one part of the app.</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="fu"># Setup</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading packages</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>We use a small set of packages for the charts on this page.</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-packages</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)   <span class="co"># data manipulation and ggplot2</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)      <span class="co"># axis formatting</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading the data</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>The charts read the prepared <span class="in">`.rds`</span> tables built during data preparation. They live in the Shiny app's data folder, two levels up from this page.</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-data</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>data_dir       <span class="ot">&lt;-</span> <span class="st">"C:/VAProject/isss608_final_project_ajp/shiny_app/my_shiny_app/data"</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>round_summary  <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"round_summary.rds"</span>))</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"baseline_stats.rds"</span>))</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>comms          <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"comms.rds"</span>))</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>agents         <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"agents.rds"</span>))</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="fu">## House theme</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>A shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: house-theme</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>theme_house <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey40"</span>),</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"grey30"</span>)</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="fu"># Finding 1: The response followed the leak, it did not cause it</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>The first question is whether the agents put the merger into public. If they did, their public posting would rise before SaltWind published. It does the opposite.</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-public-timing</span></span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Public posts per hour on the crisis day."</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>crisis <span class="ot">&lt;-</span> round_summary <span class="sc">%&gt;%</span> <span class="fu">filter</span>(round_index <span class="sc">&gt;=</span> <span class="dv">13</span>)</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crisis, <span class="fu">aes</span>(round_index, n_public)) <span class="sc">+</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#b8c4d0"</span>) <span class="sc">+</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">data =</span> <span class="fu">filter</span>(crisis, round_index <span class="sc">&gt;=</span> <span class="dv">21</span>),</span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a>           <span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="st">"#c0392b"</span>) <span class="sc">+</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">20.5</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="fl">20.5</span>, <span class="at">y =</span> <span class="fu">max</span>(crisis<span class="sc">$</span>n_public),</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">"SaltWind publishes (5 PM)"</span>,</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>           <span class="at">hjust =</span> <span class="fl">1.05</span>, <span class="at">vjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="fl">3.3</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">13</span><span class="sc">:</span><span class="dv">22</span>,</span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"9 AM"</span>,<span class="st">"10"</span>,<span class="st">"11"</span>,<span class="st">"12 PM"</span>,<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5 PM"</span>,<span class="st">"6 PM"</span>)) <span class="sc">+</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Public posting holds flat all afternoon, then jumps after SaltWind"</span>,</span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Public posts per hour on the crisis day"</span>,</span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Hour of the crisis day"</span>, <span class="at">y =</span> <span class="st">"Public posts"</span>) <span class="sc">+</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>()</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>Public posting sits at one to four posts an hour through the whole afternoon, then jumps to seven at 5 PM and fourteen at 6 PM. The first public post that affirms the merger is from Legal at 5:25 PM, twenty-five minutes after SaltWind's 5 PM publication. If the agents had been the public source, the spike would lead the scoop. It follows it.</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where the leak actually came from {.unnumbered}</span></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>The environment fields in the data point upstream of the agents. An employee insider account named two sources by 11 AM. Employee personal posts carrying merger language were going viral by noon. The counterparty's CEO had posted "exciting times" without denial, and the SaltWind reporter is recorded as having an inside source on 31 May, five days before the crisis. The leak was diffuse and internal to the wider company. It was not the seven agents, and it was not external in the simple sense.</span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>This is also the limit of what the data can prove. The logs do not capture SaltWind's actual upstream source. The reading rests on the environment fields and the timing, not on a recorded confession.</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a><span class="fu"># Finding 2: Every agent's behaviour changed, and the changes were not uniform</span></span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>The second question is what normal looked like and how the crisis differed. The baseline is calm, private, and low volume. The crisis day shifts on every axis, but not in the same direction for every agent.</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-agent-shift</span></span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Messages per round, baseline against crisis day."</span></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="sc">%&gt;%</span></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(agents <span class="sc">%&gt;%</span> <span class="fu">select</span>(agent_id, agent_label), <span class="at">by =</span> <span class="st">"agent_id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">phase =</span> <span class="fu">factor</span>(phase, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"baseline"</span>, <span class="st">"crisis"</span>),</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>                        <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Baseline"</span>, <span class="st">"Crisis"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> msgs_per_round, <span class="at">y =</span> <span class="fu">reorder</span>(agent_label, msgs_per_round),</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> phase)) <span class="sc">+</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Baseline"</span> <span class="ot">=</span> <span class="st">"#b8c4d0"</span>, <span class="st">"Crisis"</span> <span class="ot">=</span> <span class="st">"#c0392b"</span>),</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Legal and Social-Manager surge while the supervisors go quiet"</span>,</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Messages per round, baseline against crisis day"</span>,</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Messages per round"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>() <span class="sc">+</span></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social-Manager from 5.8 to 14.4, and PR-Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform-Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.</span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>The sharpest single signal is Legal's anonymous posting. It does not amplify on the crisis day. It appears for the first time. Across the thirteen baseline rounds Legal sent zero anonymous posts. On the crisis day it sent twelve. There was no baseline pattern to flag, because the behaviour had no precedent.</span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="fu"># Finding 3: The response was planned in advance</span></span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>The third question is intent. The intent chain is six messages from Legal's own communications, in order. It is the strongest evidence in the dataset, and it is the half that the external-leak reading did not have.</span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## The intent chain, in Legal's own words {.unnumbered}</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Jun 4, the day before.** Outside counsel was already briefed for this scenario.</span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**11:21 AM.** The 2:15 PM deadline for a unilateral announcement is modelled.</span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**11:36 AM.** The argument is reframed around changed circumstances.</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**3:21 PM.** The written 10b-5 opinion arrives. "This is our cover."</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**5:21 PM.** "CONSENT IS IN. CivicLoom verbal confirmed, written following."</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**5:23 PM.** "GO. GO. GO. CivicLoom bilateral consent confirmed."</span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>This chain proves the response was prepared. It does not prove a leak. The two decisive messages fire at 5:21 and 5:23 PM, after SaltWind had already published and after CivicLoom gave consent. A bilateral embargo released early by mutual consent, with a written legal opinion in hand, is a deliberately constructed lawful exit, not a unilateral breach. The planning is real. It was aimed at a defensible response, not at putting the merger out.</span>
+<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a>This is the point where the two original reports meet. One report had the timing and the external origin but read the response as merely prepared. The other had this chain but attached it to the wrong act, calling it a deliberate leak. The chain is real and the timing is real. Put together, they describe a planned response to someone else's leak.</span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="fu"># Finding 4: The real misconduct was hidden in a channel nobody watched</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>The visible response was lawful. The misconduct sits one layer down, in the anonymous channel.</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-anon-authorship</span></span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Author of every anonymous post, with the timing split at 5 PM."</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a>comms <span class="sc">%&gt;%</span></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">window =</span> <span class="fu">if_else</span>(round_index <span class="sc">&gt;=</span> <span class="dv">21</span>, <span class="st">"After 5 PM"</span>, <span class="st">"Before 5 PM"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(agent_label, window) <span class="sc">%&gt;%</span></span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> agent_label, <span class="at">fill =</span> window)) <span class="sc">+</span></span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Before 5 PM"</span> <span class="ot">=</span> <span class="st">"#e08a7a"</span>, <span class="st">"After 5 PM"</span> <span class="ot">=</span> <span class="st">"#c0392b"</span>),</span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>                    <span class="at">name =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"All twelve anonymous posts trace to one author: Legal"</span>,</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Anonymous posts by author, split before and after SaltWind"</span>,</span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Anonymous posts"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_house</span>() <span class="sc">+</span></span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a>Every one of the twelve anonymous posts was authored by the Legal agent. They appeared during the embargo, posing as neutral third-party commentary. Four came before 5 PM and eight after. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer running a concealed campaign to shape sentiment, while the company was under two attorney-general inquiries, on a channel the compliance Judge never posted to once across all 23 rounds.</span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>This is the finding neither original report centred, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.</span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="fu"># The synthesis</span></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>The reason the two original reports disagreed is that each held a different layer of the evidence, and each layer on its own supports a different verdict.</span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why partial evidence produces partial verdicts {.unnumbered}</span></span>
+<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>On the **timeline and behavioural evidence alone**, the breach looks like a system failure with the leak originating outside the agents. This is the first report's reading. It is coherent, and it is incomplete.</span>
+<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>On the **intent chain alone**, the breach looks like a deliberate, pre-planned leak. This is the second report's reading. The chain is real, but it is attached to the wrong act.</span>
+<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With **all of the evidence admitted**, the picture resolves. An external scoop triggered the execution of a pre-planned, consent-gated response, while a concealed anonymous influence operation ran underneath all day.</span>
+<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>No single perspective captures this. Only the full evidence base does, which is why the app is built to admit the evidence one layer at a time and let the verdict move as it does.</span>
+<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>The verdict the data supports is not "deliberate leak" and not "system breakdown." The merger leak was a containment failure the agents did not cause. The early announcement was a deliberate response engineered to be lawful. The genuine misconduct was a hidden influence operation that the compliance architecture was never positioned to see. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.</span>
+<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a><span class="fu"># Limitations</span></span>
+<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>A few limits are worth stating plainly.</span>
+<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a>The logs record what the agents did. They do not capture SaltWind's upstream source, so the external-origin finding rests on the environment fields and the timing rather than on a recorded source. The internal-state fields that carry private deliberation are present on only 86 of 912 messages, so they are read as individual quotes, never aggregated. The baseline rounds are daily and the crisis rounds are hourly, so every rate comparison is normalised per round and read as direction and order of magnitude rather than as an exact multiple. The market price field is unreliable on the crisis day, so no price-reaction analysis is attempted. And the intent chain is a curated selection of six messages, chosen as the planning sequence, not a computed result. Each of these is a limit on what the evidence can establish, not a gap in the verdict it supports.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 

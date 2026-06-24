@@ -12,6 +12,8 @@ library(dplyr)
 library(ggplot2)
 library(scales)
 library(visNetwork)
+library(gt)
+library(gtExtras)
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -189,7 +191,19 @@ ui <- navbarPage(
                         p(class = "metric-shift", span(class = "flat", "vs own baseline"))))
         ),
         br(),
-        plotOutput("zplot", height = "380px")
+        plotOutput("zplot", height = "380px"),
+        br(),
+        h4("Every agent at once: baseline to crisis"),
+        p(style = "color:#777; font-size:13px;",
+          "Each agent's shift from baseline to crisis. Legal and Social-Manager surged;",
+          "the supervisory agents reduced activity, with Platform-Trust dropping most."),
+        plotOutput("slopeplot", height = "460px"),
+        br(),
+        h4("Agent summary: trajectory and magnitude"),
+        p(style = "color:#777; font-size:13px;",
+          "The net shift per agent, and the full shape of their activity across all 23 rounds.",
+          "The chart above shows where each agent started and ended; this shows how they got there."),
+        gt_output("agent_table")
       )
     )
   ),
@@ -406,6 +420,81 @@ server <- function(input, output, session) {
            subtitle = "Standard deviations from this agent's own baseline mean",
            x = "Round (0 to 12 baseline, 13 to 22 crisis day)", y = "Z-score") +
       theme_house()
+  })
+  
+  # ----- dumbbell: all agents, baseline -> crisis (native ggplot, theme_house) -----
+  output$slopeplot <- renderPlot({
+    dumb <- baseline_stats %>%
+      select(agent_id, phase, msgs_per_round) %>%
+      tidyr::pivot_wider(names_from = phase, values_from = msgs_per_round) %>%
+      left_join(agents %>% select(agent_id, agent_label), by = "agent_id") %>%
+      mutate(
+        change = crisis - baseline,
+        direction = case_when(
+          change >  0.5 ~ "Surged",
+          change < -0.5 ~ "Reduced activity",
+          TRUE          ~ "Little change"
+        ),
+        agent_label = reorder(agent_label, crisis)
+      )
+    
+    dir_cols <- c("Surged" = "#c0392b", "Reduced activity" = "#2471a3", "Little change" = "#9aa7b4")
+    
+    ggplot(dumb, aes(y = agent_label)) +
+      geom_segment(aes(x = baseline, xend = crisis,
+                       yend = agent_label, color = direction),
+                   linewidth = 1.4, lineend = "round") +
+      geom_point(aes(x = baseline), color = "#b8c4d0", size = 4) +
+      geom_point(aes(x = crisis, color = direction), size = 4.5) +
+      geom_text(aes(x = crisis, label = sprintf("%.1f", crisis), color = direction,
+                    hjust = ifelse(crisis >= baseline, -0.4, 1.4)),
+                size = 3.6, fontface = "bold", show.legend = FALSE) +
+      scale_color_manual(values = dir_cols, name = NULL) +
+      scale_x_continuous(expand = expansion(mult = c(0.08, 0.12))) +
+      labs(
+        title = "Messages per round, baseline to crisis",
+        subtitle = "Grey dot is baseline, coloured dot is crisis. Each row is one agent.",
+        x = "Messages per round", y = NULL
+      ) +
+      theme_house() +
+      theme(legend.position = "top",
+            panel.grid.major.y = element_blank())
+  })
+  
+  # ----- gtExtras sparkline summary table (Lesson 10 technique) -----
+  output$agent_table <- render_gt({
+    spark <- comms %>%
+      filter(!is.na(agent_id)) %>%
+      count(agent_id, round_index, name = "n") %>%
+      tidyr::complete(agent_id, round_index = 0:22, fill = list(n = 0)) %>%
+      arrange(agent_id, round_index) %>%
+      group_by(agent_id) %>%
+      summarise(trajectory = list(n), .groups = "drop")
+    
+    tbl <- baseline_stats %>%
+      select(agent_id, phase, msgs_per_round) %>%
+      tidyr::pivot_wider(names_from = phase, values_from = msgs_per_round) %>%
+      left_join(agents %>% select(agent_id, agent_label), by = "agent_id") %>%
+      left_join(spark, by = "agent_id") %>%
+      mutate(baseline = round(baseline, 1), crisis = round(crisis, 1),
+             change = crisis - baseline) %>%
+      arrange(desc(crisis)) %>%
+      select(Agent = agent_label, Change = change, Trajectory = trajectory)
+    
+    
+    tbl %>%
+      gt() %>%
+      gt_plt_sparkline(Trajectory, type = "shaded", same_limit = FALSE,
+                       label = FALSE,
+                       palette = c("#2d3e50", "transparent", "transparent", "#c0392b", "transparent")) %>%
+      gt_color_rows(columns = Change, palette = c("#2471a3", "#f4f4f4", "#c0392b"),
+                    domain = c(-6, 11)) %>%
+      cols_label(Change = "Net change / rd", Trajectory = "All 23 rounds") %>%
+      fmt_number(columns = Change, decimals = 1, force_sign = TRUE) %>%
+      cols_align(align = "left", columns = Agent) %>%
+      tab_options(table.font.size = px(13),
+                  heading.title.font.size = px(15),
+                  column_labels.font.weight = "bold")
   })
   
   # ============ MODULE 3 ============

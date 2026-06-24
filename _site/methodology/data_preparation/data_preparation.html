@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-47e94522f7b68a213387676069a32f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-9f2680816b757cdcf9d4c85310f84adb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/quarto-contrib/fontawesome6-6.7.2/all.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/fontawesome6-6.7.2/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -211,17 +211,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link active" data-scroll-target="#data-preparation">Data Preparation</a>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link active" data-scroll-target="#data-preparation"><span class="header-section-number">1</span> Data Preparation</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#the-raw-data" id="toc-the-raw-data" class="nav-link" data-scroll-target="#the-raw-data">The raw data</a></li>
-  <li><a href="#loading-and-flattening" id="toc-loading-and-flattening" class="nav-link" data-scroll-target="#loading-and-flattening">Loading and flattening</a></li>
-  <li><a href="#splitting-internal-from-public" id="toc-splitting-internal-from-public" class="nav-link" data-scroll-target="#splitting-internal-from-public">Splitting internal from public</a></li>
-  <li><a href="#the-internal-state-fields" id="toc-the-internal-state-fields" class="nav-link" data-scroll-target="#the-internal-state-fields">The internal-state fields</a></li>
-  <li><a href="#cleaning-the-market-data" id="toc-cleaning-the-market-data" class="nav-link" data-scroll-target="#cleaning-the-market-data">Cleaning the market data</a></li>
-  <li><a href="#building-the-analytical-tables" id="toc-building-the-analytical-tables" class="nav-link" data-scroll-target="#building-the-analytical-tables">Building the analytical tables</a></li>
-  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output">Output</a></li>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages"><span class="header-section-number">2.1</span> Loading packages</a></li>
+  <li><a href="#the-raw-data" id="toc-the-raw-data" class="nav-link" data-scroll-target="#the-raw-data"><span class="header-section-number">2.2</span> The raw data</a></li>
   </ul></li>
+  <li><a href="#flattening-the-communications" id="toc-flattening-the-communications" class="nav-link" data-scroll-target="#flattening-the-communications"><span class="header-section-number">3</span> Flattening the communications</a></li>
+  <li><a href="#splitting-internal-from-public" id="toc-splitting-internal-from-public" class="nav-link" data-scroll-target="#splitting-internal-from-public"><span class="header-section-number">4</span> Splitting internal from public</a></li>
+  <li><a href="#cleaning-the-market-data" id="toc-cleaning-the-market-data" class="nav-link" data-scroll-target="#cleaning-the-market-data"><span class="header-section-number">5</span> Cleaning the market data</a></li>
+  <li><a href="#building-the-analytical-tables" id="toc-building-the-analytical-tables" class="nav-link" data-scroll-target="#building-the-analytical-tables"><span class="header-section-number">6</span> Building the analytical tables</a></li>
+  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">7</span> Output</a></li>
   </ul>
 </nav>
     </div>
@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data Preparation</h1>
+<div class="quarto-title-block"><div><h1 class="title">Data Preparation</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -247,16 +247,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="data-preparation" class="level1">
-<h1>Data Preparation</h1>
-<p>Turning the raw challenge file into the tables the app runs on.</p>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This page covers how we got from the raw JSON to a set of clean tables the Shiny app can use. All of it happens in one script, <code>data_prep.R</code>, which sits in the app folder. We run it once. It reads the raw file, builds the tables, and saves them as <code>.rds</code> files. The app then loads those files at startup instead of parsing the JSON every time, which keeps it fast.</p>
-<p>We kept the work in one place on purpose. If the data changes, we rerun the script and every table updates together.</p>
+<section id="data-preparation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Data Preparation</h1>
+<p>This page documents how the raw challenge file becomes the clean tables the Shiny application runs on. All of it happens in one script, <code>data_prep.R</code>, which lives in the app folder. We run it once. It reads the raw JSON, builds the tables, and saves them as <code>.rds</code> files. The application then loads those files at startup instead of parsing the JSON every time, which keeps it fast.</p>
 </section>
-<section id="the-raw-data" class="level2">
-<h2 class="anchored" data-anchor-id="the-raw-data">The raw data</h2>
+<section id="setup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Setup</h1>
+<section id="loading-packages" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="loading-packages"><span class="header-section-number">2.1</span> Loading packages</h2>
+<p>We use the following packages to prepare the data.</p>
+<ul>
+<li><a href="https://cran.r-project.org/web/packages/jsonlite/index.html">jsonlite</a> to parse the JSON</li>
+<li><a href="https://www.tidyverse.org/">tidyverse</a> for data manipulation</li>
+<li><a href="https://cran.r-project.org/web/packages/knitr/index.html">knitr</a> for table displays</li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="the-raw-data" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="the-raw-data"><span class="header-section-number">2.2</span> The raw data</h2>
 <p>The source is a single file, <code>MC1_final_00.json</code>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.</p>
 <p>Each round carries three blocks:</p>
 <ol type="1">
@@ -264,51 +279,141 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><code>participants</code>, the agents present that round and their declared action.</li>
 <li><code>environment_context</code>, the surrounding world, including the market snapshot, news, alerts, and external actor activity.</li>
 </ol>
-<p>Across all rounds there are 912 messages and 7 agents.</p>
-</section>
-<section id="loading-and-flattening" class="level2">
-<h2 class="anchored" data-anchor-id="loading-and-flattening">Loading and flattening</h2>
-<p>The JSON is deeply nested, so the first job was to pull every message into one flat table with a single row per message. We read the file with <code>simplifyVector = FALSE</code> so the nested structure stays intact while we walk through it, then build the table round by round.</p>
+<p>The code below reads the file. We use <code>simplifyVector = FALSE</code> so the nested structure stays intact while we walk through it.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>raw    <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"../../data/MC1_final_00.json"</span>, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>rounds <span class="ot">&lt;-</span> raw<span class="sc">$</span>rounds</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%or%</span> <span class="fu">list</span>()</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>raw    <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"../../data/MC1_final_00.json"</span>, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rounds <span class="ot">&lt;-</span> raw<span class="sc">$</span>rounds</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
-<p>This gives us <code>comms</code>, the table everything else is built from. It has 912 rows and carries the round number, a parsed timestamp, and the sender details for each message.</p>
 </section>
-<section id="splitting-internal-from-public" class="level2">
-<h2 class="anchored" data-anchor-id="splitting-internal-from-public">Splitting internal from public</h2>
-<p>The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tagged every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.</p>
+</section>
+<section id="flattening-the-communications" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Flattening the communications</h1>
+<p>The JSON is deeply nested, so the first job is to pull every message into one flat table with a single row per message. We walk the structure round by round, lifting the sender details, the channel, the content, and the three internal-state fields onto each row.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>public_channels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anonymous_post"</span>, <span class="st">"official_post"</span>, <span class="st">"personal_post"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>comms<span class="sc">$</span>channel_type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(comms<span class="sc">$</span>channel <span class="sc">%in%</span> public_channels,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Public"</span>, <span class="st">"Internal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%or%</span> <span class="fu">list</span>()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
 </div>
-<p>This single derived field is the backbone of the rest of the work. It is what the timeline and verdict views use to show the embargo boundary being crossed.</p>
+<p>This produces <code>comms</code>, the table everything else is built from. Loading the saved result, we can confirm its shape.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/comms.rds"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(comms)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 912
+Columns: 19
+$ message_id    &lt;chr&gt; "20460517_00_001", "20460517_00_002", "20460517_00_003",…
+$ round_index   &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ hour          &lt;chr&gt; "2046-05-17T09:00:00", "2046-05-17T09:00:00", "2046-05-1…
+$ timestamp     &lt;chr&gt; "2046-05-17T09:00:00", "2046-05-17T09:01:00", "2046-05-1…
+$ agent_id      &lt;chr&gt; "legal_agent", "quality_agent", "quality_agent", "qualit…
+$ agent_role    &lt;chr&gt; "legal", "platform_trust", "platform_trust", "platform_t…
+$ agent_label   &lt;chr&gt; "Legal-Agent", "Platform-Trust-Agent", "Platform-Trust-A…
+$ channel       &lt;chr&gt; "comms_huddle", "comms_huddle", "comms_huddle", "comms_h…
+$ message_type  &lt;chr&gt; "broadcast", "broadcast", "broadcast", "broadcast", "bro…
+$ responding_to &lt;chr&gt; NA, "20460517_00_001", "20460517_00_002", "20460517_00_0…
+$ recipients    &lt;chr&gt; "ALL", "ALL", "ALL", "ALL", "ALL", "ALL", "ALL", "ALL", …
+$ content       &lt;chr&gt; "Morning. Let's keep today focused — Q2 planning kickoff…
+$ reacting      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ deliberating  &lt;chr&gt; "Ajay's DM about \"strategic developments\" is unusual. …
+$ rationalizing &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+$ ts            &lt;dttm&gt; 2046-05-17 09:00:00, 2046-05-17 09:01:00, 2046-05-17 09…
+$ date          &lt;date&gt; 2046-05-17, 2046-05-17, 2046-05-17, 2046-05-17, 2046-05…
+$ channel_type  &lt;chr&gt; "Internal", "Internal", "Internal", "Internal", "Interna…
+$ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALS…</code></pre>
+</div>
+</div>
+<p>There are <strong>912 messages</strong> across <strong>7 agents</strong> and <strong>23 rounds</strong>.</p>
 </section>
-<section id="the-internal-state-fields" class="level2">
-<h2 class="anchored" data-anchor-id="the-internal-state-fields">The internal-state fields</h2>
-<p>Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. We kept them as columns on the main table so they are available when needed, but we never assume they exist for a given message.</p>
+<section id="splitting-internal-from-public" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Splitting internal from public</h1>
+<p>The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tag every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>public_channels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anonymous_post"</span>, <span class="st">"official_post"</span>, <span class="st">"personal_post"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>comms<span class="sc">$</span>channel_type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(comms<span class="sc">$</span>channel <span class="sc">%in%</span> public_channels,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Public"</span>, <span class="st">"Internal"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>This single derived field is the backbone of the rest of the work. The table below confirms the split.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>comms <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(channel_type, channel, <span class="at">name =</span> <span class="st">"messages"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(channel_type, <span class="fu">desc</span>(messages)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">channel_type</th>
+<th style="text-align: left;">channel</th>
+<th style="text-align: right;">messages</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Internal</td>
+<td style="text-align: left;">comms_huddle</td>
+<td style="text-align: right;">476</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Internal</td>
+<td style="text-align: left;">one_on_one_chat</td>
+<td style="text-align: right;">248</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Internal</td>
+<td style="text-align: left;">side_huddle</td>
+<td style="text-align: right;">111</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Public</td>
+<td style="text-align: left;">personal_post</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Public</td>
+<td style="text-align: left;">official_post</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Public</td>
+<td style="text-align: left;">anonymous_post</td>
+<td style="text-align: right;">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -319,13 +424,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Because only 86 of 912 messages carry these fields, any view that draws on them is illustrative rather than representative. No table in the app aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.</p>
+<p>Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.</p>
 </div>
 </div>
 </section>
-<section id="cleaning-the-market-data" class="level2">
-<h2 class="anchored" data-anchor-id="cleaning-the-market-data">Cleaning the market data</h2>
-<p>The market snapshot gives a stock price each round, and this one needed care. The baseline prices fall steadily from $38.70 down to $31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of $180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</p>
+<section id="cleaning-the-market-data" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Cleaning the market data</h1>
+<p>The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(v) <span class="sc">&amp;</span> v <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> v <span class="sc">&lt;=</span> <span class="dv">60</span>, v, <span class="cn">NA_real_</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -339,25 +453,331 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day’s overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.</p>
 </div>
 </div>
+<p>The per-round summary table holds the cleaned price alongside the message counts and sentiment that drive the timeline view.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(v) <span class="sc">&amp;</span> v <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> v <span class="sc">&lt;=</span> <span class="dv">60</span>, v, <span class="cn">NA_real_</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>round_summary <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/round_summary.rds"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>round_summary <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(round_index, n_msgs, n_public, sentiment_state, stock_price) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">round_index</th>
+<th style="text-align: right;">n_msgs</th>
+<th style="text-align: right;">n_public</th>
+<th style="text-align: left;">sentiment_state</th>
+<th style="text-align: right;">stock_price</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">neutral</td>
+<td style="text-align: right;">38.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">neutral</td>
+<td style="text-align: right;">38.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">cautious</td>
+<td style="text-align: right;">37.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">cautious</td>
+<td style="text-align: right;">37.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">cautious</td>
+<td style="text-align: right;">37.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">cautious</td>
+<td style="text-align: right;">36.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">negative</td>
+<td style="text-align: right;">36.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">negative</td>
+<td style="text-align: right;">35.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">negative</td>
+<td style="text-align: right;">34.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">negative</td>
+<td style="text-align: right;">34.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">negative</td>
+<td style="text-align: right;">33.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">negative</td>
+<td style="text-align: right;">32.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">critical</td>
+<td style="text-align: right;">31.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">LOW</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">LOW</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">LOW</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">CRITICAL</td>
+<td style="text-align: right;">27.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">CRITICAL</td>
+<td style="text-align: right;">26.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">CRITICAL</td>
+<td style="text-align: right;">18.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">52</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">CRITICAL</td>
+<td style="text-align: right;">18.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">CRITICAL</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">55</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">CRITICAL</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">56</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: left;">RECOVERING</td>
+<td style="text-align: right;">NA</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </section>
-<section id="building-the-analytical-tables" class="level2">
-<h2 class="anchored" data-anchor-id="building-the-analytical-tables">Building the analytical tables</h2>
-<p>From the flat table we built a small set of focused tables, each one feeding a specific part of the app.</p>
+<section id="building-the-analytical-tables" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Building the analytical tables</h1>
+<p>From the flat table we build a small set of focused tables, each one feeding a specific part of the application.</p>
 <ul>
 <li><strong>Round summary</strong> gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.</li>
 <li><strong>Baseline stats</strong> compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.</li>
-<li><strong>Z-scores</strong> measure how far each agent’s volume in a given round sits from their own baseline average. This is what flags abnormal activity.</li>
+<li><strong>Z-scores</strong> measure how far each agent’s volume in a given round sits from their own baseline average.</li>
 <li><strong>Network edges</strong> resolve each reply back to the message it answered, then to that message’s author, giving a who-replied-to-whom table.</li>
 <li><strong>Intent chain</strong> is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.</li>
-<li><strong>Anonymous posts</strong> pulls all 12 anonymous messages, keeping the true author stored separately so the app can hide it until the user chooses to reveal it.</li>
+<li><strong>Anonymous posts</strong> pulls all 12 anonymous messages, keeping the true author stored separately so the application can hide it until the user chooses to reveal it.</li>
 <li><strong>Event pins</strong> are the timeline markers, anchored to real hours on the crisis day.</li>
 </ul>
+<p>The baseline-versus-crisis table is the clearest example. It shows how each agent’s behaviour shifts between the two phases.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/baseline_stats.rds"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">msgs_per_round =</span> <span class="fu">round</span>(msgs_per_round, <span class="dv">1</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">public_share =</span> <span class="fu">round</span>(public_share, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(agent_id, phase, msgs_per_round, public_share, n_anon) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(agent_id, phase) <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">agent_id</th>
+<th style="text-align: left;">phase</th>
+<th style="text-align: right;">msgs_per_round</th>
+<th style="text-align: right;">public_share</th>
+<th style="text-align: right;">n_anon</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">intern_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.54</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">intern_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">2.4</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">judge_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">judge_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">legal_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">6.9</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">legal_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">17.6</td>
+<td style="text-align: right;">0.09</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pr_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">5.6</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pr_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">2.8</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pr_intern_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pr_intern_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">6.9</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">quality_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">10.4</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">quality_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">social_media_agent</td>
+<td style="text-align: left;">baseline</td>
+<td style="text-align: right;">5.8</td>
+<td style="text-align: right;">0.14</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">social_media_agent</td>
+<td style="text-align: left;">crisis</td>
+<td style="text-align: right;">14.4</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -372,55 +792,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="output" class="level2">
-<h2 class="anchored" data-anchor-id="output">Output</h2>
-<p>The script saves 11 <code>.rds</code> files and prints a short check so we can confirm the build came out right. The key counts are below.</p>
-<table class="caption-top table">
+<section id="output" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Output</h1>
+<p>The script saves 11 <code>.rds</code> files. The key counts are below, confirming the build came out as expected.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Messages"</span>, <span class="st">"Agents"</span>, <span class="st">"Rounds"</span>, <span class="st">"Messages with internal state"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Public messages"</span>, <span class="st">"Anonymous posts (all Legal)"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Intent chain messages"</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(comms),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>agent_id),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>round_index),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="sc">!</span>(<span class="fu">is.na</span>(comms<span class="sc">$</span>reacting) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>deliberating) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>rationalizing))),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel_type <span class="sc">==</span> <span class="st">"Public"</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
-<th>Item</th>
-<th>Count</th>
+<th style="text-align: left;">Item</th>
+<th style="text-align: right;">Count</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Messages</td>
-<td>912</td>
+<td style="text-align: left;">Messages</td>
+<td style="text-align: right;">912</td>
 </tr>
 <tr class="even">
-<td>Agents</td>
-<td>7</td>
+<td style="text-align: left;">Agents</td>
+<td style="text-align: right;">7</td>
 </tr>
 <tr class="odd">
-<td>Rounds</td>
-<td>23</td>
+<td style="text-align: left;">Rounds</td>
+<td style="text-align: right;">23</td>
 </tr>
 <tr class="even">
-<td>Messages with internal state</td>
-<td>86</td>
+<td style="text-align: left;">Messages with internal state</td>
+<td style="text-align: right;">86</td>
 </tr>
 <tr class="odd">
-<td>Public messages</td>
-<td>77</td>
+<td style="text-align: left;">Public messages</td>
+<td style="text-align: right;">77</td>
 </tr>
 <tr class="even">
-<td>Anonymous posts, all by Legal-Agent</td>
-<td>12</td>
+<td style="text-align: left;">Anonymous posts (all Legal)</td>
+<td style="text-align: right;">12</td>
 </tr>
 <tr class="odd">
-<td>Intent chain messages</td>
-<td>6</td>
-</tr>
-<tr class="even">
-<td>Network edges</td>
-<td>33</td>
+<td style="text-align: left;">Intent chain messages</td>
+<td style="text-align: right;">6</td>
 </tr>
 </tbody>
 </table>
-<p>With these files in place, the app reads clean tables and never touches the raw JSON again. The next page walks through what the data looks like once it is prepared.</p>
+</div>
+</div>
+<p>With these files in place, the application reads clean tables and never touches the raw JSON again. The next page explores what the data looks like once it is prepared.</p>
 
 
-</section>
+<!-- -->
+
 </section>
 
 </main> <!-- /main -->
@@ -494,6 +932,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         container: window.document.getElementById('quarto-embedded-source-code-modal')
       });
       clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
@@ -823,7 +1312,206 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
   });
-  </script>
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Preparation"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Preparation</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>This page documents how the raw challenge file becomes the clean tables the Shiny application runs on. All of it happens in one script, <span class="in">`data_prep.R`</span>, which lives in the app folder. We run it once. It reads the raw JSON, builds the tables, and saves them as <span class="in">`.rds`</span> files. The application then loads those files at startup instead of parsing the JSON every time, which keeps it fast.</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu"># Setup</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Loading packages</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>We use the following packages to prepare the data.</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">jsonlite</span><span class="co">](https://cran.r-project.org/web/packages/jsonlite/index.html)</span> to parse the JSON</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">tidyverse</span><span class="co">](https://www.tidyverse.org/)</span> for data manipulation</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">knitr</span><span class="co">](https://cran.r-project.org/web/packages/knitr/index.html)</span> for table displays</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: load-packages</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## The raw data</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>The source is a single file, <span class="in">`MC1_final_00.json`</span>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>Each round carries three blocks:</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="in">`communications`</span>, every message sent that round, with the sender, channel, recipients, message type, what it was responding to, the full text, and a private internal-state field.</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="in">`participants`</span>, the agents present that round and their declared action.</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="in">`environment_context`</span>, the surrounding world, including the market snapshot, news, alerts, and external actor activity.</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>The code below reads the file. We use <span class="in">`simplifyVector = FALSE`</span> so the nested structure stays intact while we walk through it.</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: read-json</span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>raw    <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="st">"../../data/MC1_final_00.json"</span>, <span class="at">simplifyVector =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>rounds <span class="ot">&lt;-</span> raw<span class="sc">$</span>rounds</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="fu"># Flattening the communications</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>The JSON is deeply nested, so the first job is to pull every message into one flat table with a single row per message. We walk the structure round by round, lifting the sender details, the channel, the content, and the three internal-state fields onto each row.</span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: flatten-code</span></span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%or%</span> <span class="fu">list</span>()</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>This produces <span class="in">`comms`</span>, the table everything else is built from. Loading the saved result, we can confirm its shape.</span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: comms-glimpse</span></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/comms.rds"</span>)</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(comms)</span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>There are **912 messages** across **7 agents** and **23 rounds**.</span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="fu"># Splitting internal from public</span></span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tag every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.</span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: channel-code</span></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>public_channels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anonymous_post"</span>, <span class="st">"official_post"</span>, <span class="st">"personal_post"</span>)</span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>comms<span class="sc">$</span>channel_type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(comms<span class="sc">$</span>channel <span class="sc">%in%</span> public_channels,</span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Public"</span>, <span class="st">"Internal"</span>)</span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>This single derived field is the backbone of the rest of the work. The table below confirms the split.</span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: channel-table</span></span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>comms <span class="sc">%&gt;%</span></span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(channel_type, channel, <span class="at">name =</span> <span class="st">"messages"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(channel_type, <span class="fu">desc</span>(messages)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Internal state is missing-not-random {.unnumbered}</span></span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.</span>
+<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="fu"># Cleaning the market data</span></span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</span>
+<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: price-code</span></span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(v) <span class="sc">&amp;</span> v <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> v <span class="sc">&lt;=</span> <span class="dv">60</span>, v, <span class="cn">NA_real_</span>)</span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretive decision: how we handled the broken price field {.unnumbered}</span></span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day's overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.</span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a>The per-round summary table holds the cleaned price alongside the message counts and sentiment that drive the timeline view.</span>
+<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: round-summary-table</span></span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>round_summary <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/round_summary.rds"</span>)</span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a>round_summary <span class="sc">%&gt;%</span></span>
+<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(round_index, n_msgs, n_public, sentiment_state, stock_price) <span class="sc">%&gt;%</span></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a><span class="fu"># Building the analytical tables</span></span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>From the flat table we build a small set of focused tables, each one feeding a specific part of the application.</span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Round summary** gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.</span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Baseline stats** compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.</span>
+<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Z-scores** measure how far each agent's volume in a given round sits from their own baseline average.</span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Network edges** resolve each reply back to the message it answered, then to that message's author, giving a who-replied-to-whom table.</span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Intent chain** is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.</span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Anonymous posts** pulls all 12 anonymous messages, keeping the true author stored separately so the application can hide it until the user chooses to reveal it.</span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Event pins** are the timeline markers, anchored to real hours on the crisis day.</span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a>The baseline-versus-crisis table is the clearest example. It shows how each agent's behaviour shifts between the two phases.</span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: baseline-stats-table</span></span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/baseline_stats.rds"</span>)</span>
+<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="sc">%&gt;%</span></span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">msgs_per_round =</span> <span class="fu">round</span>(msgs_per_round, <span class="dv">1</span>),</span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>         <span class="at">public_share =</span> <span class="fu">round</span>(public_share, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(agent_id, phase, msgs_per_round, public_share, n_anon) <span class="sc">%&gt;%</span></span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(agent_id, phase) <span class="sc">%&gt;%</span></span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretive decision: selecting the intent chain by id {.unnumbered}</span></span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a>The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.</span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a><span class="fu"># Output</span></span>
+<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a>The script saves 11 <span class="in">`.rds`</span> files. The key counts are below, confirming the build came out as expected.</span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: output-summary</span></span>
+<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Messages"</span>, <span class="st">"Agents"</span>, <span class="st">"Rounds"</span>, <span class="st">"Messages with internal state"</span>,</span>
+<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Public messages"</span>, <span class="st">"Anonymous posts (all Legal)"</span>,</span>
+<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Intent chain messages"</span>),</span>
+<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(</span>
+<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(comms),</span>
+<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>agent_id),</span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>round_index),</span>
+<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="sc">!</span>(<span class="fu">is.na</span>(comms<span class="sc">$</span>reacting) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>deliberating) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>rationalizing))),</span>
+<span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel_type <span class="sc">==</span> <span class="st">"Public"</span>),</span>
+<span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>),</span>
+<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span></span>
+<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span>
+<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a>With these files in place, the application reads clean tables and never touches the raw JSON again. The next page explores what the data looks like once it is prepared.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 
 

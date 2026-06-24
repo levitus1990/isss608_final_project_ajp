@@ -41,6 +41,10 @@ format:
   html:
     theme: [cosmo, custom.scss]   # ← loads your custom cyan theme on top of cosmo
     toc: true
-
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-tools: true
+    code-overflow: wrap
 filters:                          # ← enables the Font Awesome shortcode extension
   - fontawesome

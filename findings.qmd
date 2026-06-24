@@ -1,12 +1,13 @@
 ---
 title: "Findings"
+execute:
+  warning: false
+  message: false
 ---
 
 # Findings
 
 What the evidence says about the TenantThread embargo breach.
-
-## The question, and why it needed an app
 
 On 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom's legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?
 
@@ -14,10 +15,8 @@ This project did not start from a blank slate. Two of us analysed the same messa
 
 The short version is that both readings were half right, and the full picture needs both halves.
 
-## Answer in brief
-
 ::: callout-important
-## The short version
+## The short version {.unnumbered}
 
 Three things are true at once, and no single one of them is the whole story.
 
@@ -30,21 +29,65 @@ Three things are true at once, and no single one of them is the whole story.
 The detailed findings follow, each drawn from one part of the app.
 :::
 
-## Finding 1: The response followed the leak, it did not cause it
+# Setup
+
+## Loading packages
+
+We use a small set of packages for the charts on this page.
+
+```{r}
+#| label: load-packages
+library(tidyverse)   # data manipulation and ggplot2
+library(scales)      # axis formatting
+```
+
+## Loading the data
+
+The charts read the prepared `.rds` tables built during data preparation. They live in the Shiny app's data folder, two levels up from this page.
+
+```{r}
+#| label: load-data
+data_dir       <- "C:/VAProject/isss608_final_project_ajp/shiny_app/my_shiny_app/data"
+round_summary  <- readRDS(file.path(data_dir, "round_summary.rds"))
+baseline_stats <- readRDS(file.path(data_dir, "baseline_stats.rds"))
+comms          <- readRDS(file.path(data_dir, "comms.rds"))
+agents         <- readRDS(file.path(data_dir, "agents.rds"))
+```
+
+## House theme
+
+A shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.
+
+```{r}
+#| label: house-theme
+theme_house <- function() {
+  theme_minimal(base_size = 13) +
+    theme(
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      plot.title = element_text(face = "bold", size = 14),
+      plot.subtitle = element_text(color = "grey40"),
+      axis.title = element_text(color = "grey30")
+    )
+}
+```
+
+# Finding 1: The response followed the leak, it did not cause it
 
 The first question is whether the agents put the merger into public. If they did, their public posting would rise before SaltWind published. It does the opposite.
 
 ```{r}
-#| eval: false
 #| label: fig-public-timing
+#| fig-cap: "Public posts per hour on the crisis day."
 crisis <- round_summary %>% filter(round_index >= 13)
 
 ggplot(crisis, aes(round_index, n_public)) +
   geom_col(width = 0.7, fill = "#b8c4d0") +
   geom_col(data = filter(crisis, round_index >= 21),
            width = 0.7, fill = "#c0392b") +
-  geom_vline(xintercept = 21, linetype = "dashed", color = "grey50") +
-  annotate("text", x = 21, y = 14, label = "SaltWind publishes (5 PM)",
+  geom_vline(xintercept = 20.5, linetype = "dashed", color = "grey50") +
+  annotate("text", x = 20.5, y = max(crisis$n_public),
+           label = "SaltWind publishes (5 PM)",
            hjust = 1.05, vjust = 1, size = 3.3, color = "grey40") +
   scale_x_continuous(breaks = 13:22,
                      labels = c("9 AM","10","11","12 PM","1","2","3","4","5 PM","6 PM")) +
@@ -57,41 +100,46 @@ ggplot(crisis, aes(round_index, n_public)) +
 Public posting sits at one to four posts an hour through the whole afternoon, then jumps to seven at 5 PM and fourteen at 6 PM. The first public post that affirms the merger is from Legal at 5:25 PM, twenty-five minutes after SaltWind's 5 PM publication. If the agents had been the public source, the spike would lead the scoop. It follows it.
 
 ::: callout-note
-## Where the leak actually came from
+## Where the leak actually came from {.unnumbered}
 
 The environment fields in the data point upstream of the agents. An employee insider account named two sources by 11 AM. Employee personal posts carrying merger language were going viral by noon. The counterparty's CEO had posted "exciting times" without denial, and the SaltWind reporter is recorded as having an inside source on 31 May, five days before the crisis. The leak was diffuse and internal to the wider company. It was not the seven agents, and it was not external in the simple sense.
 
 This is also the limit of what the data can prove. The logs do not capture SaltWind's actual upstream source. The reading rests on the environment fields and the timing, not on a recorded confession.
 :::
 
-## Finding 2: Every agent's behaviour changed, and the changes were not uniform
+# Finding 2: Every agent's behaviour changed, and the changes were not uniform
 
 The second question is what normal looked like and how the crisis differed. The baseline is calm, private, and low volume. The crisis day shifts on every axis, but not in the same direction for every agent.
 
 ```{r}
-#| eval: false
 #| label: fig-agent-shift
-ggplot(baseline_stats, aes(x = msgs_per_round, y = reorder(agent_id, msgs_per_round),
-                           fill = phase)) +
+#| fig-cap: "Messages per round, baseline against crisis day."
+baseline_stats %>%
+  left_join(agents %>% select(agent_id, agent_label), by = "agent_id") %>%
+  mutate(phase = factor(phase, levels = c("baseline", "crisis"),
+                        labels = c("Baseline", "Crisis"))) %>%
+  ggplot(aes(x = msgs_per_round, y = reorder(agent_label, msgs_per_round),
+             fill = phase)) +
   geom_col(position = "dodge", width = 0.7) +
-  scale_fill_manual(values = c("baseline" = "#b8c4d0", "crisis" = "#c0392b"),
+  scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#c0392b"),
                     name = NULL) +
-  labs(title = "Legal and Social Manager surge while the supervisors go quiet",
+  labs(title = "Legal and Social-Manager surge while the supervisors go quiet",
        subtitle = "Messages per round, baseline against crisis day",
        x = "Messages per round", y = NULL) +
-  theme_house()
+  theme_house() +
+  theme(legend.position = "top")
 ```
 
-Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social Manager from 5.8 to 14.4, and PR Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.
+Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social-Manager from 5.8 to 14.4, and PR-Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform-Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.
 
 The sharpest single signal is Legal's anonymous posting. It does not amplify on the crisis day. It appears for the first time. Across the thirteen baseline rounds Legal sent zero anonymous posts. On the crisis day it sent twelve. There was no baseline pattern to flag, because the behaviour had no precedent.
 
-## Finding 3: The response was planned in advance
+# Finding 3: The response was planned in advance
 
 The third question is intent. The intent chain is six messages from Legal's own communications, in order. It is the strongest evidence in the dataset, and it is the half that the external-leak reading did not have.
 
 ::: callout-warning
-## The intent chain, in Legal's own words
+## The intent chain, in Legal's own words {.unnumbered}
 
 - **Jun 4, the day before.** Outside counsel was already briefed for this scenario.
 - **11:21 AM.** The 2:15 PM deadline for a unilateral announcement is modelled.
@@ -105,31 +153,38 @@ This chain proves the response was prepared. It does not prove a leak. The two d
 
 This is the point where the two original reports meet. One report had the timing and the external origin but read the response as merely prepared. The other had this chain but attached it to the wrong act, calling it a deliberate leak. The chain is real and the timing is real. Put together, they describe a planned response to someone else's leak.
 
-## Finding 4: The real misconduct was hidden in a channel nobody watched
+# Finding 4: The real misconduct was hidden in a channel nobody watched
 
 The visible response was lawful. The misconduct sits one layer down, in the anonymous channel.
 
 ```{r}
-#| eval: false
 #| label: fig-anon-authorship
-anon_summary <- comms %>%
+#| fig-cap: "Author of every anonymous post, with the timing split at 5 PM."
+comms %>%
   filter(channel == "anonymous_post") %>%
-  count(true_author = agent_id)
-
-# all 12 anonymous posts resolve to a single author: legal_agent
-anon_summary
+  mutate(window = if_else(round_index >= 21, "After 5 PM", "Before 5 PM")) %>%
+  count(agent_label, window) %>%
+  ggplot(aes(x = n, y = agent_label, fill = window)) +
+  geom_col(width = 0.5) +
+  scale_fill_manual(values = c("Before 5 PM" = "#e08a7a", "After 5 PM" = "#c0392b"),
+                    name = NULL) +
+  labs(title = "All twelve anonymous posts trace to one author: Legal",
+       subtitle = "Anonymous posts by author, split before and after SaltWind",
+       x = "Anonymous posts", y = NULL) +
+  theme_house() +
+  theme(legend.position = "top")
 ```
 
 Every one of the twelve anonymous posts was authored by the Legal agent. They appeared during the embargo, posing as neutral third-party commentary. Four came before 5 PM and eight after. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer running a concealed campaign to shape sentiment, while the company was under two attorney-general inquiries, on a channel the compliance Judge never posted to once across all 23 rounds.
 
 This is the finding neither original report centred, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.
 
-## The synthesis
+# The synthesis
 
 The reason the two original reports disagreed is that each held a different layer of the evidence, and each layer on its own supports a different verdict.
 
 ::: callout-note
-## Why partial evidence produces partial verdicts
+## Why partial evidence produces partial verdicts {.unnumbered}
 
 - On the **timeline and behavioural evidence alone**, the breach looks like a system failure with the leak originating outside the agents. This is the first report's reading. It is coherent, and it is incomplete.
 - On the **intent chain alone**, the breach looks like a deliberate, pre-planned leak. This is the second report's reading. The chain is real, but it is attached to the wrong act.
@@ -140,7 +195,7 @@ No single perspective captures this. Only the full evidence base does, which is 
 
 The verdict the data supports is not "deliberate leak" and not "system breakdown." The merger leak was a containment failure the agents did not cause. The early announcement was a deliberate response engineered to be lawful. The genuine misconduct was a hidden influence operation that the compliance architecture was never positioned to see. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.
 
-## Limitations
+# Limitations
 
 A few limits are worth stating plainly.
 
