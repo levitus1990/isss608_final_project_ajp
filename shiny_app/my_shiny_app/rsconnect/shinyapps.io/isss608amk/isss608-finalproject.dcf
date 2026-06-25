@@ -5,8 +5,6 @@ account: isss608amk
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 17492199
-bundleId: 12137868
+bundleId: 12175445
 url: https://isss608amk.shinyapps.io/isss608-finalproject/
 version: 1
-asMultiple: FALSE
-asStatic: FALSE

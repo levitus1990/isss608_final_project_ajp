@@ -36,11 +36,11 @@ The project uses data from [VAST Challenge 2026 Mini-Challenge 1](https://vast-c
 
 The data captures:
 
-- **Messages**: Internal deliberations, direct agent communications, and public posts across 912 messages
-- **Agents**: Seven AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)
-- **Channels**: Six distinct channels classified into Internal and Public channel types
-- **Metadata**: Message IDs, agent roles and labels, channels, recipients, message types, response chains and timestamps
-- **Internal state**: Private free text fields capturing each agent's reacting, deliberating and rationalizing at the moment of sending, present in 86 of the 912 messages. These fields are the primary source for intent analysis and are treated as sparse but high value evidence rather than a complete record
+-   **Messages**: Internal deliberations, direct agent communications, and public posts across 912 messages
+-   **Agents**: Seven AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)
+-   **Channels**: Six distinct channels classified into Internal and Public channel types
+-   **Metadata**: Message IDs, agent roles and labels, channels, recipients, message types, response chains and timestamps
+-   **Internal state**: Private free text fields capturing each agent's reacting, deliberating and rationalizing at the moment of sending, present in 86 of the 912 messages. These fields are the primary source for intent analysis and are treated as sparse but high value evidence rather than a complete record
 
 The key analytical variable is `channel_type`, a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary.
 
@@ -87,7 +87,7 @@ flowchart TD
 
 Our Shiny app will look at network and temporal patterns, with the agent communication network as the core visualisation, supported by flagged message tables, sentiment trends, and event timelines as accompanying views, and an evidence and verdict panel that consolidates the analysis.
 
-![](image/prototype v2.png)
+![](image/prototype%20v2.png)
 
 ::: panel-tabset
 ## Inputs
@@ -122,8 +122,8 @@ Shows the agent communication network plot rendered using `visNetwork`. It will 
 
 Shows a filterable table of communications flagged for anomalous behaviour, rendered using `DT::datatable`. Each row is colour coded by flag type:
 
-- **Amber** rows indicate near-miss leading indicators observed prior to June 5
-- **Red** rows indicate intent-flagged messages directly involved in the breach execution
+-   **Amber** rows indicate near-miss leading indicators observed prior to June 5
+-   **Red** rows indicate intent-flagged messages directly involved in the breach execution
 
 ### Temporal Graph
 
@@ -144,39 +144,39 @@ The following R packages are used in this project:
 
 **Data Ingestion & Wrangling**
 
-- [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html): Parsing the nested JSON communications data
-- [tidyverse](https://www.tidyverse.org/): Core data manipulation and transformation
-- [lubridate](https://lubridate.tidyverse.org/): Parsing and handling ISO datetime fields
-- [zoo](https://cran.r-project.org/web/packages/zoo/index.html): Rolling window calculations for behavioural trend analysis
+-   [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html): Parsing the nested JSON communications data
+-   [tidyverse](https://www.tidyverse.org/): Core data manipulation and transformation
+-   [lubridate](https://lubridate.tidyverse.org/): Parsing and handling ISO datetime fields
+-   [zoo](https://cran.r-project.org/web/packages/zoo/index.html): Rolling window calculations for behavioural trend analysis
 
 **Text & Sentiment Analysis**
 
-- [tidytext](https://juliasilge.github.io/tidytext/): Tokenisation and text feature extraction
-- [sentimentr](https://cran.r-project.org/web/packages/sentimentr/index.html): Sentence-level sentiment scoring of agent messages
+-   [tidytext](https://juliasilge.github.io/tidytext/): Tokenisation and text feature extraction
+-   [sentimentr](https://cran.r-project.org/web/packages/sentimentr/index.html): Sentence-level sentiment scoring of agent messages
 
 **Visualisation**
 
-- [ggplot2](https://ggplot2.tidyverse.org/): Core static visualisations and annotated timelines
-- [plotly](https://plotly.com/r/): Interactive chart rendering
-- [patchwork](https://patchwork.data-imaginist.com/): Composing multi-panel ggplot figures
-- [ggrepel](https://ggrepel.slowkow.com/): Non-overlapping labels on scatter and timeline plots
-- [scales](https://scales.r-lib.org/): Axis formatting and colour scaling
-- [kableExtra](https://haozhu233.github.io/kableExtra/): Styled summary tables
+-   [ggplot2](https://ggplot2.tidyverse.org/): Core static visualisations and annotated timelines
+-   [plotly](https://plotly.com/r/): Interactive chart rendering
+-   [patchwork](https://patchwork.data-imaginist.com/): Composing multi-panel ggplot figures
+-   [ggrepel](https://ggrepel.slowkow.com/): Non-overlapping labels on scatter and timeline plots
+-   [scales](https://scales.r-lib.org/): Axis formatting and colour scaling
+-   [kableExtra](https://haozhu233.github.io/kableExtra/): Styled summary tables
 
 **Network Analysis**
 
-- [igraph](https://cran.r-project.org/web/packages/igraph/index.html): Graph construction and network metrics
-- [visNetwork](https://datastorm-open.github.io/visNetwork/): Interactive network visualisations
+-   [igraph](https://cran.r-project.org/web/packages/igraph/index.html): Graph construction and network metrics
+-   [visNetwork](https://datastorm-open.github.io/visNetwork/): Interactive network visualisations
 
 **Shiny App**
 
-- [shiny](https://shiny.posit.co/): Interactive application framework
-- [shinyWidgets](https://shinyapps.dreamrs.fr/shinyWidgets/): Extended UI input controls
+-   [shiny](https://shiny.posit.co/): Interactive application framework
+-   [shinyWidgets](https://shinyapps.dreamrs.fr/shinyWidgets/): Extended UI input controls
 
 **Reproducibility & Testing**
 
-- [renv](https://rstudio.github.io/renv/): Locking package versions so all collaborators run identical environments
-- [shinytest2](https://rstudio.github.io/shinytest2/): Automated testing of the Shiny application
+-   [renv](https://rstudio.github.io/renv/): Locking package versions so all collaborators run identical environments
+-   [shinytest2](https://rstudio.github.io/shinytest2/): Automated testing of the Shiny application
 
 ## {{< fa calendar-days >}} Project Schedule
 
