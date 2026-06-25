@@ -550,9 +550,9 @@ server <- function(input, output, session) {
               p(class = "verdict-note",
                 "SaltWind published at 5:00 PM. The agents' public posts follow the scoop, they do not precede it."))
     } else {
-      tagList(p(class = "verdict-a", "Diffuse internal leak. Not the comms agents."),
+      tagList(p(class = "verdict-a", "Not the agents. The source was diffuse and internal."),
               p(class = "verdict-note",
-                "Employee Slack, departing staff and the counterparty CEO, aggregated by a reporter with an inside source since May 31. The seven agents did not originate it."))
+                "The agents' public posts follow the scoop, they never lead it, so they did not put the merger out. The breach traces upstream to employee posts, the CEO's hints, an early agent slip tagging the counterparty, and departing clients, aggregated and published by SaltWind. The exact source is not in the logs, but the agents are clearly not it."))
     }
   })
   
@@ -570,9 +570,9 @@ server <- function(input, output, session) {
               p(class = "verdict-note",
                 "All 12 anonymous posts were authored by Legal-Agent, during the embargo, on a channel the compliance Judge never observed."))
     } else {
-      tagList(p(class = "verdict-a bad", "Yes. Deliberate, on two fronts."),
+      tagList(p(class = "verdict-a bad", "Yes, but not where the leak hunt would look."),
               p(class = "verdict-note",
-                "A pre-planned consent-gated announcement, plus a concealed anonymous influence operation run by Legal throughout the day."))
+                "The planned announcement was lawful: consent-gated, fired only after the scoop and after consent. The deliberate misconduct is separate and hidden, a concealed anonymous influence operation run by Legal all day on a channel no one watched."))
     }
   })
   
@@ -595,7 +595,7 @@ server <- function(input, output, session) {
     } else if (all(L)) {
       tagList(h5("Interpretation: the synthesis"),
               p(style="font-size:13px;",
-                "With all four layers admitted: an external scoop triggered the execution of a pre-planned, consent-gated response, while a concealed anonymous influence operation ran underneath all day. Neither single perspective captures this. Only the full evidence base does."),
+                "With all four layers admitted, three separate things are true. The leak was not the agents: their posts follow the scoop, and the source was diffuse and internal to the wider company. The agents' announcement was planned but lawful, firing only after the scoop and after consent. The real misconduct was a concealed anonymous influence operation Legal ran underneath all day. Neither single perspective captures this. Only the full evidence base does."),
               span(class="report-tag synth", "The complete picture"))
     } else {
       tagList(h5("Interpretation"),
