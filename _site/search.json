@@ -1,33 +1,5 @@
 [
   {
-    "objectID": "findings.html",
-    "href": "findings.html",
-    "title": "Findings",
-    "section": "",
-    "text": "What the evidence says about the TenantThread embargo breach.\nOn 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom’s legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?\nThis project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.\nThe short version is that both readings were half right, and the full picture needs both halves.\n\n\n\n\n\n\nImportantThe short version\n\n\n\nThree things are true at once, and no single one of them is the whole story.\n\nThe merger leaked from inside the company, but not from the agents. The information reached the public through employee Slack chatter, departing staff, and the counterparty’s own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels.\nThe agents executed a planned response, and it was lawful on its face. From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.\nThe genuinely deliberate misconduct was hidden, and it was separate from the leak. All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.\n\nThe detailed findings follow, each drawn from one part of the app."
-  },
-  {
-    "objectID": "findings.html#loading-packages",
-    "href": "findings.html#loading-packages",
-    "title": "Findings",
-    "section": "2.1 Loading packages",
-    "text": "2.1 Loading packages\nWe use a small set of packages for the charts on this page.\n\n\nCode\nlibrary(tidyverse)   # data manipulation and ggplot2\nlibrary(scales)      # axis formatting"
-  },
-  {
-    "objectID": "findings.html#loading-the-data",
-    "href": "findings.html#loading-the-data",
-    "title": "Findings",
-    "section": "2.2 Loading the data",
-    "text": "2.2 Loading the data\nThe charts read the prepared .rds tables built during data preparation. They live in the Shiny app’s data folder, two levels up from this page.\n\n\nCode\n# Path from the Quarto project root down into the Shiny app's data folder\ndata_dir &lt;- \"shiny_app/my_shiny_app/data\"\n\n# Read in the files\nround_summary  &lt;- readRDS(file.path(data_dir, \"round_summary.rds\"))\nbaseline_stats &lt;- readRDS(file.path(data_dir, \"baseline_stats.rds\"))\ncomms          &lt;- readRDS(file.path(data_dir, \"comms.rds\"))\nagents         &lt;- readRDS(file.path(data_dir, \"agents.rds\"))"
-  },
-  {
-    "objectID": "findings.html#house-theme",
-    "href": "findings.html#house-theme",
-    "title": "Findings",
-    "section": "2.3 House theme",
-    "text": "2.3 House theme\nA shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.\n\n\nCode\ntheme_house &lt;- function() {\n  theme_minimal(base_size = 13) +\n    theme(\n      panel.grid.minor = element_blank(),\n      panel.grid.major.x = element_blank(),\n      plot.title = element_text(face = \"bold\", size = 14),\n      plot.subtitle = element_text(color = \"grey40\"),\n      axis.title = element_text(color = \"grey30\")\n    )\n}"
-  },
-  {
     "objectID": "user_guide.html",
     "href": "user_guide.html",
     "title": "User Guide",
@@ -152,6 +124,118 @@
     "title": "Meeting Minutes",
     "section": "3.6 Action Items",
     "text": "3.6 Action Items\n\nJit: complete the four-module application and the data preparation pipeline, and circulate the build for review.\nMing Kwan: write the findings page, deploy the application to shinyapps.io, and confirm all four tabs load.\nPersis: write the data preparation page and review the application build.\nAll: cross-review the application, the data preparation page, and the findings page, and begin planning the A1 poster ahead of the 1 July deadline.\n\nAdjournment: Meeting adjourned at 10:50 PM. Next meeting to review the deployed application and the poster draft."
+  },
+  {
+    "objectID": "findings.html",
+    "href": "findings.html",
+    "title": "Findings",
+    "section": "",
+    "text": "What the evidence says about the TenantThread embargo breach.\nOn 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom’s legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?\nThis project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.\nThe short version is that both readings were half right, and the full picture needs both halves.\n\n\n\n\n\n\nImportantThe short version\n\n\n\nThree things are true at once, and no single one of them is the whole story.\n\nThe merger leaked from inside the company, but not from the agents. The information reached the public through employee Slack chatter, departing staff, and the counterparty’s own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels.\nThe agents executed a planned response, and it was lawful on its face. From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.\nThe genuinely deliberate misconduct was hidden, and it was separate from the leak. All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.\n\nThe detailed findings follow, each drawn from one part of the app."
+  },
+  {
+    "objectID": "findings.html#loading-packages",
+    "href": "findings.html#loading-packages",
+    "title": "Findings",
+    "section": "2.1 Loading packages",
+    "text": "2.1 Loading packages\nWe use a small set of packages for the charts on this page.\n\n\nCode\nlibrary(tidyverse)   # data manipulation and ggplot2\nlibrary(scales)      # axis formatting"
+  },
+  {
+    "objectID": "findings.html#loading-the-data",
+    "href": "findings.html#loading-the-data",
+    "title": "Findings",
+    "section": "2.2 Loading the data",
+    "text": "2.2 Loading the data\nThe charts read the prepared .rds tables built during data preparation. They live in the Shiny app’s data folder, two levels up from this page.\n\n\nCode\n# Path from the Quarto project root down into the Shiny app's data folder\ndata_dir &lt;- \"shiny_app/my_shiny_app/data\"\n\n# Read in the files\nround_summary  &lt;- readRDS(file.path(data_dir, \"round_summary.rds\"))\nbaseline_stats &lt;- readRDS(file.path(data_dir, \"baseline_stats.rds\"))\ncomms          &lt;- readRDS(file.path(data_dir, \"comms.rds\"))\nagents         &lt;- readRDS(file.path(data_dir, \"agents.rds\"))"
+  },
+  {
+    "objectID": "findings.html#house-theme",
+    "href": "findings.html#house-theme",
+    "title": "Findings",
+    "section": "2.3 House theme",
+    "text": "2.3 House theme\nA shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.\n\n\nCode\ntheme_house &lt;- function() {\n  theme_minimal(base_size = 13) +\n    theme(\n      panel.grid.minor = element_blank(),\n      panel.grid.major.x = element_blank(),\n      plot.title = element_text(face = \"bold\", size = 14),\n      plot.subtitle = element_text(color = \"grey40\"),\n      axis.title = element_text(color = \"grey30\")\n    )\n}"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "The Team",
+    "section": "",
+    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+  },
+  {
+    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
+    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
+    "title": "The Team",
+    "section": "",
+    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+  },
+  {
+    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
+    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
+    "title": "The Team",
+    "section": "2  Team Members",
+    "text": "2  Team Members\n\n2.1  Ang Ming Kwan\nRole: Data Preparation & EDA\nBrief bio or role description.\n\n\n2.2  Persie Evangeline\nRole: Visualisation & Shiny App\nBrief bio or role description.\n\n\n2.3  Yap Jit Wei\nRole: Findings & Report Writing\nBrief bio or role description."
+  },
+  {
+    "objectID": "data/mc1 data description.html",
+    "href": "data/mc1 data description.html",
+    "title": "",
+    "section": "",
+    "text": "Code"
+  },
+  {
+    "objectID": "data/mc1 data description.html#overview",
+    "href": "data/mc1 data description.html#overview",
+    "title": "",
+    "section": "1.1 Overview",
+    "text": "1.1 Overview\nThis folder contains the data for the multi-agent LLM crisis for our corporate communications team. There was an exposé, an communications embargo around a company merger, and social media firestorm recently. The data is based on 7 interacting AI agents who communicate across multiple channels and make real-time decisions about what to publish and what not to."
+  },
+  {
+    "objectID": "data/mc1 data description.html#files",
+    "href": "data/mc1 data description.html#files",
+    "title": "",
+    "section": "1.2 Files",
+    "text": "1.2 Files\n\n\n\n\n\n\n\n\nFile\nDescription\nSize\n\n\n\n\nMC1_final.json\nMC1 dataset containing the two weeks leading up to the release of information\n\n\n\nREADME.md\nThis documentation file\n—\n\n\n\n\nEach JSON file follows this structure.\n{\n  \"rounds\": [\n    {\n      \"hour\": \"2046-05-17 9 AM\",\n      \"environment_context\": {\n        \"event_narrative\": \"...\",\n        \"market_snapshot\": { ... },\n        \"media_events\": [ ... ],\n        \"agents_unavailable\": [ ... ]\n      },\n      \"agent_outputs\": [\n        {\n          \"agent_id\": \"legal_agent\",\n          \"internal_state\": {\n            \"reacting\": \"...\",\n            \"rationalizing\": \"...\",\n            \"deliberating\": \"...\"\n          },\n          \"communications\": [\n            {\n              \"message_id\": \"...\",\n              \"channel\": \"comms_huddle\",\n              \"message_text\": \"...\",\n            }\n          ],\n          \"declared_action\": \"MONITORING\"\n        }\n      ]\n    }\n  ]\n}"
+  },
+  {
+    "objectID": "data/mc1 data description.html#agents",
+    "href": "data/mc1 data description.html#agents",
+    "title": "",
+    "section": "1.3 Agents",
+    "text": "1.3 Agents\n\n\n\n\n\n\n\n\n\n\nAgent ID\nRole\nLabel\nSeniority\nDescription\n\n\n\n\nlegal_agent\nlegal\nLegal-Agent\nSenior\nGeneral legal counsel.\n\n\nquality_agent\nplatform_trust\nPlatform-Trust\nSenior\nVP of Platform Trust & Safety.\n\n\nsocial_manager_agent\nsocial_manager\nSocial-Manager\nSenior\nManages Social messaging\n\n\npr_agent\npr\nPR-Agent\nSenior\nHead of Communications and Public Relationships\n\n\nintern_agent\nintern\nIntern\nJunior\nGeneral intern.\n\n\npr_intern_agent\npr_intern\nPR-Intern\nJunior\nPR team intern with access to the official TenantThread Flex account.\n\n\njudge_eval_agent\njudge\nJudge\nCompliance officer\nEvaluates risks, mediates conflicts, provides compliance guidance."
+  },
+  {
+    "objectID": "data/mc1 data description.html#companies-codenames",
+    "href": "data/mc1 data description.html#companies-codenames",
+    "title": "",
+    "section": "1.4 Companies & Codenames",
+    "text": "1.4 Companies & Codenames\n\n\n\n\n\n\n\nEntity\nDescription\n\n\n\n\nTenantThread\nThe company being acquired whose records are being presented. A proptech platform providing tenant management tools including the controversial “Retention Optimizer” scoring system.\n\n\nCivicLoom\nThe company acquiring TenantThread in the merger. Identity is embargoed until 6:00 PM on the crisis day.\n\n\nProject HarborCrest\nInternal codename for the CivicLoom–TenantThread merger.\n\n\nResidentIQ\nAnother PropTech company being discussed in the SaltWind Journal.\n\n\nSaltWind Journal\nLocal newspaper running stories on the property tech industry.\n\n\nOceanCrunch\nTech media outlet. Sarah Kowalski is a reporter.\n\n\n@HorizonMgmt, @PinnacleResidential\nMajor clients of TennatThread."
+  },
+  {
+    "objectID": "data/mc1 data description.html#communication-channels",
+    "href": "data/mc1 data description.html#communication-channels",
+    "title": "",
+    "section": "1.5 Communication Channels",
+    "text": "1.5 Communication Channels\nAgents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": "1  Overview",
+    "text": "1  Overview\nThis project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.\nThe data originates from AI agents managing TenantThread’s corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": "2  Key Questions",
+    "text": "2  Key Questions\nOur investigation is structured around three core questions:\n\nWhat were the key events and relationships that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.\nHow did the breach-day behaviour differ from established norms? We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.\nWere there leading indicators? We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": "3  The Team",
+    "text": "3  The Team\nWe are a team of Visual Analytics students from SMU’s Master of IT in Business programme, tackling the VAST Challenge 2026 MC1. Meet the team on the About page."
   },
   {
     "objectID": "methodology/data_exploration/data_exploration.html",

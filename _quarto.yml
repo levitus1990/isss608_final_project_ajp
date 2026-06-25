@@ -5,8 +5,10 @@ project:
 website:
   title: "Unmasking the Leak"
   navbar:
-    background: primary          # ← makes navbar use your theme's primary colour
+    background: primary
     left:
+      - text: "{{< fa house >}} Home"   # ← Add this to explicitly map to index.qmd
+        href: index.qmd
       - text: "{{< fa file-lines >}} Proposal"
         href: proposal.qmd
       - text: "Methodology"
