@@ -42,11 +42,88 @@
     "text": "Minutes for the team’s project meetings. Each entry records the agenda, the discussion including any disagreements, the decisions reached, the division of labour, and the action items that followed.\nTeam members: Ang Ming Kwan, Persis Evangeline, Yap Jit Wei."
   },
   {
-    "objectID": "meeting_minutes.html#meeting-1",
-    "href": "meeting_minutes.html#meeting-1",
-    "title": "meeting_minutes",
-    "section": "",
-    "text": "Date: Attendees:"
+    "objectID": "meeting_minutes.html#agenda",
+    "href": "meeting_minutes.html#agenda",
+    "title": "Meeting Minutes",
+    "section": "2.1 Agenda",
+    "text": "2.1 Agenda\n\nDecide which Mini-Challenge the team will take and the analytical direction.\nAgree on the conclusion the project will argue before drafting the proposal.\nSet the division of labour and the immediate next steps toward the 10 June proposal deadline."
+  },
+  {
+    "objectID": "meeting_minutes.html#discussion",
+    "href": "meeting_minutes.html#discussion",
+    "title": "Meeting Minutes",
+    "section": "2.2 Discussion",
+    "text": "2.2 Discussion\nThe team first weighed which Mini-Challenge to take. The deciding factor was that two of us had already completed independent Take-home Exercise 2 analyses of MC1, which gave the team a richer base of source material and two worked-through readings to build on. MC1 was chosen on that basis: it let the project start from real prior analysis rather than from scratch.\nThe team then turned to the harder question of what the conclusion should actually be. This is where the two existing reports disagreed. One reading held that the breach was an external leak that the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same message logs, two careful analyses, two opposite verdicts.\nPersis, who had analysed MC2 rather than MC1, acted as the neutral point of view in this debate. Without being attached to either reading, she pushed both sides to state what their evidence could and could not prove. That framing helped the team see that the two readings were not actually in full conflict. One had the timeline and the external-origin signals. The other had the intent chain showing the response was planned. Each was strong on its own half and weak on the other."
+  },
+  {
+    "objectID": "meeting_minutes.html#disagreement-and-resolution",
+    "href": "meeting_minutes.html#disagreement-and-resolution",
+    "title": "Meeting Minutes",
+    "section": "2.3 Disagreement and Resolution",
+    "text": "2.3 Disagreement and Resolution\nDisagreement: whether the verdict should be “external leak, system failure” or “deliberate leak by Legal.”\nConsiderations weighed:\n\nThe external-leak reading: the agents’ public posting follows the external scoop rather than preceding it, and the environment fields point to upstream sources outside the agent system.\nThe deliberate-leak reading: the six-message intent chain proves the response was planned in advance, which the external reading did not account for.\nThe neutral check: the intent chain fires only after the scoop and after counterparty consent, so it proves a planned response, not a planned leak.\n\nResolution: the team debated the two readings and reached consensus on a synthesis that incorporates both halves. The merger leaked from inside the wider company but not from the agents; the agents then executed a planned, consent-gated response that was lawful on its face. With the direction agreed, Jit set out the project roadmap, and this synthesis became the spine of the proposal and the reason the application is framed as an evidence room that admits each layer of evidence rather than asserting a single answer."
+  },
+  {
+    "objectID": "meeting_minutes.html#decisions-made",
+    "href": "meeting_minutes.html#decisions-made",
+    "title": "Meeting Minutes",
+    "section": "2.4 Decisions Made",
+    "text": "2.4 Decisions Made\n\nTake MC1, building on the team’s two existing TH_Ex02 reports.\nArgue the synthesis verdict that combines the external-origin finding and the intent-chain finding.\nDesign the application around progressive disclosure of evidence rather than a fixed conclusion."
+  },
+  {
+    "objectID": "meeting_minutes.html#division-of-labour",
+    "href": "meeting_minutes.html#division-of-labour",
+    "title": "Meeting Minutes",
+    "section": "2.5 Division of Labour",
+    "text": "2.5 Division of Labour\nAt this stage the work was the proposal and the project setup. The team agreed the following ownership.\n\n\n\n\n\n\n\n\nMember\nOwns\nSupporting\n\n\n\n\nAng Ming Kwan\nWebsite setup, repository, initial wordings and logos\nReviewing the roadmap\n\n\nPersis Evangeline\nReview and supporting comments on the verdict\nOutside perspective, independent review\n\n\nYap Jit Wei\nProject roadmap, proposal touch-ups\nReviewing the website setup"
+  },
+  {
+    "objectID": "meeting_minutes.html#action-items",
+    "href": "meeting_minutes.html#action-items",
+    "title": "Meeting Minutes",
+    "section": "2.6 Action Items",
+    "text": "2.6 Action Items\n\nMing Kwan: set up the website and repository with the initial wordings and logos, and confirm the shinyapps.io setup.\nPersis: review the synthesis with a fresh independent lens and flag anything inconsistent.\nJit: set out the roadmap and finalise the proposal touch-ups for publishing before the 10 June deadline.\n\nAdjournment: Meeting adjourned at 9:15 PM. Next meeting to be held after the proposal feedback window."
+  },
+  {
+    "objectID": "meeting_minutes.html#approval-of-previous-minutes",
+    "href": "meeting_minutes.html#approval-of-previous-minutes",
+    "title": "Meeting Minutes",
+    "section": "3.1 Approval of Previous Minutes",
+    "text": "3.1 Approval of Previous Minutes\nThe minutes of Meeting 1 were reviewed and approved without changes."
+  },
+  {
+    "objectID": "meeting_minutes.html#agenda-1",
+    "href": "meeting_minutes.html#agenda-1",
+    "title": "Meeting Minutes",
+    "section": "3.2 Agenda",
+    "text": "3.2 Agenda\n\nDecide whether to wait for the instructor’s proposal feedback before starting the build.\nDecide how best to present the analysis in the application.\nConfirm the build, repository, and deployment approach."
+  },
+  {
+    "objectID": "meeting_minutes.html#discussion-1",
+    "href": "meeting_minutes.html#discussion-1",
+    "title": "Meeting Minutes",
+    "section": "3.3 Discussion",
+    "text": "3.3 Discussion\nThe first item was timing. The proposal had been submitted and the team debated whether to pause and wait for the instructor’s feedback before committing to a build, or to proceed straight away. The case for waiting was that feedback might redirect the scope and save rework. The case for proceeding was that the timeline to the 1 July poster and 5 July final submission is tight, and waiting risked compressing the build into too short a window.\nThe team decided not to wait. The proposal direction was considered solid enough to build on, and protecting the schedule was judged more important than the chance of a redirect. The team agreed to proceed with the build and adjust later if the feedback called for it.\nThe bulk of the meeting then went to how to present the analysis. The team agreed the application should not simply state the verdict. It should let the user reconstruct it. This led to the evidence-room concept built around four modules, each answering one part of the challenge."
+  },
+  {
+    "objectID": "meeting_minutes.html#decisions-made-1",
+    "href": "meeting_minutes.html#decisions-made-1",
+    "title": "Meeting Minutes",
+    "section": "3.4 Decisions Made",
+    "text": "3.4 Decisions Made\n\nProceed with the build now rather than waiting for proposal feedback, to protect the timeline.\nStructure the application as four modules:\n\nThe Day: a timeline scrubber that replays the crisis hour by hour.\nThe Norm: baseline versus crisis behaviour, with per-agent anomaly scores.\nThe Intent: the intent chain and the anonymous-authorship reveal.\nThe Verdict: evidence-layer toggles that show how partial evidence reproduces each report and the full set resolves the synthesis.\n\nTreat the Verdict module as the novel contribution of the project, since it is what demonstrates why the two original reports disagreed.\nRepository: one repository, with the Quarto website at the root and the Shiny application in a subfolder; the application deploys separately to shinyapps.io.\nDeployment: Ming Kwan owns the deployment. Jit writes and tests the application locally, pushes to the repository, and Ming Kwan pulls and deploys."
+  },
+  {
+    "objectID": "meeting_minutes.html#division-of-labour-build-stage",
+    "href": "meeting_minutes.html#division-of-labour-build-stage",
+    "title": "Meeting Minutes",
+    "section": "3.5 Division of Labour (build stage)",
+    "text": "3.5 Division of Labour (build stage)\nWith the application build decided, ownership of the remaining write-ups was assigned so each page has a clear owner, and the team agreed to cross-review each other’s work.\n\n\n\n\n\n\n\n\nMember\nOwns\nSupporting\n\n\n\n\nAng Ming Kwan\nFindings page, deployment owner, repository lead\nComments on the application build\n\n\nPersis Evangeline\nData preparation page, minutes documentation\nReview comments on the application\n\n\nYap Jit Wei\nShiny application build, data preparation pipeline\nReviewing the website pages"
+  },
+  {
+    "objectID": "meeting_minutes.html#action-items-1",
+    "href": "meeting_minutes.html#action-items-1",
+    "title": "Meeting Minutes",
+    "section": "3.6 Action Items",
+    "text": "3.6 Action Items\n\nJit: complete the four-module application and the data preparation pipeline, and circulate the build for review.\nMing Kwan: write the findings page, deploy the application to shinyapps.io, and confirm all four tabs load.\nPersis: write the data preparation page and review the application build.\nAll: cross-review the application, the data preparation page, and the findings page, and begin planning the A1 poster ahead of the 1 July deadline.\n\nAdjournment: Meeting adjourned at 10:50 PM. Next meeting to review the deployed application and the poster draft."
   },
   {
     "objectID": "findings.html",
@@ -243,89 +320,5 @@
     "title": "Project Proposal",
     "section": "",
     "text": "The following R packages are used in this project:\nData Ingestion & Wrangling\n\njsonlite: Parsing the nested JSON communications data\ntidyverse: Core data manipulation and transformation\nlubridate: Parsing and handling ISO datetime fields\nzoo: Rolling window calculations for behavioural trend analysis\n\nText & Sentiment Analysis\n\ntidytext: Tokenisation and text feature extraction\nsentimentr: Sentence-level sentiment scoring of agent messages\n\nVisualisation\n\nggplot2: Core static visualisations and annotated timelines\nplotly: Interactive chart rendering\npatchwork: Composing multi-panel ggplot figures\nggrepel: Non-overlapping labels on scatter and timeline plots\nscales: Axis formatting and colour scaling\nkableExtra: Styled summary tables\n\nNetwork Analysis\n\nigraph: Graph construction and network metrics\nvisNetwork: Interactive network visualisations\n\nShiny App\n\nshiny: Interactive application framework\nshinyWidgets: Extended UI input controls\n\nReproducibility & Testing\n\nrenv: Locking package versions so all collaborators run identical environments\nshinytest2: Automated testing of the Shiny application"
-  },
-  {
-    "objectID": "meeting_minutes.html#agenda",
-    "href": "meeting_minutes.html#agenda",
-    "title": "Meeting Minutes",
-    "section": "2.1 Agenda",
-    "text": "2.1 Agenda\n\nDecide which Mini-Challenge the team will take and the analytical direction.\nAgree on the conclusion the project will argue before drafting the proposal.\nSet the division of labour and the immediate next steps toward the 10 June proposal deadline."
-  },
-  {
-    "objectID": "meeting_minutes.html#discussion",
-    "href": "meeting_minutes.html#discussion",
-    "title": "Meeting Minutes",
-    "section": "2.2 Discussion",
-    "text": "2.2 Discussion\nThe team first weighed which Mini-Challenge to take. The deciding factor was that two of us had already completed independent Take-home Exercise 2 analyses of MC1, which gave the team a richer base of source material and two worked-through readings to build on. MC1 was chosen on that basis: it let the project start from real prior analysis rather than from scratch.\nThe team then turned to the harder question of what the conclusion should actually be. This is where the two existing reports disagreed. One reading held that the breach was an external leak that the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same message logs, two careful analyses, two opposite verdicts.\nPersis, who had analysed MC2 rather than MC1, acted as the neutral point of view in this debate. Without being attached to either reading, she pushed both sides to state what their evidence could and could not prove. That framing helped the team see that the two readings were not actually in full conflict. One had the timeline and the external-origin signals. The other had the intent chain showing the response was planned. Each was strong on its own half and weak on the other."
-  },
-  {
-    "objectID": "meeting_minutes.html#disagreement-and-resolution",
-    "href": "meeting_minutes.html#disagreement-and-resolution",
-    "title": "Meeting Minutes",
-    "section": "2.3 Disagreement and Resolution",
-    "text": "2.3 Disagreement and Resolution\nDisagreement: whether the verdict should be “external leak, system failure” or “deliberate leak by Legal.”\nConsiderations weighed:\n\nThe external-leak reading: the agents’ public posting follows the external scoop rather than preceding it, and the environment fields point to upstream sources outside the agent system.\nThe deliberate-leak reading: the six-message intent chain proves the response was planned in advance, which the external reading did not account for.\nThe neutral check: the intent chain fires only after the scoop and after counterparty consent, so it proves a planned response, not a planned leak.\n\nResolution: the team debated the two readings and reached consensus on a synthesis that incorporates both halves. The merger leaked from inside the wider company but not from the agents; the agents then executed a planned, consent-gated response that was lawful on its face. With the direction agreed, Jit set out the project roadmap, and this synthesis became the spine of the proposal and the reason the application is framed as an evidence room that admits each layer of evidence rather than asserting a single answer."
-  },
-  {
-    "objectID": "meeting_minutes.html#decisions-made",
-    "href": "meeting_minutes.html#decisions-made",
-    "title": "Meeting Minutes",
-    "section": "2.4 Decisions Made",
-    "text": "2.4 Decisions Made\n\nTake MC1, building on the team’s two existing TH_Ex02 reports.\nArgue the synthesis verdict that combines the external-origin finding and the intent-chain finding.\nDesign the application around progressive disclosure of evidence rather than a fixed conclusion."
-  },
-  {
-    "objectID": "meeting_minutes.html#division-of-labour",
-    "href": "meeting_minutes.html#division-of-labour",
-    "title": "Meeting Minutes",
-    "section": "2.5 Division of Labour",
-    "text": "2.5 Division of Labour\nAt this stage the work was the proposal and the project setup. The team agreed the following ownership.\n\n\n\n\n\n\n\n\nMember\nOwns\nSupporting\n\n\n\n\nAng Ming Kwan\nWebsite setup, repository, initial wordings and logos\nReviewing the roadmap\n\n\nPersis Evangeline\nReview and supporting comments on the verdict\nOutside perspective, independent review\n\n\nYap Jit Wei\nProject roadmap, proposal touch-ups\nReviewing the website setup"
-  },
-  {
-    "objectID": "meeting_minutes.html#action-items",
-    "href": "meeting_minutes.html#action-items",
-    "title": "Meeting Minutes",
-    "section": "2.6 Action Items",
-    "text": "2.6 Action Items\n\nMing Kwan: set up the website and repository with the initial wordings and logos, and confirm the shinyapps.io setup.\nPersis: review the synthesis with a fresh independent lens and flag anything inconsistent.\nJit: set out the roadmap and finalise the proposal touch-ups for publishing before the 10 June deadline.\n\nAdjournment: Meeting adjourned at 9:15 PM. Next meeting to be held after the proposal feedback window."
-  },
-  {
-    "objectID": "meeting_minutes.html#approval-of-previous-minutes",
-    "href": "meeting_minutes.html#approval-of-previous-minutes",
-    "title": "Meeting Minutes",
-    "section": "3.1 Approval of Previous Minutes",
-    "text": "3.1 Approval of Previous Minutes\nThe minutes of Meeting 1 were reviewed and approved without changes."
-  },
-  {
-    "objectID": "meeting_minutes.html#agenda-1",
-    "href": "meeting_minutes.html#agenda-1",
-    "title": "Meeting Minutes",
-    "section": "3.2 Agenda",
-    "text": "3.2 Agenda\n\nDecide whether to wait for the instructor’s proposal feedback before starting the build.\nDecide how best to present the analysis in the application.\nConfirm the build, repository, and deployment approach."
-  },
-  {
-    "objectID": "meeting_minutes.html#discussion-1",
-    "href": "meeting_minutes.html#discussion-1",
-    "title": "Meeting Minutes",
-    "section": "3.3 Discussion",
-    "text": "3.3 Discussion\nThe first item was timing. The proposal had been submitted and the team debated whether to pause and wait for the instructor’s feedback before committing to a build, or to proceed straight away. The case for waiting was that feedback might redirect the scope and save rework. The case for proceeding was that the timeline to the 1 July poster and 5 July final submission is tight, and waiting risked compressing the build into too short a window.\nThe team decided not to wait. The proposal direction was considered solid enough to build on, and protecting the schedule was judged more important than the chance of a redirect. The team agreed to proceed with the build and adjust later if the feedback called for it.\nThe bulk of the meeting then went to how to present the analysis. The team agreed the application should not simply state the verdict. It should let the user reconstruct it. This led to the evidence-room concept built around four modules, each answering one part of the challenge."
-  },
-  {
-    "objectID": "meeting_minutes.html#decisions-made-1",
-    "href": "meeting_minutes.html#decisions-made-1",
-    "title": "Meeting Minutes",
-    "section": "3.4 Decisions Made",
-    "text": "3.4 Decisions Made\n\nProceed with the build now rather than waiting for proposal feedback, to protect the timeline.\nStructure the application as four modules:\n\nThe Day: a timeline scrubber that replays the crisis hour by hour.\nThe Norm: baseline versus crisis behaviour, with per-agent anomaly scores.\nThe Intent: the intent chain and the anonymous-authorship reveal.\nThe Verdict: evidence-layer toggles that show how partial evidence reproduces each report and the full set resolves the synthesis.\n\nTreat the Verdict module as the novel contribution of the project, since it is what demonstrates why the two original reports disagreed.\nRepository: one repository, with the Quarto website at the root and the Shiny application in a subfolder; the application deploys separately to shinyapps.io.\nDeployment: Ming Kwan owns the deployment. Jit writes and tests the application locally, pushes to the repository, and Ming Kwan pulls and deploys."
-  },
-  {
-    "objectID": "meeting_minutes.html#division-of-labour-build-stage",
-    "href": "meeting_minutes.html#division-of-labour-build-stage",
-    "title": "Meeting Minutes",
-    "section": "3.5 Division of Labour (build stage)",
-    "text": "3.5 Division of Labour (build stage)\nWith the application build decided, ownership of the remaining write-ups was assigned so each page has a clear owner, and the team agreed to cross-review each other’s work.\n\n\n\n\n\n\n\n\nMember\nOwns\nSupporting\n\n\n\n\nAng Ming Kwan\nFindings page, deployment owner, repository lead\nComments on the application build\n\n\nPersis Evangeline\nData preparation page, minutes documentation\nReview comments on the application\n\n\nYap Jit Wei\nShiny application build, data preparation pipeline\nReviewing the website pages"
-  },
-  {
-    "objectID": "meeting_minutes.html#action-items-1",
-    "href": "meeting_minutes.html#action-items-1",
-    "title": "Meeting Minutes",
-    "section": "3.6 Action Items",
-    "text": "3.6 Action Items\n\nJit: complete the four-module application and the data preparation pipeline, and circulate the build for review.\nMing Kwan: write the findings page, deploy the application to shinyapps.io, and confirm all four tabs load.\nPersis: write the data preparation page and review the application build.\nAll: cross-review the application, the data preparation page, and the findings page, and begin planning the A1 poster ahead of the 1 July deadline.\n\nAdjournment: Meeting adjourned at 10:50 PM. Next meeting to review the deployed application and the poster draft."
   }
 ]

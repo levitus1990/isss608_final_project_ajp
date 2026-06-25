@@ -229,6 +229,104 @@ plot_net(g_base, "Baseline") + plot_net(g_crisis, "Crisis day")
 In the baseline the reply structure is sparse and fairly even. On the crisis day the traffic thickens and tightens around Legal, shown in red, who becomes the busiest node by reply volume. The structure does not just get louder, it reorganises around one agent. The application's timeline carries an interactive version of this network, redrawn for each round.
 :::
 
+
+# Where the messages actually went
+
+The internal-versus-public split is the headline, but the data carries six distinct channels, not two. Breaking the traffic down by individual channel shows where the conversation actually lived and how small the public footprint really was.
+
+```{r}
+#| label: fig-channels6
+#| fig-cap: "Total messages per channel across all 23 rounds, internal in grey and public in red."
+channel_levels <- comms %>%
+  count(channel, channel_type, name = "n") %>%
+  arrange(n)
+
+ggplot(channel_levels, aes(x = n, y = reorder(channel, n), fill = channel_type)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = n), hjust = -0.2, size = 4, color = "grey30") +
+  scale_fill_manual(values = c("Internal" = "#b8c4d0", "Public" = "#c0392b"), name = NULL) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(title = "Three internal channels carry almost everything; the public channels are tiny",
+       subtitle = "Total messages per channel, internal against public",
+       x = "Messages", y = NULL) +
+  theme_house() +
+  theme(legend.position = "top",
+        panel.grid.major.y = element_blank())
+```
+
+::: callout-note
+## Findings
+
+The internal comms huddle alone carries 476 of the 912 messages, with one-on-one chats and side huddles making up most of the rest. The three public channels together, the personal post, official post, and anonymous post, account for only a small fraction of the total. The anonymous channel, which turns out to matter most, is the smallest of all at just twelve messages. The signal that breaks the case is not loud; it is the quietest channel in the data.
+:::
+
+# When the anonymous campaign ran
+
+The anonymous channel is small but decisive. Plotting when those twelve posts appeared, rather than just how many there were, shows that the anonymous activity was not spread evenly. It concentrated around the moment the story broke.
+
+```{r}
+#| label: fig-anontiming
+#| fig-cap: "Anonymous posts per round on the crisis day, split before and after 5 PM."
+anon_timing <- comms %>%
+  filter(channel == "anonymous_post") %>%
+  count(round_index, name = "n") %>%
+  mutate(window = if_else(round_index >= 21, "After 5 PM", "Before 5 PM"))
+
+ggplot(anon_timing, aes(x = round_index, y = n, fill = window)) +
+  geom_col(width = 0.6) +
+  geom_vline(xintercept = 20.5, linetype = "dashed", color = "grey50") +
+  annotate("text", x = 20.4, y = max(anon_timing$n) * 0.95,
+           label = "SaltWind publishes (5 PM)", hjust = 1.05, vjust = 1,
+           size = 3.3, color = "grey45") +
+  scale_fill_manual(values = c("Before 5 PM" = "#e08a7a", "After 5 PM" = "#c0392b"),
+                    name = NULL) +
+  labs(title = "Anonymous posting steps up after the story breaks",
+       subtitle = "Anonymous posts per round on the crisis day",
+       x = "Round (crisis day)", y = "Anonymous posts") +
+  theme_house() +
+  theme(legend.position = "top")
+```
+
+::: callout-note
+## Findings
+
+Of the twelve anonymous posts, four appear before SaltWind publishes at 5 PM and eight appear after. The campaign is not a single burst; it runs through the afternoon and then intensifies once the merger is public. Read alongside the authorship finding, where every one of these posts traces to Legal, the timing shows a sustained effort to shape public perception that escalates at exactly the moment the company comes under public scrutiny.
+:::
+
+# What we also checked: message types
+
+Not every variable in the data turned out to discriminate. Message type is one we examined and set aside, and it is worth recording what it showed.
+
+```{r}
+#| label: fig-msgtype
+#| fig-cap: "Composition of messages by type across the full dataset."
+type_levels <- c("broadcast", "one_on_one_chat", "side_huddle", "public_post", "action")
+type_labels <- c("Broadcast", "One-on-one", "Side huddle", "Public post", "Action")
+
+comms %>%
+  mutate(message_type = factor(message_type, levels = type_levels, labels = type_labels)) %>%
+  count(message_type, name = "n") %>%
+  filter(!is.na(message_type)) %>%
+  ggplot(aes(x = n, y = reorder(message_type, n))) +
+  geom_col(width = 0.7, fill = "#b8c4d0") +
+  geom_col(data = ~filter(.x, message_type == "Public post"),
+           width = 0.7, fill = "#c0392b") +
+  geom_text(aes(label = n), hjust = -0.2, size = 4, color = "grey30") +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(title = "Message type is dominated by routine broadcasts and does not single out the crisis",
+       subtitle = "Messages by type, public posts highlighted",
+       x = "Messages", y = NULL) +
+  theme_house() +
+  theme(panel.grid.major.y = element_blank())
+```
+
+::: callout-note
+## Findings
+
+Broadcasts and one-on-one chats make up the bulk of the traffic, with public posts a small share highlighted here in red. Message type tracks the internal-versus-public split we already had and adds little beyond it. We checked whether any single message type concentrated on the crisis day in a way that would flag the breach, and none did. We record it here because a thorough exploration should show the variables that did not discriminate as well as the ones that did. The signal in this dataset is in who spoke, on which channel, and when, not in the message type field.
+:::
+
+
 # Where this led
 
 The first pass surfaced a clear set of facts. There is one unmistakable anomaly, the crisis day. There is a boundary that matters, internal against public, that the agents crossed only late in the day. The surge was driven by a few agents while oversight receded, and the reply structure reorganised around Legal. We also found one dead end: the price field was too broken to use, so the project leans on communication data throughout.
