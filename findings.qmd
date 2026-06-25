@@ -183,7 +183,11 @@ comms %>%
 
 Every one of the twelve anonymous posts was authored by the Legal agent. They appeared during the embargo, posing as neutral third-party commentary. Four came before 5 PM and eight after. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer running a concealed campaign to shape sentiment, while the company was under two attorney-general inquiries, on a channel the compliance Judge never posted to once across all 23 rounds.
 
-This is the finding neither original report centred, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.
+This is the finding both original reports missed, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.
+
+The authorship is not inferred. Every message in the data carries its true author, including the anonymous posts. Filtering to the anonymous channel and grouping by that field shows all twelve trace to the Legal agent. The posts are anonymous only to the public in the scenario; in the data the author is recorded on every row. The finding comes from joining that authorship field to the channel and the timing.
+
+
 
 # The synthesis
 
