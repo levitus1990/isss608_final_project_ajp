@@ -14,6 +14,7 @@ library(scales)
 library(visNetwork)
 library(gt)
 library(gtExtras)
+library(igraph)
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 

@@ -47,7 +47,11 @@ The charts read the prepared `.rds` tables built during data preparation. They l
 
 ```{r}
 #| label: load-data
-data_dir       <- "C:/VAProject/isss608_final_project_ajp/shiny_app/my_shiny_app/data"
+
+# Path from the Quarto project root down into the Shiny app's data folder
+data_dir <- "shiny_app/my_shiny_app/data"
+
+# Read in the files
 round_summary  <- readRDS(file.path(data_dir, "round_summary.rds"))
 baseline_stats <- readRDS(file.path(data_dir, "baseline_stats.rds"))
 comms          <- readRDS(file.path(data_dir, "comms.rds"))
