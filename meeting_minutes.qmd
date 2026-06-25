@@ -1,10 +1,132 @@
 ---
-title: "meeting_minutes"
-format: html
+title: "Meeting Minutes"
 ---
 
-## Meeting 1
-**Date:**
-**Attendees:**
+# Meeting Minutes
 
-### Agenda
+Minutes for the team's project meetings. Each entry records the agenda, the
+discussion including any disagreements, the decisions reached, the division
+of labour, and the action items that followed.
+
+Team members: Ang Ming Kwan, Persis Evangeline, Yap Jit Wei.
+
+# Meeting 1: Project Direction and Verdict
+
+| | |
+|---|---|
+| **Date** | 8 June 2026 |
+| **Time** | Called to order at 8:00 PM |
+| **Location** | Virtual (video call) |
+| **Present** | Ang Ming Kwan, Persis Evangeline, Yap Jit Wei |
+| **Absent** | None |
+| **Minutes submitted by** | Persis Evangeline |
+
+## Agenda
+
+1. Decide which Mini-Challenge the team will take and the analytical direction.
+2. Agree on the conclusion the project will argue before drafting the proposal.
+3. Set the division of labour and the immediate next steps toward the 10 June proposal deadline.
+
+## Discussion
+
+The team first weighed which Mini-Challenge to take. The deciding factor was that two of us had already completed independent Take-home Exercise 2 analyses of MC1, which gave the team a richer base of source material and two worked-through readings to build on. MC1 was chosen on that basis: it let the project start from real prior analysis rather than from scratch.
+
+The team then turned to the harder question of what the conclusion should actually be. This is where the two existing reports disagreed. One reading held that the breach was an external leak that the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same message logs, two careful analyses, two opposite verdicts.
+
+Persis, who had analysed MC2 rather than MC1, acted as the neutral point of view in this debate. Without being attached to either reading, she pushed both sides to state what their evidence could and could not prove. That framing helped the team see that the two readings were not actually in full conflict. One had the timeline and the external-origin signals. The other had the intent chain showing the response was planned. Each was strong on its own half and weak on the other.
+
+## Disagreement and Resolution
+
+**Disagreement:** whether the verdict should be "external leak, system failure" or "deliberate leak by Legal."
+
+Considerations weighed:
+
+- The external-leak reading: the agents' public posting follows the external scoop rather than preceding it, and the environment fields point to upstream sources outside the agent system.
+- The deliberate-leak reading: the six-message intent chain proves the response was planned in advance, which the external reading did not account for.
+- The neutral check: the intent chain fires only after the scoop and after counterparty consent, so it proves a planned response, not a planned leak.
+
+**Resolution:** the team debated the two readings and reached consensus on a synthesis that incorporates both halves. The merger leaked from inside the wider company but not from the agents; the agents then executed a planned, consent-gated response that was lawful on its face. With the direction agreed, Jit set out the project roadmap, and this synthesis became the spine of the proposal and the reason the application is framed as an evidence room that admits each layer of evidence rather than asserting a single answer.
+
+## Decisions Made
+
+- Take MC1, building on the team's two existing TH_Ex02 reports.
+- Argue the synthesis verdict that combines the external-origin finding and the intent-chain finding.
+- Design the application around progressive disclosure of evidence rather than a fixed conclusion.
+
+## Division of Labour
+
+At this stage the work was the proposal and the project setup. The team agreed the following ownership.
+
+| Member | Owns | Supporting |
+|---|---|---|
+| Ang Ming Kwan | Website setup, repository, initial wordings and logos | Reviewing the roadmap |
+| Persis Evangeline | Review and supporting comments on the verdict | Outside perspective, independent review |
+| Yap Jit Wei | Project roadmap, proposal touch-ups | Reviewing the website setup |
+
+## Action Items
+
+- **Ming Kwan:** set up the website and repository with the initial wordings and logos, and confirm the shinyapps.io setup.
+- **Persis:** review the synthesis with a fresh independent lens and flag anything inconsistent.
+- **Jit:** set out the roadmap and finalise the proposal touch-ups for publishing before the 10 June deadline.
+
+**Adjournment:** Meeting adjourned at 9:15 PM. Next meeting to be held after the proposal feedback window.
+
+# Meeting 2: Presentation and Build Decisions
+
+| | |
+|---|---|
+| **Date** | 16 June 2026 |
+| **Time** | Called to order at 9:30 PM |
+| **Location** | Virtual (video call) |
+| **Present** | Ang Ming Kwan, Persis Evangeline, Yap Jit Wei |
+| **Absent** | None |
+| **Minutes submitted by** | Persis Evangeline |
+
+## Approval of Previous Minutes
+
+The minutes of Meeting 1 were reviewed and approved without changes.
+
+## Agenda
+
+1. Decide whether to wait for the instructor's proposal feedback before starting the build.
+2. Decide how best to present the analysis in the application.
+3. Confirm the build, repository, and deployment approach.
+
+## Discussion
+
+The first item was timing. The proposal had been submitted and the team debated whether to pause and wait for the instructor's feedback before committing to a build, or to proceed straight away. The case for waiting was that feedback might redirect the scope and save rework. The case for proceeding was that the timeline to the 1 July poster and 5 July final submission is tight, and waiting risked compressing the build into too short a window.
+
+The team decided not to wait. The proposal direction was considered solid enough to build on, and protecting the schedule was judged more important than the chance of a redirect. The team agreed to proceed with the build and adjust later if the feedback called for it.
+
+The bulk of the meeting then went to how to present the analysis. The team agreed the application should not simply state the verdict. It should let the user reconstruct it. This led to the evidence-room concept built around four modules, each answering one part of the challenge.
+
+## Decisions Made
+
+- Proceed with the build now rather than waiting for proposal feedback, to protect the timeline.
+- Structure the application as four modules:
+    - **The Day:** a timeline scrubber that replays the crisis hour by hour.
+    - **The Norm:** baseline versus crisis behaviour, with per-agent anomaly scores.
+    - **The Intent:** the intent chain and the anonymous-authorship reveal.
+    - **The Verdict:** evidence-layer toggles that show how partial evidence reproduces each report and the full set resolves the synthesis.
+- Treat the Verdict module as the novel contribution of the project, since it is what demonstrates why the two original reports disagreed.
+- **Repository:** one repository, with the Quarto website at the root and the Shiny application in a subfolder; the application deploys separately to shinyapps.io.
+- **Deployment:** Ming Kwan owns the deployment. Jit writes and tests the application locally, pushes to the repository, and Ming Kwan pulls and deploys.
+
+## Division of Labour (build stage)
+
+With the application build decided, ownership of the remaining write-ups was assigned so each page has a clear owner, and the team agreed to cross-review each other's work.
+
+| Member | Owns | Supporting |
+|---|---|---|
+| Ang Ming Kwan | Findings page, deployment owner, repository lead | Comments on the application build |
+| Persis Evangeline | Data preparation page, minutes documentation | Review comments on the application |
+| Yap Jit Wei | Shiny application build, data preparation pipeline | Reviewing the website pages |
+
+## Action Items
+
+- **Jit:** complete the four-module application and the data preparation pipeline, and circulate the build for review.
+- **Ming Kwan:** write the findings page, deploy the application to shinyapps.io, and confirm all four tabs load.
+- **Persis:** write the data preparation page and review the application build.
+- **All:** cross-review the application, the data preparation page, and the findings page, and begin planning the A1 poster ahead of the 1 July deadline.
+
+**Adjournment:** Meeting adjourned at 10:50 PM. Next meeting to review the deployed application and the poster draft.

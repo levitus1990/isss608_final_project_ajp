@@ -925,11 +925,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>The data captures:</span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Messages**: Internal deliberations, direct agent communications, and public posts across 912 messages</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Agents**: Seven AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Channels**: Six distinct channels classified into Internal and Public channel types</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Metadata**: Message IDs, agent roles and labels, channels, recipients, message types, response chains and timestamps</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Internal state**: Private free text fields capturing each agent's reacting, deliberating and rationalizing at the moment of sending, present in 86 of the 912 messages. These fields are the primary source for intent analysis and are treated as sparse but high value evidence rather than a complete record</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Messages**: Internal deliberations, direct agent communications, and public posts across 912 messages</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Agents**: Seven AI agents with defined roles (e.g. Legal-Agent, Social-Manager-Agent, Judge-Agent, PR-Intern-Agent, Platform-Trust-Agent)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Channels**: Six distinct channels classified into Internal and Public channel types</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Metadata**: Message IDs, agent roles and labels, channels, recipients, message types, response chains and timestamps</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Internal state**: Private free text fields capturing each agent's reacting, deliberating and rationalizing at the moment of sending, present in 86 of the 912 messages. These fields are the primary source for intent analysis and are treated as sparse but high value evidence rather than a complete record</span>
 <span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>The key analytical variable is <span class="in">`channel_type`</span>, a derived binary classification (Internal/Public) that forms the backbone for detecting when and why messages crossed the embargo boundary.</span>
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
@@ -976,7 +976,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>Our Shiny app will look at network and temporal patterns, with the agent communication network as the core visualisation, supported by flagged message tables, sentiment trends, and event timelines as accompanying views, and an evidence and verdict panel that consolidates the analysis.</span>
 <span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="al">![](image/prototype v2.png)</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="al">![](image/prototype%20v2.png)</span></span>
 <span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
 <span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inputs</span></span>
@@ -1011,8 +1011,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>Shows a filterable table of communications flagged for anomalous behaviour, rendered using <span class="in">`DT::datatable`</span>. Each row is colour coded by flag type:</span>
 <span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Amber** rows indicate near-miss leading indicators observed prior to June 5</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Red** rows indicate intent-flagged messages directly involved in the breach execution</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Amber** rows indicate near-miss leading indicators observed prior to June 5</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Red** rows indicate intent-flagged messages directly involved in the breach execution</span>
 <span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="fu">### Temporal Graph</span></span>
 <span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
@@ -1033,39 +1033,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>**Data Ingestion &amp; Wrangling**</span>
 <span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">jsonlite</span><span class="co">](https://cran.r-project.org/web/packages/jsonlite/index.html)</span>: Parsing the nested JSON communications data</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">tidyverse</span><span class="co">](https://www.tidyverse.org/)</span>: Core data manipulation and transformation</span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">lubridate</span><span class="co">](https://lubridate.tidyverse.org/)</span>: Parsing and handling ISO datetime fields</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">zoo</span><span class="co">](https://cran.r-project.org/web/packages/zoo/index.html)</span>: Rolling window calculations for behavioural trend analysis</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">jsonlite</span><span class="co">](https://cran.r-project.org/web/packages/jsonlite/index.html)</span>: Parsing the nested JSON communications data</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">tidyverse</span><span class="co">](https://www.tidyverse.org/)</span>: Core data manipulation and transformation</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">lubridate</span><span class="co">](https://lubridate.tidyverse.org/)</span>: Parsing and handling ISO datetime fields</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">zoo</span><span class="co">](https://cran.r-project.org/web/packages/zoo/index.html)</span>: Rolling window calculations for behavioural trend analysis</span>
 <span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>**Text &amp; Sentiment Analysis**</span>
 <span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">tidytext</span><span class="co">](https://juliasilge.github.io/tidytext/)</span>: Tokenisation and text feature extraction</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">sentimentr</span><span class="co">](https://cran.r-project.org/web/packages/sentimentr/index.html)</span>: Sentence-level sentiment scoring of agent messages</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">tidytext</span><span class="co">](https://juliasilge.github.io/tidytext/)</span>: Tokenisation and text feature extraction</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">sentimentr</span><span class="co">](https://cran.r-project.org/web/packages/sentimentr/index.html)</span>: Sentence-level sentiment scoring of agent messages</span>
 <span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>**Visualisation**</span>
 <span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">ggplot2</span><span class="co">](https://ggplot2.tidyverse.org/)</span>: Core static visualisations and annotated timelines</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">plotly</span><span class="co">](https://plotly.com/r/)</span>: Interactive chart rendering</span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">patchwork</span><span class="co">](https://patchwork.data-imaginist.com/)</span>: Composing multi-panel ggplot figures</span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">ggrepel</span><span class="co">](https://ggrepel.slowkow.com/)</span>: Non-overlapping labels on scatter and timeline plots</span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">scales</span><span class="co">](https://scales.r-lib.org/)</span>: Axis formatting and colour scaling</span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">kableExtra</span><span class="co">](https://haozhu233.github.io/kableExtra/)</span>: Styled summary tables</span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">ggplot2</span><span class="co">](https://ggplot2.tidyverse.org/)</span>: Core static visualisations and annotated timelines</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">plotly</span><span class="co">](https://plotly.com/r/)</span>: Interactive chart rendering</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">patchwork</span><span class="co">](https://patchwork.data-imaginist.com/)</span>: Composing multi-panel ggplot figures</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">ggrepel</span><span class="co">](https://ggrepel.slowkow.com/)</span>: Non-overlapping labels on scatter and timeline plots</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">scales</span><span class="co">](https://scales.r-lib.org/)</span>: Axis formatting and colour scaling</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">kableExtra</span><span class="co">](https://haozhu233.github.io/kableExtra/)</span>: Styled summary tables</span>
 <span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>**Network Analysis**</span>
 <span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">igraph</span><span class="co">](https://cran.r-project.org/web/packages/igraph/index.html)</span>: Graph construction and network metrics</span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">visNetwork</span><span class="co">](https://datastorm-open.github.io/visNetwork/)</span>: Interactive network visualisations</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">igraph</span><span class="co">](https://cran.r-project.org/web/packages/igraph/index.html)</span>: Graph construction and network metrics</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">visNetwork</span><span class="co">](https://datastorm-open.github.io/visNetwork/)</span>: Interactive network visualisations</span>
 <span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>**Shiny App**</span>
 <span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">shiny</span><span class="co">](https://shiny.posit.co/)</span>: Interactive application framework</span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">shinyWidgets</span><span class="co">](https://shinyapps.dreamrs.fr/shinyWidgets/)</span>: Extended UI input controls</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">shiny</span><span class="co">](https://shiny.posit.co/)</span>: Interactive application framework</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">shinyWidgets</span><span class="co">](https://shinyapps.dreamrs.fr/shinyWidgets/)</span>: Extended UI input controls</span>
 <span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>**Reproducibility &amp; Testing**</span>
 <span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">renv</span><span class="co">](https://rstudio.github.io/renv/)</span>: Locking package versions so all collaborators run identical environments</span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">shinytest2</span><span class="co">](https://rstudio.github.io/shinytest2/)</span>: Automated testing of the Shiny application</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">renv</span><span class="co">](https://rstudio.github.io/renv/)</span>: Locking package versions so all collaborators run identical environments</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">shinytest2</span><span class="co">](https://rstudio.github.io/shinytest2/)</span>: Automated testing of the Shiny application</span>
 <span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a><span class="fu">## {{&lt; fa calendar-days &gt;}} Project Schedule</span></span>
 <span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a></span>

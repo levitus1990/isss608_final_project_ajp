@@ -67,9 +67,9 @@ ggplot(round_summary, aes(round_index, n_msgs)) +
   geom_col(data = filter(round_summary, round_index >= 13),
            width = 0.8, fill = "#c0392b") +
   geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
-  annotate("text", x = 12.5, y = max(round_summary$n_msgs),
-           label = "crisis day begins", hjust = -0.05, vjust = 1,
-           size = 3.3, color = "grey45") +
+  annotate("text", x = 12.3, y = max(round_summary$n_msgs) * 0.95,
+           label = "crisis day begins", hjust = 1.05, vjust = 1,
+           size = 3.3, color = "grey45")  +
   scale_x_continuous(breaks = seq(0, 22, 2)) +
   labs(title = "Activity is flat through the baseline, then explodes on the crisis day",
        subtitle = "Total messages per round. Baseline in grey, crisis day in red.",

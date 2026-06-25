@@ -1,45 +1,10 @@
 [
   {
-    "objectID": "findings.html",
-    "href": "findings.html",
-    "title": "Findings",
-    "section": "",
-    "text": "What the evidence says about the TenantThread embargo breach.\nOn 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom’s legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?\nThis project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.\nThe short version is that both readings were half right, and the full picture needs both halves.\n\n\n\n\n\n\nImportantThe short version\n\n\n\nThree things are true at once, and no single one of them is the whole story.\n\nThe merger leaked from inside the company, but not from the agents. The information reached the public through employee Slack chatter, departing staff, and the counterparty’s own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels.\nThe agents executed a planned response, and it was lawful on its face. From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.\nThe genuinely deliberate misconduct was hidden, and it was separate from the leak. All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.\n\nThe detailed findings follow, each drawn from one part of the app."
-  },
-  {
-    "objectID": "findings.html#loading-packages",
-    "href": "findings.html#loading-packages",
-    "title": "Findings",
-    "section": "2.1 Loading packages",
-    "text": "2.1 Loading packages\nWe use a small set of packages for the charts on this page.\n\n\nCode\nlibrary(tidyverse)   # data manipulation and ggplot2\nlibrary(scales)      # axis formatting"
-  },
-  {
-    "objectID": "findings.html#loading-the-data",
-    "href": "findings.html#loading-the-data",
-    "title": "Findings",
-    "section": "2.2 Loading the data",
-    "text": "2.2 Loading the data\nThe charts read the prepared .rds tables built during data preparation. They live in the Shiny app’s data folder, two levels up from this page.\n\n\nCode\ndata_dir       &lt;- \"C:/VAProject/isss608_final_project_ajp/shiny_app/my_shiny_app/data\"\nround_summary  &lt;- readRDS(file.path(data_dir, \"round_summary.rds\"))\nbaseline_stats &lt;- readRDS(file.path(data_dir, \"baseline_stats.rds\"))\ncomms          &lt;- readRDS(file.path(data_dir, \"comms.rds\"))\nagents         &lt;- readRDS(file.path(data_dir, \"agents.rds\"))"
-  },
-  {
-    "objectID": "findings.html#house-theme",
-    "href": "findings.html#house-theme",
-    "title": "Findings",
-    "section": "2.3 House theme",
-    "text": "2.3 House theme\nA shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.\n\n\nCode\ntheme_house &lt;- function() {\n  theme_minimal(base_size = 13) +\n    theme(\n      panel.grid.minor = element_blank(),\n      panel.grid.major.x = element_blank(),\n      plot.title = element_text(face = \"bold\", size = 14),\n      plot.subtitle = element_text(color = \"grey40\"),\n      axis.title = element_text(color = \"grey30\")\n    )\n}"
-  },
-  {
     "objectID": "user_guide.html",
     "href": "user_guide.html",
     "title": "User Guide",
     "section": "",
     "text": "1 User Guide\nThe application, Unmasking the Leak, is an evidence room for the TenantThread embargo breach. It is organised into four tabs, each answering one part of the investigation. This guide walks through what each tab shows and how to use it.\nThe application is live at the link in the navigation bar. You can follow along in the app as you read.\n\n\n2 The Day\nThe first tab replays the crisis as it happened, hour by hour.\n\n\n\nThe Day tab: the timeline scrubber, event pins, message volume, the reply network, and the live message feed.\n\n\nHow to use it. Drag the slider at the top through the 23 rounds, or press the play button to the right of it to advance automatically. As you move, everything on the tab updates to that moment:\n\nThe event pins below the slider mark key moments. A filled grey pin has already happened, a red pin is the current hour, and a faint pin is still ahead. The leak-related pins are tinted red.\nThe volume chart fills in dark up to your current position, so you can see how much of the conversation has elapsed.\nThe reply network shows who replied to whom that hour. Node size is the number of messages an agent sent, and Legal stays at the centre in red.\nThe message feed on the right lists the actual messages from that round. Public messages are marked with a red bar on the left.\n\nThe tab is built so the surge is visible as you scrub: the baseline rounds are quiet, and the volume and public posting climb sharply once you pass the crisis-day line.\n\n\n3 The Norm\nThe second tab compares each agent’s normal behaviour against the crisis day.\n\n\n\nThe Norm tab: the agent selector, the baseline-versus-crisis metric cards, and the per-round anomaly chart.\n\n\nHow to use it. Pick an agent from the dropdown on the left. The four cards along the top show that agent’s shift from baseline to crisis: messages per round, public share, anonymous posts, and the peak anomaly score. The red triangles show the size and direction of each change.\nBelow the cards, the anomaly chart plots each round’s deviation from that agent’s own baseline average. Bars to the right of the dashed line are the crisis day, shown in red. For Legal, the crisis bars sit far above the baseline, which is the behavioural signature the investigation looks for.\n\n\n\nLower on the same tab: the dumbbell comparison of all agents, and the per-agent summary table with sparklines.\n\n\nScrolling down, two more views compare all seven agents at once. The dumbbell chart shows each agent’s move from baseline to crisis, with red for the agents that surged and blue for those that reduced activity. The summary table gives each agent’s net change, colour-coded, alongside a sparkline of their full trajectory across all 23 rounds.\n\n\n4 The Intent\nThe third tab presents the planned response and the question of who was really posting.\n\n\n\nThe Intent tab: the six-step intent chain on the left, and the anonymous channel with the reveal button on the right.\n\n\nHow to use it. The left column is the intent chain, six messages from Legal’s own communications in order. Read them top to bottom. The first cards are the planning, and the final two, tagged in red, fire only after the merger was already public.\nThe right column is the anonymous channel, twelve posts that appeared to the public as neutral third-party commentary during the embargo. Click the red Reveal authors button to unmask who actually wrote them. Click Reset to hide the authors again. The reveal is the point of the tab, so it is worth reading a few posts as anonymous first, then revealing.\n\n\n5 The Verdict\nThe fourth tab lets you build the verdict from the evidence, one layer at a time.\n\n\n\nThe Verdict tab: the four evidence-layer toggles on the left, and the two verdict readouts plus the interpretation on the right.\n\n\nHow to use it. Tick the evidence layers on the left to admit them into the analysis. As you do, the two readouts on the right update: who put the merger into public, and whether there was deliberate misconduct. The interpretation box at the bottom names which reading the current evidence reproduces.\nThe tab is designed to be explored:\n\nAdmit only the public timeline and behavioural anomalies (layers 1 and 2) and the analysis reproduces the first report’s reading, an external leak and a system failure.\nAdmit only the intent chain (layer 3) and it reproduces the second report’s reading, a deliberate leak.\nUse Admit all four to see the full synthesis, where the partial readings resolve into a single picture.\n\nThis is the novel piece of the application. It shows not just the conclusion, but why two careful analysts, each holding part of the evidence, reached opposite verdicts."
-  },
-  {
-    "objectID": "user_guide.html#how-to-use-the-shiny-app",
-    "href": "user_guide.html#how-to-use-the-shiny-app",
-    "title": "User Guide",
-    "section": "1 How to Use the Shiny App",
-    "text": "1 How to Use the Shiny App"
   },
   {
     "objectID": "poster.html",
@@ -72,9 +37,9 @@
   {
     "objectID": "meeting_minutes.html",
     "href": "meeting_minutes.html",
-    "title": "meeting_minutes",
+    "title": "Meeting Minutes",
     "section": "",
-    "text": "Date: Attendees:"
+    "text": "Minutes for the team’s project meetings. Each entry records the agenda, the discussion including any disagreements, the decisions reached, the division of labour, and the action items that followed.\nTeam members: Ang Ming Kwan, Persis Evangeline, Yap Jit Wei."
   },
   {
     "objectID": "meeting_minutes.html#meeting-1",
@@ -82,6 +47,118 @@
     "title": "meeting_minutes",
     "section": "",
     "text": "Date: Attendees:"
+  },
+  {
+    "objectID": "findings.html",
+    "href": "findings.html",
+    "title": "Findings",
+    "section": "",
+    "text": "What the evidence says about the TenantThread embargo breach.\nOn 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the agreed 6 PM embargo lifted. CivicLoom’s legal team needs to know what happened: was the embargo broken on purpose, or did the compliance system fail under pressure?\nThis project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.\nThe short version is that both readings were half right, and the full picture needs both halves.\n\n\n\n\n\n\nImportantThe short version\n\n\n\nThree things are true at once, and no single one of them is the whole story.\n\nThe merger leaked from inside the company, but not from the agents. The information reached the public through employee Slack chatter, departing staff, and the counterparty’s own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels.\nThe agents executed a planned response, and it was lawful on its face. From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.\nThe genuinely deliberate misconduct was hidden, and it was separate from the leak. All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.\n\nThe detailed findings follow, each drawn from one part of the app."
+  },
+  {
+    "objectID": "findings.html#loading-packages",
+    "href": "findings.html#loading-packages",
+    "title": "Findings",
+    "section": "2.1 Loading packages",
+    "text": "2.1 Loading packages\nWe use a small set of packages for the charts on this page.\n\n\nCode\nlibrary(tidyverse)   # data manipulation and ggplot2\nlibrary(scales)      # axis formatting"
+  },
+  {
+    "objectID": "findings.html#loading-the-data",
+    "href": "findings.html#loading-the-data",
+    "title": "Findings",
+    "section": "2.2 Loading the data",
+    "text": "2.2 Loading the data\nThe charts read the prepared .rds tables built during data preparation. They live in the Shiny app’s data folder, two levels up from this page.\n\n\nCode\ndata_dir       &lt;- \"C:/VAProject/isss608_final_project_ajp/shiny_app/my_shiny_app/data\"\nround_summary  &lt;- readRDS(file.path(data_dir, \"round_summary.rds\"))\nbaseline_stats &lt;- readRDS(file.path(data_dir, \"baseline_stats.rds\"))\ncomms          &lt;- readRDS(file.path(data_dir, \"comms.rds\"))\nagents         &lt;- readRDS(file.path(data_dir, \"agents.rds\"))"
+  },
+  {
+    "objectID": "findings.html#house-theme",
+    "href": "findings.html#house-theme",
+    "title": "Findings",
+    "section": "2.3 House theme",
+    "text": "2.3 House theme\nA shared theme keeps every chart consistent: one focal colour, finding-led titles, grey reference values.\n\n\nCode\ntheme_house &lt;- function() {\n  theme_minimal(base_size = 13) +\n    theme(\n      panel.grid.minor = element_blank(),\n      panel.grid.major.x = element_blank(),\n      plot.title = element_text(face = \"bold\", size = 14),\n      plot.subtitle = element_text(color = \"grey40\"),\n      axis.title = element_text(color = \"grey30\")\n    )\n}"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "The Team",
+    "section": "",
+    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+  },
+  {
+    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
+    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
+    "title": "The Team",
+    "section": "",
+    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+  },
+  {
+    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
+    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
+    "title": "The Team",
+    "section": "2  Team Members",
+    "text": "2  Team Members\n\n2.1  Ang Ming Kwan\nRole: Data Preparation & EDA\nBrief bio or role description.\n\n\n2.2  Persie Evangeline\nRole: Visualisation & Shiny App\nBrief bio or role description.\n\n\n2.3  Yap Jit Wei\nRole: Findings & Report Writing\nBrief bio or role description."
+  },
+  {
+    "objectID": "data/mc1 data description.html",
+    "href": "data/mc1 data description.html",
+    "title": "",
+    "section": "",
+    "text": "Code"
+  },
+  {
+    "objectID": "data/mc1 data description.html#overview",
+    "href": "data/mc1 data description.html#overview",
+    "title": "",
+    "section": "1.1 Overview",
+    "text": "1.1 Overview\nThis folder contains the data for the multi-agent LLM crisis for our corporate communications team. There was an exposé, an communications embargo around a company merger, and social media firestorm recently. The data is based on 7 interacting AI agents who communicate across multiple channels and make real-time decisions about what to publish and what not to."
+  },
+  {
+    "objectID": "data/mc1 data description.html#files",
+    "href": "data/mc1 data description.html#files",
+    "title": "",
+    "section": "1.2 Files",
+    "text": "1.2 Files\n\n\n\n\n\n\n\n\nFile\nDescription\nSize\n\n\n\n\nMC1_final.json\nMC1 dataset containing the two weeks leading up to the release of information\n\n\n\nREADME.md\nThis documentation file\n—\n\n\n\n\nEach JSON file follows this structure.\n{\n  \"rounds\": [\n    {\n      \"hour\": \"2046-05-17 9 AM\",\n      \"environment_context\": {\n        \"event_narrative\": \"...\",\n        \"market_snapshot\": { ... },\n        \"media_events\": [ ... ],\n        \"agents_unavailable\": [ ... ]\n      },\n      \"agent_outputs\": [\n        {\n          \"agent_id\": \"legal_agent\",\n          \"internal_state\": {\n            \"reacting\": \"...\",\n            \"rationalizing\": \"...\",\n            \"deliberating\": \"...\"\n          },\n          \"communications\": [\n            {\n              \"message_id\": \"...\",\n              \"channel\": \"comms_huddle\",\n              \"message_text\": \"...\",\n            }\n          ],\n          \"declared_action\": \"MONITORING\"\n        }\n      ]\n    }\n  ]\n}"
+  },
+  {
+    "objectID": "data/mc1 data description.html#agents",
+    "href": "data/mc1 data description.html#agents",
+    "title": "",
+    "section": "1.3 Agents",
+    "text": "1.3 Agents\n\n\n\n\n\n\n\n\n\n\nAgent ID\nRole\nLabel\nSeniority\nDescription\n\n\n\n\nlegal_agent\nlegal\nLegal-Agent\nSenior\nGeneral legal counsel.\n\n\nquality_agent\nplatform_trust\nPlatform-Trust\nSenior\nVP of Platform Trust & Safety.\n\n\nsocial_manager_agent\nsocial_manager\nSocial-Manager\nSenior\nManages Social messaging\n\n\npr_agent\npr\nPR-Agent\nSenior\nHead of Communications and Public Relationships\n\n\nintern_agent\nintern\nIntern\nJunior\nGeneral intern.\n\n\npr_intern_agent\npr_intern\nPR-Intern\nJunior\nPR team intern with access to the official TenantThread Flex account.\n\n\njudge_eval_agent\njudge\nJudge\nCompliance officer\nEvaluates risks, mediates conflicts, provides compliance guidance."
+  },
+  {
+    "objectID": "data/mc1 data description.html#companies-codenames",
+    "href": "data/mc1 data description.html#companies-codenames",
+    "title": "",
+    "section": "1.4 Companies & Codenames",
+    "text": "1.4 Companies & Codenames\n\n\n\n\n\n\n\nEntity\nDescription\n\n\n\n\nTenantThread\nThe company being acquired whose records are being presented. A proptech platform providing tenant management tools including the controversial “Retention Optimizer” scoring system.\n\n\nCivicLoom\nThe company acquiring TenantThread in the merger. Identity is embargoed until 6:00 PM on the crisis day.\n\n\nProject HarborCrest\nInternal codename for the CivicLoom–TenantThread merger.\n\n\nResidentIQ\nAnother PropTech company being discussed in the SaltWind Journal.\n\n\nSaltWind Journal\nLocal newspaper running stories on the property tech industry.\n\n\nOceanCrunch\nTech media outlet. Sarah Kowalski is a reporter.\n\n\n@HorizonMgmt, @PinnacleResidential\nMajor clients of TennatThread."
+  },
+  {
+    "objectID": "data/mc1 data description.html#communication-channels",
+    "href": "data/mc1 data description.html#communication-channels",
+    "title": "",
+    "section": "1.5 Communication Channels",
+    "text": "1.5 Communication Channels\nAgents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612062756c6c73657965203e7d7d-overview",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": "1  Overview",
+    "text": "1  Overview\nThis project investigates the TenantThread embargo breach of June 5, 2046 — a premature disclosure of a corporate merger that violated an active information embargo. Using visual analytics applied to AI agent communication logs spanning May 17 to June 5, 2046, we reconstruct the sequence of events, identify behavioural anomalies, and determine whether the breach was the result of deliberate intent or systemic breakdown.\nThe data originates from AI agents managing TenantThread’s corporate communications, covering internal deliberations, direct messages, and public posts across multiple channels."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c20666120636972636c652d7175657374696f6e203e7d7d-key-questions",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": "2  Key Questions",
+    "text": "2  Key Questions\nOur investigation is structured around three core questions:\n\nWhat were the key events and relationships that led to the inappropriate release? We map the causal chain — key actions, decision points, and the actors involved — with a focus on how the post bypassed embargo enforcement.\nHow did the breach-day behaviour differ from established norms? We profile the typical communication patterns of each agent and system, then contrast them against the anomalous conduct observed on and before June 5.\nWere there leading indicators? We examine prior occasions where agents deviated from expected behaviour, assess whether those episodes resembled the eventual breach, and explain why they did not trigger corrective action at the time."
+  },
+  {
+    "objectID": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "href": "index.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-the-team",
+    "title": "Unmasking the Leak: Visual Analytics on the TenantThread Embargo Breach",
+    "section": "3  The Team",
+    "text": "3  The Team\nWe are a team of Visual Analytics students from SMU’s Master of IT in Business programme, tackling the VAST Challenge 2026 MC1. Meet the team on the About page."
   },
   {
     "objectID": "methodology/data_exploration/data_exploration.html",
@@ -168,24 +245,87 @@
     "text": "The following R packages are used in this project:\nData Ingestion & Wrangling\n\njsonlite: Parsing the nested JSON communications data\ntidyverse: Core data manipulation and transformation\nlubridate: Parsing and handling ISO datetime fields\nzoo: Rolling window calculations for behavioural trend analysis\n\nText & Sentiment Analysis\n\ntidytext: Tokenisation and text feature extraction\nsentimentr: Sentence-level sentiment scoring of agent messages\n\nVisualisation\n\nggplot2: Core static visualisations and annotated timelines\nplotly: Interactive chart rendering\npatchwork: Composing multi-panel ggplot figures\nggrepel: Non-overlapping labels on scatter and timeline plots\nscales: Axis formatting and colour scaling\nkableExtra: Styled summary tables\n\nNetwork Analysis\n\nigraph: Graph construction and network metrics\nvisNetwork: Interactive network visualisations\n\nShiny App\n\nshiny: Interactive application framework\nshinyWidgets: Extended UI input controls\n\nReproducibility & Testing\n\nrenv: Locking package versions so all collaborators run identical environments\nshinytest2: Automated testing of the Shiny application"
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "The Team",
-    "section": "",
-    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+    "objectID": "meeting_minutes.html#agenda",
+    "href": "meeting_minutes.html#agenda",
+    "title": "Meeting Minutes",
+    "section": "2.1 Agenda",
+    "text": "2.1 Agenda\n\nDecide which Mini-Challenge the team will take and the analytical direction.\nAgree on the conclusion the project will argue before drafting the proposal.\nSet the division of labour and the immediate next steps toward the 10 June proposal deadline."
   },
   {
-    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
-    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c206661207573657273203e7d7d-about-us",
-    "title": "The Team",
-    "section": "",
-    "text": "We developed this project for ISSS608 (Visual Analytics and Applications) during Term 3 of the Academic Year 2025-26 in Singapore Management University under the guidance of Dr. Kam Tin Seong, Associate Professor of Information Systems."
+    "objectID": "meeting_minutes.html#discussion",
+    "href": "meeting_minutes.html#discussion",
+    "title": "Meeting Minutes",
+    "section": "2.2 Discussion",
+    "text": "2.2 Discussion\nThe team first weighed which Mini-Challenge to take. The deciding factor was that two of us had already completed independent Take-home Exercise 2 analyses of MC1, which gave the team a richer base of source material and two worked-through readings to build on. MC1 was chosen on that basis: it let the project start from real prior analysis rather than from scratch.\nThe team then turned to the harder question of what the conclusion should actually be. This is where the two existing reports disagreed. One reading held that the breach was an external leak that the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same message logs, two careful analyses, two opposite verdicts.\nPersis, who had analysed MC2 rather than MC1, acted as the neutral point of view in this debate. Without being attached to either reading, she pushed both sides to state what their evidence could and could not prove. That framing helped the team see that the two readings were not actually in full conflict. One had the timeline and the external-origin signals. The other had the intent chain showing the response was planned. Each was strong on its own half and weak on the other."
   },
   {
-    "objectID": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
-    "href": "about.html#b58fc729-690b-4000-b19f-365a4093b2ff7b7b3c2066612069642d63617264203e7d7d-team-members",
-    "title": "The Team",
-    "section": "2  Team Members",
-    "text": "2  Team Members\n\n2.1  Ang Ming Kwan\nRole: Data Preparation & EDA\nBrief bio or role description.\n\n\n2.2  Persie Evangeline\nRole: Visualisation & Shiny App\nBrief bio or role description.\n\n\n2.3  Yap Jit Wei\nRole: Findings & Report Writing\nBrief bio or role description."
+    "objectID": "meeting_minutes.html#disagreement-and-resolution",
+    "href": "meeting_minutes.html#disagreement-and-resolution",
+    "title": "Meeting Minutes",
+    "section": "2.3 Disagreement and Resolution",
+    "text": "2.3 Disagreement and Resolution\nDisagreement: whether the verdict should be “external leak, system failure” or “deliberate leak by Legal.”\nConsiderations weighed:\n\nThe external-leak reading: the agents’ public posting follows the external scoop rather than preceding it, and the environment fields point to upstream sources outside the agent system.\nThe deliberate-leak reading: the six-message intent chain proves the response was planned in advance, which the external reading did not account for.\nThe neutral check: the intent chain fires only after the scoop and after counterparty consent, so it proves a planned response, not a planned leak.\n\nResolution: the team debated the two readings and reached consensus on a synthesis that incorporates both halves. The merger leaked from inside the wider company but not from the agents; the agents then executed a planned, consent-gated response that was lawful on its face. With the direction agreed, Jit set out the project roadmap, and this synthesis became the spine of the proposal and the reason the application is framed as an evidence room that admits each layer of evidence rather than asserting a single answer."
+  },
+  {
+    "objectID": "meeting_minutes.html#decisions-made",
+    "href": "meeting_minutes.html#decisions-made",
+    "title": "Meeting Minutes",
+    "section": "2.4 Decisions Made",
+    "text": "2.4 Decisions Made\n\nTake MC1, building on the team’s two existing TH_Ex02 reports.\nArgue the synthesis verdict that combines the external-origin finding and the intent-chain finding.\nDesign the application around progressive disclosure of evidence rather than a fixed conclusion."
+  },
+  {
+    "objectID": "meeting_minutes.html#division-of-labour",
+    "href": "meeting_minutes.html#division-of-labour",
+    "title": "Meeting Minutes",
+    "section": "2.5 Division of Labour",
+    "text": "2.5 Division of Labour\nAt this stage the work was the proposal and the project setup. The team agreed the following ownership.\n\n\n\n\n\n\n\n\nMember\nOwns\nSupporting\n\n\n\n\nAng Ming Kwan\nWebsite setup, repository, initial wordings and logos\nReviewing the roadmap\n\n\nPersis Evangeline\nReview and supporting comments on the verdict\nOutside perspective, independent review\n\n\nYap Jit Wei\nProject roadmap, proposal touch-ups\nReviewing the website setup"
+  },
+  {
+    "objectID": "meeting_minutes.html#action-items",
+    "href": "meeting_minutes.html#action-items",
+    "title": "Meeting Minutes",
+    "section": "2.6 Action Items",
+    "text": "2.6 Action Items\n\nMing Kwan: set up the website and repository with the initial wordings and logos, and confirm the shinyapps.io setup.\nPersis: review the synthesis with a fresh independent lens and flag anything inconsistent.\nJit: set out the roadmap and finalise the proposal touch-ups for publishing before the 10 June deadline.\n\nAdjournment: Meeting adjourned at 9:15 PM. Next meeting to be held after the proposal feedback window."
+  },
+  {
+    "objectID": "meeting_minutes.html#approval-of-previous-minutes",
+    "href": "meeting_minutes.html#approval-of-previous-minutes",
+    "title": "Meeting Minutes",
+    "section": "3.1 Approval of Previous Minutes",
+    "text": "3.1 Approval of Previous Minutes\nThe minutes of Meeting 1 were reviewed and approved without changes."
+  },
+  {
+    "objectID": "meeting_minutes.html#agenda-1",
+    "href": "meeting_minutes.html#agenda-1",
+    "title": "Meeting Minutes",
+    "section": "3.2 Agenda",
+    "text": "3.2 Agenda\n\nDecide whether to wait for the instructor’s proposal feedback before starting the build.\nDecide how best to present the analysis in the application.\nConfirm the build, repository, and deployment approach."
+  },
+  {
+    "objectID": "meeting_minutes.html#discussion-1",
+    "href": "meeting_minutes.html#discussion-1",
+    "title": "Meeting Minutes",
+    "section": "3.3 Discussion",
+    "text": "3.3 Discussion\nThe first item was timing. The proposal had been submitted and the team debated whether to pause and wait for the instructor’s feedback before committing to a build, or to proceed straight away. The case for waiting was that feedback might redirect the scope and save rework. The case for proceeding was that the timeline to the 1 July poster and 5 July final submission is tight, and waiting risked compressing the build into too short a window.\nThe team decided not to wait. The proposal direction was considered solid enough to build on, and protecting the schedule was judged more important than the chance of a redirect. The team agreed to proceed with the build and adjust later if the feedback called for it.\nThe bulk of the meeting then went to how to present the analysis. The team agreed the application should not simply state the verdict. It should let the user reconstruct it. This led to the evidence-room concept built around four modules, each answering one part of the challenge."
+  },
+  {
+    "objectID": "meeting_minutes.html#decisions-made-1",
+    "href": "meeting_minutes.html#decisions-made-1",
+    "title": "Meeting Minutes",
+    "section": "3.4 Decisions Made",
+    "text": "3.4 Decisions Made\n\nProceed with the build now rather than waiting for proposal feedback, to protect the timeline.\nStructure the application as four modules:\n\nThe Day: a timeline scrubber that replays the crisis hour by hour.\nThe Norm: baseline versus crisis behaviour, with per-agent anomaly scores.\nThe Intent: the intent chain and the anonymous-authorship reveal.\nThe Verdict: evidence-layer toggles that show how partial evidence reproduces each report and the full set resolves the synthesis.\n\nTreat the Verdict module as the novel contribution of the project, since it is what demonstrates why the two original reports disagreed.\nRepository: one repository, with the Quarto website at the root and the Shiny application in a subfolder; the application deploys separately to shinyapps.io.\nDeployment: Ming Kwan owns the deployment. Jit writes and tests the application locally, pushes to the repository, and Ming Kwan pulls and deploys."
+  },
+  {
+    "objectID": "meeting_minutes.html#division-of-labour-build-stage",
+    "href": "meeting_minutes.html#division-of-labour-build-stage",
+    "title": "Meeting Minutes",
+    "section": "3.5 Division of Labour (build stage)",
+    "text": "3.5 Division of Labour (build stage)\nWith the application build decided, ownership of the remaining write-ups was assigned so each page has a clear owner, and the team agreed to cross-review each other’s work.\n\n\n\n\n\n\n\n\nMember\nOwns\nSupporting\n\n\n\n\nAng Ming Kwan\nFindings page, deployment owner, repository lead\nComments on the application build\n\n\nPersis Evangeline\nData preparation page, minutes documentation\nReview comments on the application\n\n\nYap Jit Wei\nShiny application build, data preparation pipeline\nReviewing the website pages"
+  },
+  {
+    "objectID": "meeting_minutes.html#action-items-1",
+    "href": "meeting_minutes.html#action-items-1",
+    "title": "Meeting Minutes",
+    "section": "3.6 Action Items",
+    "text": "3.6 Action Items\n\nJit: complete the four-module application and the data preparation pipeline, and circulate the build for review.\nMing Kwan: write the findings page, deploy the application to shinyapps.io, and confirm all four tabs load.\nPersis: write the data preparation page and review the application build.\nAll: cross-review the application, the data preparation page, and the findings page, and begin planning the A1 poster ahead of the 1 July deadline.\n\nAdjournment: Meeting adjourned at 10:50 PM. Next meeting to review the deployed application and the poster draft."
   }
 ]
