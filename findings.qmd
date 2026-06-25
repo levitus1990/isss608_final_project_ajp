@@ -224,24 +224,44 @@ This is the point where the two original reports meet. One report had the timing
 The visible response was consent-gated and defensible. A separate finding sits one layer down, in the anonymous channel. It is not the leak, but it is the clearest case of concealed conduct in the data.
 
 ```{r}
-#| label: fig-anon-authorship
-#| fig-cap: "Author of every anonymous post, with the timing split at 5 PM."
-comms %>%
+#| label: fig-anontiming
+#| fig-cap: "Anonymous posts per round on the crisis day, by phase of the embargo window."
+anon_timing <- comms %>%
   filter(channel == "anonymous_post") %>%
-  mutate(window = if_else(round_index >= 21, "After 5 PM", "Before 5 PM")) %>%
-  count(agent_label, window) %>%
-  ggplot(aes(x = n, y = agent_label, fill = window)) +
-  geom_col(width = 0.5) +
-  scale_fill_manual(values = c("Before 5 PM" = "#e08a7a", "After 5 PM" = "#c0392b"),
-                    name = NULL) +
-  labs(title = "All twelve anonymous posts trace to one author: Legal",
-       subtitle = "Anonymous posts by author, split before and after SaltWind",
-       x = "Anonymous posts", y = NULL) +
+  count(round_index, name = "n") %>%
+  mutate(window = case_when(
+    round_index <  21 ~ "Before the scoop (pre-5 PM)",
+    round_index == 21 ~ "Scoop to lift (5 to 6 PM)",
+    TRUE              ~ "After the embargo lifted (post-6 PM)"
+  ),
+  window = factor(window, levels = c(
+    "Before the scoop (pre-5 PM)",
+    "Scoop to lift (5 to 6 PM)",
+    "After the embargo lifted (post-6 PM)")))
+
+ggplot(anon_timing, aes(x = round_index, y = n, fill = window)) +
+  geom_col(width = 0.6) +
+  geom_vline(xintercept = 20.5, linetype = "dashed", color = "grey50") +
+  geom_vline(xintercept = 21.5, linetype = "dashed", color = "grey50") +
+  annotate("text", x = 20.4, y = max(anon_timing$n) * 0.95,
+           label = "SaltWind publishes (5 PM)", hjust = 1.05, vjust = 1,
+           size = 3.2, color = "grey45") +
+  annotate("text", x = 21.6, y = max(anon_timing$n) * 0.95,
+           label = "embargo lifts (6 PM)", hjust = -0.05, vjust = 1,
+           size = 3.2, color = "grey45") +
+  scale_fill_manual(values = c(
+    "Before the scoop (pre-5 PM)"          = "#e9b7ac",
+    "Scoop to lift (5 to 6 PM)"            = "#d4664f",
+    "After the embargo lifted (post-6 PM)" = "#c0392b"),
+    name = NULL) +
+  labs(title = "Half the anonymous posts came after the embargo had already lifted",
+       subtitle = "Anonymous posts per round on the crisis day",
+       x = "Round (crisis day)", y = "Anonymous posts") +
   theme_house() +
   theme(legend.position = "top")
 ```
 
-Every one of the twelve anonymous posts was authored by the Legal agent. They appeared across the crisis day, posing as neutral third-party commentary. Four came before 5 PM and eight after, with six of those landing after the 6 PM embargo lift. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer conducting undisclosed advocacy to shape sentiment, while the company was under two attorney-general inquiries, on a channel with no recorded Judge participation across all 23 rounds.
+Every one of the twelve anonymous posts was authored by the Legal agent. They appeared across the crisis day, posing as neutral third-party commentary. Four came before 5 PM, two between the scoop and the 6 PM lift, and six after, so half ran after the embargo was already over. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer conducting undisclosed advocacy to shape sentiment, while the company was under two attorney-general inquiries, on a channel with no recorded Judge participation across all 23 rounds.
 
 This is the finding both original reports missed, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is the clearest case of concealed conduct in the data. Not the leak, and not the consent-gated announcement, but undisclosed advocacy running alongside both, through what appears to be an oversight blind spot.
 
