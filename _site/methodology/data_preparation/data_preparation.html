@@ -223,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#flattening-the-communications" id="toc-flattening-the-communications" class="nav-link" data-scroll-target="#flattening-the-communications"><span class="header-section-number">3</span> Flattening the communications</a></li>
   <li><a href="#splitting-internal-from-public" id="toc-splitting-internal-from-public" class="nav-link" data-scroll-target="#splitting-internal-from-public"><span class="header-section-number">4</span> Splitting internal from public</a></li>
-  <li><a href="#cleaning-the-market-data" id="toc-cleaning-the-market-data" class="nav-link" data-scroll-target="#cleaning-the-market-data"><span class="header-section-number">5</span> Cleaning the market data</a></li>
+  <li><a href="#handling-the-market-data" id="toc-handling-the-market-data" class="nav-link" data-scroll-target="#handling-the-market-data"><span class="header-section-number">5</span> Handling the market data</a></li>
   <li><a href="#building-the-analytical-tables" id="toc-building-the-analytical-tables" class="nav-link" data-scroll-target="#building-the-analytical-tables"><span class="header-section-number">6</span> Building the analytical tables</a></li>
   <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">7</span> Output</a></li>
   </ul>
@@ -276,7 +276,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="the-raw-data" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="the-raw-data"><span class="header-section-number">2.2</span> The raw data</h2>
-<p>The source is a single file, <code>MC1_final_00.json</code>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.</p>
+<p>The source is a single file, <code>MC1_final_00.json</code>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are baseline rounds spanning 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later. Because the two phases use different time resolutions, we report average messages per simulation round rather than a time-based rate, and read the comparisons as direction and magnitude of behavioural change within the challenge structure, not as precise hourly or daily ratios.</p>
 <p>Each round carries three blocks:</p>
 <ol type="1">
 <li><code>communications</code>, every message sent that round, with the sender, channel, recipients, message type, what it was responding to, the full text, and a private internal-state field.</li>
@@ -299,26 +299,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%or%</span> <span class="fu">list</span>()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">%||%</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) <span class="cf">if</span> (<span class="fu">is.null</span>(x)) y <span class="cf">else</span> x</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%||%</span> <span class="fu">list</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>This produces <code>comms</code>, the table everything else is built from. Loading the saved result, we can confirm its shape.</p>
@@ -424,24 +426,27 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Internal state is missing-not-random
+<span class="screen-reader-only">Note</span>Internal state is sparse and selectively populated
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.</p>
+<p>Each message can carry a private internal state with three parts: reacting, deliberating, and rationalizing. These fields are populated for only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates the internal-state fields. Where they are used, they are presented as individual quotations rather than interpreted as representative of the full dataset.</p>
 </div>
 </div>
 </section>
-<section id="cleaning-the-market-data" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Cleaning the market data</h1>
+<section id="handling-the-market-data" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Handling the market data</h1>
 <p>The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(v) <span class="sc">&amp;</span> v <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> v <span class="sc">&lt;=</span> <span class="dv">60</span>, v, <span class="cn">NA_real_</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># the crisis-day field is contaminated: several rounds are missing and one</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># records 180, the distressed-sale valuation bleeding in from the news. We</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># parse the raw value, flag the 180 reading, and exclude the field from the</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># verdict because of missingness and contamination.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -450,14 +455,14 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Interpretive decision: how we handled the broken price field
+<span class="screen-reader-only">Note</span>Interpretive decision: how we handled the unreliable price field
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day’s overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.</p>
+<p>Charting the raw price would produce a misleading series on exactly the day that matters most. Rather than impose an analyst-selected valid range, we retain the parsed values, flag the contextually inconsistent reading of 180, and exclude the stock-price field from substantive analysis because of its missingness and apparent contamination. For contextual orientation, we use the sentiment state, which remains populated across the full period and moves from neutral through cautious, negative, and critical before recovering. The project therefore makes no claims about price reactions or market manipulation.</p>
 </div>
 </div>
-<p>The per-round summary table holds the cleaned price alongside the message counts and sentiment that drive the timeline view.</p>
+<p>The per-round summary table retains the parsed price field alongside the message counts and sentiment used by the timeline view.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -648,12 +653,12 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 <h1 data-number="6"><span class="header-section-number">6</span> Building the analytical tables</h1>
 <p>From the flat table we build a small set of focused tables, each one feeding a specific part of the application.</p>
 <ul>
-<li><strong>Round summary</strong> gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.</li>
-<li><strong>Baseline stats</strong> compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.</li>
-<li><strong>Z-scores</strong> measure how far each agent’s volume in a given round sits from their own baseline average.</li>
+<li><strong>Round summary</strong> gives the per-round message counts, channel split, sentiment, and parsed price. This drives the timeline view.</li>
+<li><strong>Baseline stats</strong> compares each agent before and during the crisis on messages per simulation round, public share, and anonymous posts. We divide by 13 for the baseline and 10 for the crisis to get an average per round. Because the baseline rounds are daily and the crisis rounds hourly, this is a per-round average within the challenge structure, not a comparable time-based rate, and is read as direction and magnitude rather than an exact multiple.</li>
+<li><strong>Z-scores</strong> measure how many baseline standard deviations each agent’s message count in a given simulation round lies above or below that agent’s baseline mean.</li>
 <li><strong>Network edges</strong> resolve each reply back to the message it answered, then to that message’s author, giving a who-replied-to-whom table.</li>
-<li><strong>Intent chain</strong> is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.</li>
-<li><strong>Anonymous posts</strong> pulls all 12 anonymous messages, keeping the true author stored separately so the application can hide it until the user chooses to reveal it.</li>
+<li><strong>Intent chain</strong> is a curated set of six messages selected by message id and arranged in a fixed sequence, so the same messages appear in the intended order even if the source file is reordered.</li>
+<li><strong>Anonymous posts</strong> retains the twelve anonymous-channel messages and their recorded author field, so the application can control when authorship is displayed.</li>
 <li><strong>Event pins</strong> are the timeline markers, anchored to real hours on the crisis day.</li>
 </ul>
 <p>The baseline-versus-crisis table is the clearest example. It shows how each agent’s behaviour shifts between the two phases.</p>
@@ -792,19 +797,19 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.</p>
+<p>The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, and arranged them in a fixed sequence, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.</p>
 </div>
 </div>
 </section>
 <section id="output" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> Output</h1>
-<p>The script saves 11 <code>.rds</code> files. The key counts are below, confirming the build came out as expected.</p>
+<p>The script saves ten core .rds files and, when tidytext is available, one optional TF-IDF file. The key counts are below</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Messages"</span>, <span class="st">"Agents"</span>, <span class="st">"Rounds"</span>, <span class="st">"Messages with internal state"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Public messages"</span>, <span class="st">"Anonymous posts (all Legal)"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Public messages"</span>, <span class="st">"Anonymous posts"</span>,</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Intent chain messages"</span>),</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(comms),</span>
@@ -847,7 +852,7 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 <td style="text-align: right;">77</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Anonymous posts (all Legal)</td>
+<td style="text-align: left;">Anonymous posts</td>
 <td style="text-align: right;">12</td>
 </tr>
 <tr class="odd">
@@ -1347,7 +1352,7 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 <span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="fu">## The raw data</span></span>
 <span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>The source is a single file, <span class="in">`MC1_final_00.json`</span>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>The source is a single file, <span class="in">`MC1_final_00.json`</span>, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are baseline rounds spanning 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later. Because the two phases use different time resolutions, we report average messages per simulation round rather than a time-based rate, and read the comparisons as direction and magnitude of behavioural change within the challenge structure, not as precise hourly or daily ratios.</span>
 <span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>Each round carries three blocks:</span>
 <span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a></span>
@@ -1371,149 +1376,154 @@ $ has_internal  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, 
 <span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: flatten-code</span></span>
 <span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%or%</span> <span class="fu">list</span>()</span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
-<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>This produces <span class="in">`comms`</span>, the table everything else is built from. Loading the saved result, we can confirm its shape.</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">%||%</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) <span class="cf">if</span> (<span class="fu">is.null</span>(x)) y <span class="cf">else</span> x</span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">seq_along</span>(rounds), <span class="cf">function</span>(ri) {</span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>  rd <span class="ot">&lt;-</span> rounds[[ri]]</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(rd<span class="sc">$</span>communications, <span class="cf">function</span>(m) {</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>    ist <span class="ot">&lt;-</span> m<span class="sc">$</span>internal_state <span class="sc">%||%</span> <span class="fu">list</span>()</span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(</span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_id   =</span> m<span class="sc">$</span>message_id,</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>      <span class="at">round_index  =</span> ri <span class="sc">-</span> <span class="dv">1</span>L,</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_id     =</span> m<span class="sc">$</span>agent_id,</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">agent_label  =</span> m<span class="sc">$</span>agent_label,</span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">channel      =</span> m<span class="sc">$</span>channel,</span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">message_type =</span> m<span class="sc">$</span>message_type,</span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">responding_to=</span> m<span class="sc">$</span>responding_to,</span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">content      =</span> m<span class="sc">$</span>content,</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp    =</span> m<span class="sc">$</span>timestamp,</span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">reacting     =</span> ist<span class="sc">$</span>reacting,</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>      <span class="at">deliberating =</span> ist<span class="sc">$</span>deliberating,</span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>      <span class="at">rationalizing=</span> ist<span class="sc">$</span>rationalizing</span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>  }) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: comms-glimpse</span></span>
-<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/comms.rds"</span>)</span>
-<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(comms)</span>
-<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a>There are **912 messages** across **7 agents** and **23 rounds**.</span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>This produces <span class="in">`comms`</span>, the table everything else is built from. Loading the saved result, we can confirm its shape.</span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: comms-glimpse</span></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a>comms <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/comms.rds"</span>)</span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(comms)</span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a><span class="fu"># Splitting internal from public</span></span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>There are **912 messages** across **7 agents** and **23 rounds**.</span>
 <span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tag every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.</span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a><span class="fu"># Splitting internal from public</span></span>
 <span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: channel-code</span></span>
-<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>public_channels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anonymous_post"</span>, <span class="st">"official_post"</span>, <span class="st">"personal_post"</span>)</span>
-<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>comms<span class="sc">$</span>channel_type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(comms<span class="sc">$</span>channel <span class="sc">%in%</span> public_channels,</span>
-<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Public"</span>, <span class="st">"Internal"</span>)</span>
-<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>This single derived field is the backbone of the rest of the work. The table below confirms the split.</span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a>The central question in this challenge is when and why information crossed from inside the company to the outside. To make that measurable we tag every channel as either Internal or Public. There are six channels. Three are public, the personal post, official post, and anonymous post. The other three are internal, the comms huddle, the one-on-one chat, and the side huddle.</span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: channel-code</span></span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>public_channels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"anonymous_post"</span>, <span class="st">"official_post"</span>, <span class="st">"personal_post"</span>)</span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>comms<span class="sc">$</span>channel_type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(comms<span class="sc">$</span>channel <span class="sc">%in%</span> public_channels,</span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Public"</span>, <span class="st">"Internal"</span>)</span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: channel-table</span></span>
-<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>comms <span class="sc">%&gt;%</span></span>
-<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(channel_type, channel, <span class="at">name =</span> <span class="st">"messages"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(channel_type, <span class="fu">desc</span>(messages)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
-<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Internal state is missing-not-random {.unnumbered}</span></span>
-<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.</span>
-<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a><span class="fu"># Cleaning the market data</span></span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>This single derived field is the backbone of the rest of the work. The table below confirms the split.</span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: channel-table</span></span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>comms <span class="sc">%&gt;%</span></span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(channel_type, channel, <span class="at">name =</span> <span class="st">"messages"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(channel_type, <span class="fu">desc</span>(messages)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a><span class="fu">## Internal state is sparse and selectively populated {.unnumbered}</span></span>
+<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>Each message can carry a private internal state with three parts: reacting, deliberating, and rationalizing. These fields are populated for only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates the internal-state fields. Where they are used, they are presented as individual quotations rather than interpreted as representative of the full dataset.</span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a><span class="fu"># Handling the market data</span></span>
 <span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: price-code</span></span>
-<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
-<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="sc">!</span><span class="fu">is.na</span>(v) <span class="sc">&amp;</span> v <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> v <span class="sc">&lt;=</span> <span class="dv">60</span>, v, <span class="cn">NA_real_</span>)</span>
-<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretive decision: how we handled the broken price field {.unnumbered}</span></span>
-<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day's overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.</span>
-<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a>The per-round summary table holds the cleaned price alongside the message counts and sentiment that drive the timeline view.</span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a>The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.</span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: price-code</span></span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>parse_price <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>  <span class="fu">suppressWarnings</span>(<span class="fu">as.numeric</span>(<span class="fu">str_remove_all</span>(x, <span class="st">"[$,]"</span>)))</span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a><span class="co"># the crisis-day field is contaminated: several rounds are missing and one</span></span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a><span class="co"># records 180, the distressed-sale valuation bleeding in from the news. We</span></span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a><span class="co"># parse the raw value, flag the 180 reading, and exclude the field from the</span></span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a><span class="co"># verdict because of missingness and contamination.</span></span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretive decision: how we handled the unreliable price field {.unnumbered}</span></span>
 <span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: round-summary-table</span></span>
-<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>round_summary <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/round_summary.rds"</span>)</span>
-<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a>round_summary <span class="sc">%&gt;%</span></span>
-<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(round_index, n_msgs, n_public, sentiment_state, stock_price) <span class="sc">%&gt;%</span></span>
-<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
-<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a><span class="fu"># Building the analytical tables</span></span>
-<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>From the flat table we build a small set of focused tables, each one feeding a specific part of the application.</span>
-<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Round summary** gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.</span>
-<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Baseline stats** compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.</span>
-<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Z-scores** measure how far each agent's volume in a given round sits from their own baseline average.</span>
-<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Network edges** resolve each reply back to the message it answered, then to that message's author, giving a who-replied-to-whom table.</span>
-<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Intent chain** is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.</span>
-<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Anonymous posts** pulls all 12 anonymous messages, keeping the true author stored separately so the application can hide it until the user chooses to reveal it.</span>
-<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Event pins** are the timeline markers, anchored to real hours on the crisis day.</span>
-<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a>The baseline-versus-crisis table is the clearest example. It shows how each agent's behaviour shifts between the two phases.</span>
-<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: baseline-stats-table</span></span>
-<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/baseline_stats.rds"</span>)</span>
-<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="sc">%&gt;%</span></span>
-<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">msgs_per_round =</span> <span class="fu">round</span>(msgs_per_round, <span class="dv">1</span>),</span>
-<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>         <span class="at">public_share =</span> <span class="fu">round</span>(public_share, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(agent_id, phase, msgs_per_round, public_share, n_anon) <span class="sc">%&gt;%</span></span>
-<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(agent_id, phase) <span class="sc">%&gt;%</span></span>
-<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
-<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretive decision: selecting the intent chain by id {.unnumbered}</span></span>
-<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a>The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.</span>
-<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a><span class="fu"># Output</span></span>
+<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>Charting the raw price would produce a misleading series on exactly the day that matters most. Rather than impose an analyst-selected valid range, we retain the parsed values, flag the contextually inconsistent reading of 180, and exclude the stock-price field from substantive analysis because of its missingness and apparent contamination. For contextual orientation, we use the sentiment state, which remains populated across the full period and moves from neutral through cautious, negative, and critical before recovering. The project therefore makes no claims about price reactions or market manipulation.</span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a>The per-round summary table retains the parsed price field alongside the message counts and sentiment used by the timeline view.</span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: round-summary-table</span></span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a>round_summary <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/round_summary.rds"</span>)</span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>round_summary <span class="sc">%&gt;%</span></span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(round_index, n_msgs, n_public, sentiment_state, stock_price) <span class="sc">%&gt;%</span></span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a><span class="fu"># Building the analytical tables</span></span>
+<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a>From the flat table we build a small set of focused tables, each one feeding a specific part of the application.</span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Round summary** gives the per-round message counts, channel split, sentiment, and parsed price. This drives the timeline view.</span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Baseline stats** compares each agent before and during the crisis on messages per simulation round, public share, and anonymous posts. We divide by 13 for the baseline and 10 for the crisis to get an average per round. Because the baseline rounds are daily and the crisis rounds hourly, this is a per-round average within the challenge structure, not a comparable time-based rate, and is read as direction and magnitude rather than an exact multiple.</span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Z-scores** measure how many baseline standard deviations each agent's message count in a given simulation round lies above or below that agent's baseline mean.</span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Network edges** resolve each reply back to the message it answered, then to that message's author, giving a who-replied-to-whom table.</span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Intent chain** is a curated set of six messages selected by message id and arranged in a fixed sequence, so the same messages appear in the intended order even if the source file is reordered.</span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Anonymous posts** retains the twelve anonymous-channel messages and their recorded author field, so the application can control when authorship is displayed.</span>
+<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Event pins** are the timeline markers, anchored to real hours on the crisis day.</span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a>The baseline-versus-crisis table is the clearest example. It shows how each agent's behaviour shifts between the two phases.</span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: baseline-stats-table</span></span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../../shiny_app/my_shiny_app/data/baseline_stats.rds"</span>)</span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a>baseline_stats <span class="sc">%&gt;%</span></span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">msgs_per_round =</span> <span class="fu">round</span>(msgs_per_round, <span class="dv">1</span>),</span>
+<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a>         <span class="at">public_share =</span> <span class="fu">round</span>(public_share, <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(agent_id, phase, msgs_per_round, public_share, n_anon) <span class="sc">%&gt;%</span></span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(agent_id, phase) <span class="sc">%&gt;%</span></span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>()</span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpretive decision: selecting the intent chain by id {.unnumbered}</span></span>
 <span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a>The script saves 11 <span class="in">`.rds`</span> files. The key counts are below, confirming the build came out as expected.</span>
-<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: output-summary</span></span>
-<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Messages"</span>, <span class="st">"Agents"</span>, <span class="st">"Rounds"</span>, <span class="st">"Messages with internal state"</span>,</span>
-<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Public messages"</span>, <span class="st">"Anonymous posts (all Legal)"</span>,</span>
-<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Intent chain messages"</span>),</span>
-<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(</span>
-<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(comms),</span>
-<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>agent_id),</span>
-<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>round_index),</span>
-<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="sc">!</span>(<span class="fu">is.na</span>(comms<span class="sc">$</span>reacting) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>deliberating) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>rationalizing))),</span>
-<span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel_type <span class="sc">==</span> <span class="st">"Public"</span>),</span>
-<span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>),</span>
-<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span></span>
-<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span>
-<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a>With these files in place, the application reads clean tables and never touches the raw JSON again. The next page explores what the data looks like once it is prepared.</span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a>The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, and arranged them in a fixed sequence, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.</span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-198"><a href="#cb12-198" aria-hidden="true" tabindex="-1"></a><span class="fu"># Output</span></span>
+<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a>The script saves ten core .rds files and, when tidytext is available, one optional TF-IDF file. The key counts are below</span>
+<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: output-summary</span></span>
+<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">Item =</span> <span class="fu">c</span>(<span class="st">"Messages"</span>, <span class="st">"Agents"</span>, <span class="st">"Rounds"</span>, <span class="st">"Messages with internal state"</span>,</span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Public messages"</span>, <span class="st">"Anonymous posts"</span>,</span>
+<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a>           <span class="st">"Intent chain messages"</span>),</span>
+<span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a>  <span class="at">Count =</span> <span class="fu">c</span>(</span>
+<span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a>    <span class="fu">nrow</span>(comms),</span>
+<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>agent_id),</span>
+<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a>    <span class="fu">n_distinct</span>(comms<span class="sc">$</span>round_index),</span>
+<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="sc">!</span>(<span class="fu">is.na</span>(comms<span class="sc">$</span>reacting) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>deliberating) <span class="sc">&amp;</span> <span class="fu">is.na</span>(comms<span class="sc">$</span>rationalizing))),</span>
+<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel_type <span class="sc">==</span> <span class="st">"Public"</span>),</span>
+<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(comms<span class="sc">$</span>channel <span class="sc">==</span> <span class="st">"anonymous_post"</span>),</span>
+<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span></span>
+<span id="cb12-218"><a href="#cb12-218" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span>
+<span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a>With these files in place, the application reads clean tables and never touches the raw JSON again. The next page explores what the data looks like once it is prepared.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
