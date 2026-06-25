@@ -28,7 +28,7 @@ library(knitr)
 
 ## The raw data
 
-The source is a single file, `MC1_final_00.json`, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are daily snapshots from 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later, because it means raw message counts cannot be compared between the two phases without normalising to a per-round rate.
+The source is a single file, `MC1_final_00.json`, from VAST Challenge 2026 Mini-Challenge 1. It holds 23 rounds across two phases. Rounds 1 to 13 are baseline rounds spanning 17 May to 4 June. Rounds 14 to 23 are hourly snapshots across a single day, 5 June, from 9 AM to 6 PM. The switch from daily to hourly matters later. Because the two phases use different time resolutions, we report average messages per simulation round rather than a time-based rate, and read the comparisons as direction and magnitude of behavioural change within the challenge structure, not as precise hourly or daily ratios.
 
 Each round carries three blocks:
 
@@ -52,10 +52,12 @@ The JSON is deeply nested, so the first job is to pull every message into one fl
 ```{r}
 #| label: flatten-code
 #| eval: false
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
 comms <- map(seq_along(rounds), function(ri) {
   rd <- rounds[[ri]]
   map(rd$communications, function(m) {
-    ist <- m$internal_state %or% list()
+    ist <- m$internal_state %||% list()
     tibble(
       message_id   = m$message_id,
       round_index  = ri - 1L,
@@ -107,12 +109,12 @@ comms %>%
 ```
 
 ::: callout-note
-## Internal state is missing-not-random {.unnumbered}
+## Internal state is sparse and selectively populated {.unnumbered}
 
-Each message can carry a private internal state with three parts, reacting, deliberating, and rationalizing. These are filled in on only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates over internal state. Where the fields are used, they are read as individual quotes, not as a population.
+Each message can carry a private internal state with three parts: reacting, deliberating, and rationalizing. These fields are populated for only 86 of the 912 messages, so we treat them as a sparse source rather than a complete record. No table in the application aggregates the internal-state fields. Where they are used, they are presented as individual quotations rather than interpreted as representative of the full dataset.
 :::
 
-# Cleaning the market data
+# Handling the market data
 
 The market snapshot gives a stock price each round, and this one needs care. The baseline prices fall steadily from 38.70 down to 31.50, which is sensible given the exposé pressure building through the buildup. On the crisis day the field breaks down. Several rounds have no price at all, including the decisive 4 PM to 6 PM window, and one round records a stock price of 180, which is the distressed-sale valuation from the news narrative bleeding into the price field.
 
@@ -120,18 +122,21 @@ The market snapshot gives a stock price each round, and this one needs care. The
 #| label: price-code
 #| eval: false
 parse_price <- function(x) {
-  v <- suppressWarnings(as.numeric(str_remove_all(x, "[$,]")))
-  ifelse(!is.na(v) & v >= 10 & v <= 60, v, NA_real_)
+  suppressWarnings(as.numeric(str_remove_all(x, "[$,]")))
 }
+# the crisis-day field is contaminated: several rounds are missing and one
+# records 180, the distressed-sale valuation bleeding in from the news. We
+# parse the raw value, flag the 180 reading, and exclude the field from the
+# verdict because of missingness and contamination.
 ```
 
 ::: callout-note
-## Interpretive decision: how we handled the broken price field {.unnumbered}
+## Interpretive decision: how we handled the unreliable price field {.unnumbered}
 
-Charting the raw price would put a misleading line on exactly the day that matters most. Rather than trust the field, we clipped the price to a plausible band and dropped anything outside it. For the day's overall shape we lean on the sentiment state instead, which stays consistent across the whole period and moves from neutral through cautious, negative, and critical before recovering. No price-reaction or manipulation analysis is attempted, because the field cannot support one.
+Charting the raw price would produce a misleading series on exactly the day that matters most. Rather than impose an analyst-selected valid range, we retain the parsed values, flag the contextually inconsistent reading of 180, and exclude the stock-price field from substantive analysis because of its missingness and apparent contamination. For contextual orientation, we use the sentiment state, which remains populated across the full period and moves from neutral through cautious, negative, and critical before recovering. The project therefore makes no claims about price reactions or market manipulation.
 :::
 
-The per-round summary table holds the cleaned price alongside the message counts and sentiment that drive the timeline view.
+The per-round summary table retains the parsed price field alongside the message counts and sentiment used by the timeline view.
 
 ```{r}
 #| label: round-summary-table
@@ -145,12 +150,12 @@ round_summary %>%
 
 From the flat table we build a small set of focused tables, each one feeding a specific part of the application.
 
-- **Round summary** gives the per-round message counts, channel split, sentiment, and cleaned price. This drives the timeline view.
-- **Baseline stats** compares each agent before and during the crisis on messages per round, public share, and anonymous posts. Because the two phases have a different number of rounds, we divide by 13 for the baseline and 10 for the crisis so the rates are comparable.
-- **Z-scores** measure how far each agent's volume in a given round sits from their own baseline average.
+- **Round summary** gives the per-round message counts, channel split, sentiment, and parsed price. This drives the timeline view.
+- **Baseline stats** compares each agent before and during the crisis on messages per simulation round, public share, and anonymous posts. We divide by 13 for the baseline and 10 for the crisis to get an average per round. Because the baseline rounds are daily and the crisis rounds hourly, this is a per-round average within the challenge structure, not a comparable time-based rate, and is read as direction and magnitude rather than an exact multiple.
+- **Z-scores** measure how many baseline standard deviations each agent's message count in a given simulation round lies above or below that agent's baseline mean.
 - **Network edges** resolve each reply back to the message it answered, then to that message's author, giving a who-replied-to-whom table.
-- **Intent chain** is a fixed set of six messages selected by their message id, so the sequence is exact and cannot break if the ordering of the file changes.
-- **Anonymous posts** pulls all 12 anonymous messages, keeping the true author stored separately so the application can hide it until the user chooses to reveal it.
+- **Intent chain** is a curated set of six messages selected by message id and arranged in a fixed sequence, so the same messages appear in the intended order even if the source file is reordered.
+- **Anonymous posts** retains the twelve anonymous-channel messages and their recorded author field, so the application can control when authorship is displayed.
 - **Event pins** are the timeline markers, anchored to real hours on the crisis day.
 
 The baseline-versus-crisis table is the clearest example. It shows how each agent's behaviour shifts between the two phases.
@@ -169,18 +174,18 @@ baseline_stats %>%
 ::: callout-note
 ## Interpretive decision: selecting the intent chain by id {.unnumbered}
 
-The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.
+The intent chain is a curated set of six messages, not a computed result. We selected them by message id rather than by text matching, and arranged them in a fixed sequence, so the chain is exact and does not silently change if the file is reordered. The selection is an analytical choice about which messages form the planning sequence, and the verdict view treats it as such.
 :::
 
 # Output
 
-The script saves 11 `.rds` files. The key counts are below, confirming the build came out as expected.
+The script saves ten core .rds files and, when tidytext is available, one optional TF-IDF file. The key counts are below
 
 ```{r}
 #| label: output-summary
 tibble(
   Item = c("Messages", "Agents", "Rounds", "Messages with internal state",
-           "Public messages", "Anonymous posts (all Legal)",
+           "Public messages", "Anonymous posts",
            "Intent chain messages"),
   Count = c(
     nrow(comms),

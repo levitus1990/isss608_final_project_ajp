@@ -95,6 +95,10 @@ app_css <- HTML("
   .feed-ch  { font-size:10px; color:#aaa; }
   .feed-txt { font-size:12.5px; color:#444; margin-top:3px; line-height:1.4; }
   .feed-txt.pub { border-left:3px solid #c0392b; padding-left:8px; }
+  .prior-card { background:#fff7ed; border:1px solid #fed7aa; border-left:4px solid #ea8a4b;
+                border-radius:8px; padding:12px 16px; margin-top:6px; }
+  .prior-title { font-size:13px; font-weight:700; color:#9a4a13; letter-spacing:.02em; }
+  .prior-body { font-size:12.5px; color:#5b4636; margin-top:6px; line-height:1.5; }
 
   /* Module 3 */
   .chain-card { background:#fff; border:1px solid #e6e6e6; border-left:4px solid #b8c4d0;
@@ -117,7 +121,12 @@ app_css <- HTML("
                padding:16px 18px; margin-bottom:16px; }
   .verdict-card { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
                   padding:18px 20px; margin-bottom:14px; }
+  .verdict-card.secondary { border-left:4px solid #ea8a4b; }
   .verdict-q { font-size:13px; color:#888; margin:0 0 6px; }
+  .verdict-tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em;
+                 padding:2px 8px; border-radius:12px; margin-bottom:8px; }
+  .verdict-tag.primary { background:#eef2f6; color:#2d3e50; }
+  .verdict-tag.second  { background:#fff2e6; color:#9a4a13; }
   .verdict-a { font-size:19px; font-weight:700; color:#2d3e50; margin:0; line-height:1.3; }
   .verdict-a.bad { color:#c0392b; }
   .verdict-note { font-size:12px; color:#777; margin-top:6px; }
@@ -135,7 +144,7 @@ ui <- navbarPage(
   tabPanel(
     "The Day",
     div(class = "app-sub",
-        "Module 1. Drag through the timeline and watch the leak unfold."),
+        "Module 1. Drag through the timeline and watch the crisis day unfold."),
     sliderInput("rnd", NULL, min = 0, max = 22, value = 15, step = 1,
                 width = "100%", ticks = FALSE,
                 animate = animationOptions(interval = 900)),
@@ -147,8 +156,9 @@ ui <- navbarPage(
              div(style = "margin-top:8px;",
                  p(style = "font-size:12px; color:#888; margin-bottom:2px;",
                    "Who replied to whom this hour. Node size shows messages sent; Legal stays central."),
-                 visNetworkOutput("day_network", height = "230px"))),
-
+                 visNetworkOutput("day_network", height = "230px")),
+             uiOutput("prior_incident")),
+      
       column(4,
              uiOutput("day_feed_head"),
              div(style = "max-height:520px; overflow-y:auto;", uiOutput("day_feed")))
@@ -165,7 +175,10 @@ ui <- navbarPage(
         selectInput("agent", "Select agent",
                     choices = agent_choices, selected = "legal_agent"),
         helpText("Baseline is rounds 0 to 12 (May 17 to Jun 4, daily).",
-                 "Crisis is rounds 13 to 22 (Jun 5, hourly)."),
+                 "Crisis is rounds 13 to 22 (Jun 5, hourly).",
+                 "Because the phases use different time resolutions, figures are",
+                 "messages per simulation round, read as direction and magnitude",
+                 "rather than exact time-based rates."),
         hr(),
         helpText("Cards compare the selected agent's baseline against the",
                  "crisis day. The chart shows each round's deviation from",
@@ -226,7 +239,7 @@ ui <- navbarPage(
              h4("The anonymous channel"),
              p(style = "color:#777; font-size:13px;",
                "Twelve posts that appeared to the public as neutral, third party",
-               "commentary during the embargo. Who actually wrote them?"),
+               "commentary across the crisis day. Who actually wrote them?"),
              div(style = "margin-bottom:12px;",
                  actionButton("reveal_btn", "Reveal authors",
                               class = "btn-danger", icon = icon("eye")),
@@ -239,15 +252,15 @@ ui <- navbarPage(
   tabPanel(
     "The Verdict",
     div(class = "app-sub",
-        "Module 4. Admit each layer of evidence and watch the verdict change."),
+        "Module 4. Admit each layer of evidence and watch the answer take shape."),
     sidebarLayout(
       sidebarPanel(
         width = 4,
         div(class = "layer-box",
             h5("Admit evidence layers"),
             p(style = "font-size:12px; color:#888;",
-              "Tick layers to admit them into the analysis. The verdict",
-              "updates as the evidence base grows."),
+              "Tick layers to admit them into the analysis. The answers",
+              "update as the evidence base grows."),
             checkboxInput("L1", "1 · Public timeline", value = FALSE),
             checkboxInput("L2", "2 · Behavioural anomalies", value = FALSE),
             checkboxInput("L3", "3 · Intent chain", value = FALSE),
@@ -260,13 +273,16 @@ ui <- navbarPage(
       mainPanel(
         width = 8,
         div(class = "verdict-card",
-            p(class = "verdict-q", "Who put the merger into the public domain?"),
+            span(class = "verdict-tag primary", "PRIMARY QUESTION"),
+            p(class = "verdict-q", "Did an agent cause the embargo breach?"),
             uiOutput("v_origin")),
-        div(class = "verdict-card",
-            p(class = "verdict-q", "Was there deliberate misconduct by the agents?"),
+        div(class = "verdict-card secondary",
+            span(class = "verdict-tag second", "SECONDARY FINDING"),
+            p(class = "verdict-q", "What separate concealed conduct did the investigation uncover?"),
             uiOutput("v_misconduct")),
-        div(class = "verdict-card",
-            p(class = "verdict-q", "Were there warning signs, and why did oversight miss it?"),
+        div(class = "verdict-card secondary",
+            span(class = "verdict-tag second", "LEADING INDICATOR"),
+            p(class = "verdict-q", "Were there warning signs, and did oversight cover them?"),
             uiOutput("v_warning")),
         div(class = "layer-box", uiOutput("v_interpretation"))
       )
@@ -293,7 +309,6 @@ server <- function(input, output, session) {
     now_ts <- (round_summary %>% filter(round_index == cur_round()))$ts
     pins <- lapply(seq_len(nrow(event_pins)), function(i) {
       e <- event_pins[i, ]
-      # status: past (already happened), now (this exact hour), future
       same_hour <- abs(as.numeric(difftime(e$ts, now_ts, units = "mins"))) < 30
       is_past <- e$ts <= now_ts
       cls <- if (same_hour) "pin now"
@@ -334,10 +349,23 @@ server <- function(input, output, session) {
                 format(rs$ts, "%H:%M"), min(10, nrow(cm)), nrow(cm)))
     )
   })
+  
+  # ----- prior-incident card: the @Elena leading indicator (Q3) -----
+  output$prior_incident <- renderUI({
+    div(class = "prior-card",
+        div(class = "prior-title", "PRIOR INCIDENT  ·  29 MAY, A WEEK BEFORE THE CRISIS"),
+        div(class = "prior-body",
+            "Social-Manager publicly tagged the CivicLoom CEO with \"big things coming.\" ",
+            "A CivicLoom employee liked the post before it was deleted after fourteen minutes. ",
+            "This is the one moment an agent put merger-adjacent intent into public, and it is ",
+            "what prompted the Judge to be assigned as compliance monitor and a social hold to ",
+            "be imposed. A warning sign the system did act on, though the later concealed posting ",
+            "ran on a different channel."))
+  })
+  
   # ----- per-round communication network (safe redraw) -----
   output$day_network <- renderVisNetwork({
     cr <- cur_round()
-    # resolve this round's replies into edges: responding_to -> author
     id_author <- setNames(comms$agent_id, comms$message_id)
     cm <- comms %>% filter(round_index == cr, !is.na(responding_to))
     e <- cm %>%
@@ -345,7 +373,6 @@ server <- function(input, output, session) {
       filter(!is.na(from), !is.na(to), from != to) %>%
       count(from, to, name = "value")
     
-    # node size = messages this agent sent this round
     sent <- comms %>% filter(round_index == cr) %>% count(agent_id, name = "n")
     nodes <- net_nodes %>%
       left_join(sent, by = c("id" = "agent_id")) %>%
@@ -422,12 +449,11 @@ server <- function(input, output, session) {
       scale_fill_manual(values = c("FALSE"="#b8c4d0","TRUE"="#c0392b"), guide = "none") +
       scale_x_continuous(breaks = seq(0, 22, 2)) +
       labs(title = paste0(lbl, ": message volume anomaly by round"),
-           subtitle = "Standard deviations from this agent's own baseline mean",
+           subtitle = "Baseline standard deviations from this agent's own baseline mean",
            x = "Round (0 to 12 baseline, 13 to 22 crisis day)", y = "Z-score") +
       theme_house()
   })
   
-  # ----- dumbbell: all agents, baseline -> crisis (native ggplot, theme_house) -----
   output$slopeplot <- renderPlot({
     dumb <- baseline_stats %>%
       select(agent_id, phase, msgs_per_round) %>%
@@ -457,16 +483,15 @@ server <- function(input, output, session) {
       scale_color_manual(values = dir_cols, name = NULL) +
       scale_x_continuous(expand = expansion(mult = c(0.08, 0.12))) +
       labs(
-        title = "Messages per round, baseline to crisis",
+        title = "Messages per simulation round, baseline to crisis",
         subtitle = "Grey dot is baseline, coloured dot is crisis. Each row is one agent.",
-        x = "Messages per round", y = NULL
+        x = "Messages per simulation round", y = NULL
       ) +
       theme_house() +
       theme(legend.position = "top",
             panel.grid.major.y = element_blank())
   })
   
-  # ----- gtExtras sparkline summary table (Lesson 10 technique) -----
   output$agent_table <- render_gt({
     spark <- comms %>%
       filter(!is.na(agent_id)) %>%
@@ -485,7 +510,6 @@ server <- function(input, output, session) {
              change = crisis - baseline) %>%
       arrange(desc(crisis)) %>%
       select(Agent = agent_label, Change = change, Trajectory = trajectory)
-    
     
     tbl %>%
       gt() %>%
@@ -544,51 +568,68 @@ server <- function(input, output, session) {
   layers <- reactive(c(L1 = isTRUE(input$L1), L2 = isTRUE(input$L2),
                        L3 = isTRUE(input$L3), L4 = isTRUE(input$L4)))
   
+  # ---- PRIMARY QUESTION: did an agent cause the breach? ----
+  # Origin can only be assessed once the public timeline (L1) is admitted.
+  # Behavioural anomalies (L2) alone cannot establish origin.
   output$v_origin <- renderUI({
     L <- layers()
-    if (!L["L1"] && !L["L2"]) {
+    if (!L["L1"]) {
       tagList(p(class = "verdict-a", "Unresolved"),
-              p(class = "verdict-note", "Admit the public timeline to begin."))
+              p(class = "verdict-note",
+                "Admit the public timeline to assess origin. Behavioural anomalies alone cannot establish who put the merger out."))
     } else if (L["L1"] && !L["L2"]) {
-      tagList(p(class = "verdict-a", "Appears to originate outside the agent system"),
+      tagList(p(class = "verdict-a", "The timeline points away from the agents"),
               p(class = "verdict-note",
-                "SaltWind published at 5:00 PM. The agents' public posts follow the scoop, they do not precede it."))
+                "SaltWind published at 5:00 PM. The agents' merger-confirming posts follow the scoop, they do not precede it."))
     } else {
-      tagList(p(class = "verdict-a", "Not the agents. The source was diffuse and internal."),
+      tagList(p(class = "verdict-a", "No agent-originated breach in the logs"),
               p(class = "verdict-note",
-                "The agents' public posts follow the scoop, they never lead it, so they did not put the merger out. The breach traces upstream to employee posts, the CEO's hints, an early agent slip tagging the counterparty, and departing clients, aggregated and published by SaltWind. The exact source is not in the logs, but the agents are clearly not it."))
+                "The timeline plus the behavioural evidence places the origin outside the agents, in the wider information environment: employee posts, the CEO's hints, and departing clients. The exact upstream source is not captured in the logs, but the agents are not it."))
     }
   })
   
+  # ---- SECONDARY FINDING: separate concealed conduct ----
   output$v_misconduct <- renderUI({
     L <- layers()
     if (!L["L3"] && !L["L4"]) {
       tagList(p(class = "verdict-a", "Not yet established"),
               p(class = "verdict-note", "Admit the intent chain and anonymous authorship to assess."))
     } else if (L["L3"] && !L["L4"]) {
-      tagList(p(class = "verdict-a", "Planned response, but lawful on its face"),
+      tagList(p(class = "verdict-a", "A planned response, defensible on its face"),
               p(class = "verdict-note",
-                "The intent chain shows a pre-planned, consent-gated announcement. It fires only after SaltWind and after CivicLoom consent. A deliberate response, not a leak."))
+                "The intent chain shows a pre-planned, consent-gated announcement. It activates only after SaltWind and after CivicLoom consent. A planned response, not a leak."))
     } else if (!L["L3"] && L["L4"]) {
-      tagList(p(class = "verdict-a bad", "Yes. A concealed influence operation."),
+      tagList(p(class = "verdict-a", "Undisclosed advocacy by Legal"),
               p(class = "verdict-note",
-                "All 12 anonymous posts were authored by Legal-Agent, during the embargo, on a channel the compliance Judge never observed."))
+                "All twelve anonymous posts were authored by Legal-Agent, posing as neutral voices, on a channel with no recorded Judge participation."))
     } else {
-      tagList(p(class = "verdict-a bad", "Yes, but not where the leak hunt would look."),
+      tagList(p(class = "verdict-a", "Concealed advocacy, separate from the breach"),
               p(class = "verdict-note",
-                "The planned announcement was lawful: consent-gated, fired only after the scoop and after consent. The deliberate misconduct is separate and hidden, a concealed anonymous influence operation run by Legal all day on a channel no one watched."))
+                "The planned announcement was consent-gated and defensible, activated only after the scoop and after consent. Separately, all twelve anonymous posts trace to Legal, presenting as independent voices on a channel with no recorded Judge participation. This is undisclosed advocacy and a potential oversight blind spot, not the embargo breach."))
     }
   })
   
+  # ---- LEADING INDICATOR: warning signs and oversight coverage ----
+  # The full reading needs the behavioural warning (L2) AND the anonymous
+  # authorship (L4); either alone is incomplete.
   output$v_warning <- renderUI({
     L <- layers()
-    if (!any(L)) {
+    if (!L["L2"] && !L["L4"]) {
       tagList(p(class = "verdict-a", "Admit evidence to assess"),
-              p(class = "verdict-note", "The warning signs become clear once the behavioural and authorship layers are admitted."))
-    } else {
-      tagList(p(class = "verdict-a", "Yes. The warning was acted on, but the wrong channel was watched."),
               p(class = "verdict-note",
-                "A week before the crisis, an agent publicly tagged the counterparty CEO. That slip is what prompted the Judge to be assigned as compliance monitor. But the Judge watched the comms huddle, the loudest channel, while Legal's concealed operation ran on the anonymous channel the Judge never posted to once. The system had a leading indicator, acted on it, and still missed the misconduct because oversight was aimed at the wrong place."))
+                "Admit the behavioural anomalies and the anonymous authorship to see the warning sign and the oversight gap."))
+    } else if (L["L2"] && !L["L4"]) {
+      tagList(p(class = "verdict-a", "A behavioural warning existed"),
+              p(class = "verdict-note",
+                "A week before the crisis, an agent slip tagging the counterparty CEO prompted the Judge to be assigned as compliance monitor. The warning was acted on."))
+    } else if (!L["L2"] && L["L4"]) {
+      tagList(p(class = "verdict-a", "Concealed posting on a channel with no recorded Judge participation"),
+              p(class = "verdict-note",
+                "Legal's anonymous posts ran on a channel with no recorded Judge participation across all 23 rounds."))
+    } else {
+      tagList(p(class = "verdict-a", "There was a warning, but oversight and the conduct sat on different channels"),
+              p(class = "verdict-note",
+                "The 29 May agent slip prompted the Judge's appointment and a social hold, so the warning was acted on. But the recorded Judge activity is in the comms huddle, while Legal's concealed posts ran on the anonymous channel, where the logs show no recorded Judge participation. The warning was addressed; the channel that carried the concealed conduct shows no recorded oversight. Whether the Judge could read that channel is not established by the logs."))
     }
   })
   
@@ -601,7 +642,7 @@ server <- function(input, output, session) {
     } else if (L["L1"] && L["L2"] && !L["L3"] && !L["L4"]) {
       tagList(h5("Interpretation"),
               p(style="font-size:13px;",
-                "On the timeline and behavioural evidence alone, this looks like a system failure with the leak originating outside the agents. A coherent reading, but an incomplete one."),
+                "On the timeline and behavioural evidence alone, this looks like a containment failure with the origin outside the agents. A coherent reading, but an incomplete one."),
               span(class="report-tag", "Reproduces Report A"))
     } else if (!L["L1"] && !L["L2"] && L["L3"] && !L["L4"]) {
       tagList(h5("Interpretation"),
@@ -611,7 +652,7 @@ server <- function(input, output, session) {
     } else if (all(L)) {
       tagList(h5("Interpretation: the synthesis"),
               p(style="font-size:13px;",
-                "With all four layers admitted, three separate things are true. The leak was not the agents: their posts follow the scoop, and the source was diffuse and internal to the wider company. The agents' announcement was planned but lawful, firing only after the scoop and after consent. The real misconduct was a concealed anonymous influence operation Legal ran underneath all day. Neither single perspective captures this. Only the full evidence base does."),
+                "With all four layers admitted, the primary answer and the secondary finding separate cleanly. Primary: the logs do not support an agent-originated breach. The agents' posts follow the scoop, and the origin lies in the wider information environment. The agents' own announcement was planned but consent-gated and defensible. Secondary: a separate concealed advocacy ran alongside it, all twelve anonymous posts authored by Legal on a channel with no recorded oversight. The leak question and the concealed-conduct question have different answers, and only the full evidence base separates them."),
               span(class="report-tag synth", "The complete picture"))
     } else {
       tagList(h5("Interpretation"),

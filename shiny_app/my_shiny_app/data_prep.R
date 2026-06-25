@@ -93,12 +93,13 @@ agents <- comms %>%
 # =====================================================================
 # 3. ROUND SUMMARY (drives the Module 1 scrubber)  ->  round_summary.rds
 #    Stock price is clean only in the baseline; crisis-day values are
-#    unreliable (nulls + out-of-range noise), so we clip to a plausible
-#    band and rely on sentiment severity + volume as the main signals.
+#    unreliable (nulls + contextually inconsistent readings). Rather than
+#    impose an analyst-selected valid range, we parse the raw value, flag
+#    the single inconsistent reading of 180, and exclude the field from
+#    substantive analysis. Sentiment severity and volume are the signals.
 # =====================================================================
 parse_price <- function(x) {
-  v <- suppressWarnings(as.numeric(str_remove_all(x %or% "", "[$,]")))
-  if_else(!is.na(v) & v >= 10 & v <= 60, v, NA_real_)   # drop $180 / $18 noise
+  suppressWarnings(as.numeric(str_remove_all(x %or% "", "[$,]")))
 }
 
 # severity scale (higher = worse market sentiment); documented mapping
@@ -128,12 +129,18 @@ round_summary <- map(seq_along(rounds), function(ri) {
     ts        = ymd_hms(hour, quiet = TRUE),
     date      = as_date(ts),
     is_crisis = round_index >= 13L,
-    severity  = severity_of(sentiment_state)
+    severity  = severity_of(sentiment_state),
+    # flag the single contextually inconsistent reading of 180 as NA;
+    # the field is not used in the verdict regardless.
+    stock_price = if_else(!is.na(stock_price) & stock_price == 180,
+                          NA_real_, stock_price)
   )
 
 # =====================================================================
 # 4. BASELINE vs CRISIS PER-AGENT STATS (Module 2 cards)
 #    ->  baseline_stats.rds
+#    Per-round averages: baseline rounds are daily, crisis rounds hourly,
+#    so these are read as direction and magnitude, not time-based rates.
 # =====================================================================
 baseline_stats <- comms %>%
   mutate(phase = if_else(round_index < 13L, "baseline", "crisis")) %>%
@@ -152,6 +159,7 @@ baseline_stats <- comms %>%
 # =====================================================================
 # 5. PER-AGENT PER-ROUND VOLUME + Z-SCORES (Module 2 anomaly)
 #    ->  zscores.rds   (z computed against each agent's baseline)
+#    z = baseline standard deviations above/below that agent's baseline mean
 # =====================================================================
 agent_round <- comms %>%
   filter(!is.na(agent_id)) %>%
@@ -199,7 +207,9 @@ edges_phase <- edges_raw %>%
 
 # =====================================================================
 # 7. INTENT CHAIN (Module 3, stack 1) — six verified messages, ordered
-#    Selected by message_id so the chain is exact and stable.
+#    Selected by message_id and arranged in a fixed sequence (match()
+#    against intent_ids), so the chain is exact and stable in order even
+#    if the source file is reordered.
 #    ->  intent_chain.rds
 # =====================================================================
 intent_ids <- c(
@@ -305,7 +315,7 @@ cat(sprintf("  Agents................... %d\n", nrow(agents)))
 cat(sprintf("  Rounds (round_summary)... %d   (expect 23)\n", nrow(round_summary)))
 cat(sprintf("  Internal-state messages.. %d   (expect 86)\n", sum(comms$has_internal)))
 cat(sprintf("  Public messages.......... %d\n", sum(comms$channel_type == "Public")))
-cat(sprintf("  Anonymous posts.......... %d   (expect 12, all Legal)\n", nrow(anon_posts)))
+cat(sprintf("  Anonymous posts.......... %d   (expect 12)\n", nrow(anon_posts)))
 cat(sprintf("  Intent-chain messages.... %d   (expect 6)\n", nrow(intent_chain)))
 cat(sprintf("  Network edges (unique)... %d\n", nrow(edges)))
 cat(sprintf("  Anon authors............. %s\n",

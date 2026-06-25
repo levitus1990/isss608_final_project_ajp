@@ -13,18 +13,18 @@ On 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoo
 
 This project did not start from a blank slate. Two of us analysed the same message logs independently for Take-home Exercise 2, and we reached opposite conclusions. One reading held that the breach was an external leak the compliance system could not contain. The other held that the breach was a deliberate, pre-planned act by the Legal agent. Same data, two careful analyses, two different verdicts. That disagreement is what this project set out to resolve, and it is the reason the app is built as an evidence room rather than a single answer.
 
-The short version is that both readings were half right, and the full picture needs both halves.
+The short version is that both readings were half right, and the full picture needs both halves, plus a third finding neither had looked at closely.
 
 ::: callout-important
 ## The short version {.unnumbered}
 
-Three things are true at once, and no single one of them is the whole story.
+There are two questions here, and they have different answers. The first is the challenge's central question: who put the merger into the public domain. The second is what else the investigation uncovered about the agents' conduct.
 
-1. **The merger leaked from inside the company, but not from the agents.** The information reached the public through employee Slack chatter, departing staff, and the counterparty's own CEO, aggregated by a reporter who had an inside source days before the crisis. The seven communications agents did not put the merger into public through their own channels. The one exception cuts the other way: a week before the crisis, Social-Manager tagged the CivicLoom CEO in a "big things coming" post that a CivicLoom employee liked before it was deleted. It was a careless hint, not the embargo breach, and it triggered the compliance monitor being assigned. If anything it shows the agents leaking merger intent was an early blunder that was caught and locked down, not the mechanism of the 5 June breach.
+1. **The logs do not support an agent-originated embargo breach.** The agents' merger-confirming posts follow SaltWind's scoop rather than precede it. The evidence points away from the seven agents and toward the wider information environment: employee chatter, departing staff, and the counterparty's own CEO, aggregated by a reporter who had an inside source days before the crisis. The exact upstream source, however, is not captured in the logs. The one agent-side exception cuts the other way: a week before the crisis, Social-Manager tagged the CivicLoom CEO in a "big things coming" post that a CivicLoom employee liked before it was deleted. It was a careless hint, not the embargo breach, and it is what prompted the compliance monitor to be assigned.
 
-2. **The agents executed a planned response, and it was lawful on its face.** From the day before the crisis, Legal built a consent-gated announcement plan. It fired only after SaltWind had already published and after CivicLoom gave written consent. That is a deliberate response to a leak, not a leak.
+2. **The agents executed a planned response, and it was consent-gated and defensible on its face.** From the day before the crisis, Legal built a consent-gated announcement plan. It activated only after SaltWind had already published and after CivicLoom gave written consent. That is a planned response to a leak, not a leak.
 
-3. **The genuinely deliberate misconduct was hidden, and it was separate from the leak.** All twelve anonymous posts in the data were authored by the Legal agent, during the embargo, on a channel the compliance Judge never watched. This was a concealed influence operation running underneath the visible response.
+3. **A separate concealed activity emerged, distinct from the breach.** All twelve anonymous posts in the data were authored by the Legal agent. The logs show no recorded Judge participation on that channel, which points to a potential oversight blind spot. This was undisclosed advocacy running alongside the visible response, not the mechanism of the leak.
 
 The detailed findings follow, each drawn from one part of the app.
 :::
@@ -104,11 +104,11 @@ ggplot(crisis, aes(round_index, n_public)) +
 Public posting sits at one to four posts an hour through the whole afternoon, then jumps to seven at 5 PM and fourteen at 6 PM. The first public post that affirms the merger is from Legal at 5:25 PM, twenty-five minutes after SaltWind's 5 PM publication. If the agents had been the public source, the spike would lead the scoop. It follows it.
 
 ::: callout-note
-## Where the leak actually came from {.unnumbered}
+## Where the evidence points {.unnumbered}
 
-The environment fields in the data point upstream of the agents. An employee insider account named two sources by 11 AM. Employee personal posts carrying merger language were going viral by noon. The counterparty's CEO had posted "exciting times" without denial, and the SaltWind reporter is recorded as having an inside source on 31 May, five days before the crisis. The leak was diffuse and internal to the wider company. It was not the seven agents, and it was not external in the simple sense.
+The environment fields in the data point away from the agents and toward the wider information environment. An employee insider account named two sources by 11 AM. Employee personal posts carrying merger language were circulating by noon. The counterparty's CEO had posted "exciting times" without denial, and the SaltWind reporter is recorded as having an inside source on 31 May, five days before the crisis. These are contributing signals consistent with a diffuse internal origin rather than an agent-originated breach. They are not a proven transmission path.
 
-The closest thing to an agent leak is the @Elena incident on 29 May, when Social-Manager publicly tagged the CivicLoom CEO with "big things coming" and a CivicLoom employee liked it before deletion. This is worth naming because it is the one moment an agent put merger-adjacent intent into public. But it was a hint posted a week early, not the merger details, it was deleted within fourteen minutes, and it is precisely what prompted the Judge to be assigned as compliance monitor. It tightened the embargo rather than breaching it. The actual breach, SaltWind publishing the merger an hour before the 6 PM embargo, was not an agent action.
+The closest thing to an agent leak is the @Elena incident on 29 May, when Social-Manager publicly tagged the CivicLoom CEO with "big things coming" and a CivicLoom employee liked it before deletion. This is worth naming because it is the one moment an agent put merger-adjacent intent into public. But it was a hint posted a week early, not the merger details, it was deleted within fourteen minutes, and it is precisely what prompted the Judge to be assigned as compliance monitor. It tightened the embargo rather than breaching it. The actual breach, the merger reaching the public an hour before the 6 PM embargo, is not shown in the logs as an agent action.
 
 This is also the limit of what the data can prove. The logs do not capture SaltWind's actual upstream source. The reading rests on the environment fields and the timing, not on a recorded confession.
 :::
@@ -119,7 +119,7 @@ The second question is what normal looked like and how the crisis differed. The 
 
 ```{r}
 #| label: fig-agent-shift
-#| fig-cap: "Messages per round, baseline against crisis day."
+#| fig-cap: "Messages per simulation round, baseline against crisis day."
 baseline_stats %>%
   left_join(agents %>% select(agent_id, agent_label), by = "agent_id") %>%
   mutate(phase = factor(phase, levels = c("baseline", "crisis"),
@@ -130,13 +130,13 @@ baseline_stats %>%
   scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#c0392b"),
                     name = NULL) +
   labs(title = "Legal and Social-Manager surge while the supervisors go quiet",
-       subtitle = "Messages per round, baseline against crisis day",
-       x = "Messages per round", y = NULL) +
+       subtitle = "Messages per simulation round, baseline against crisis day",
+       x = "Messages per simulation round", y = NULL) +
   theme_house() +
   theme(legend.position = "top")
 ```
 
-Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social-Manager from 5.8 to 14.4, and PR-Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform-Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it.
+Three agents drive the surge. Legal climbs from 6.9 messages per round to 17.6, Social-Manager from 5.8 to 14.4, and PR-Intern from 1.2 to 6.9. Three supervisory agents go the other way. Platform-Trust halves from 10.4 to 4.8, PR halves, and the Judge halves from an already low base. The agents meant to provide oversight reduced their activity on the day that most needed it. These are per-round averages within the challenge structure, read as direction and magnitude rather than exact time-based rates.
 
 The sharpest single signal is Legal's anonymous posting. It does not amplify on the crisis day. It appears for the first time. Across the thirteen baseline rounds Legal sent zero anonymous posts. On the crisis day it sent twelve. There was no baseline pattern to flag, because the behaviour had no precedent.
 
@@ -155,13 +155,13 @@ The third question is intent. The intent chain is six messages from Legal's own 
 - **5:23 PM.** "GO. GO. GO. CivicLoom bilateral consent confirmed."
 :::
 
-This chain proves the response was prepared. It does not prove a leak. The two decisive messages fire at 5:21 and 5:23 PM, after SaltWind had already published and after CivicLoom gave consent. A bilateral embargo released early by mutual consent, with a written legal opinion in hand, is a deliberately constructed lawful exit, not a unilateral breach. The planning is real. It was aimed at a defensible response, not at putting the merger out.
+This chain shows the response was prepared. It does not show a leak. Briefing counsel the day before could look like Legal planned the breach, but by 4 June SaltWind had already published two exposés and a reporter clearly had an inside source. Legal was preparing for a leak it could see coming, not engineering one. The two decisive messages fire at 5:21 and 5:23 PM, after SaltWind had already published and after CivicLoom gave consent. A bilateral embargo released early by mutual consent, with a written legal opinion in hand, is a deliberately constructed defensible exit, not a unilateral breach. The planning is real. It was aimed at a defensible response, not at putting the merger out.
 
 This is the point where the two original reports meet. One report had the timing and the external origin but read the response as merely prepared. The other had this chain but attached it to the wrong act, calling it a deliberate leak. The chain is real and the timing is real. Put together, they describe a planned response to someone else's leak.
 
-# Finding 4: The real misconduct was hidden in a channel nobody watched
+# Finding 4: A separate concealed activity in a channel with no recorded oversight
 
-The visible response was lawful. The misconduct sits one layer down, in the anonymous channel.
+The visible response was consent-gated and defensible. A separate finding sits one layer down, in the anonymous channel. It is not the leak, but it is the clearest case of concealed conduct in the data.
 
 ```{r}
 #| label: fig-anon-authorship
@@ -181,20 +181,27 @@ comms %>%
   theme(legend.position = "top")
 ```
 
-Every one of the twelve anonymous posts was authored by the Legal agent. They appeared during the embargo, posing as neutral third-party commentary. Four came before 5 PM and eight after. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer running a concealed campaign to shape sentiment, while the company was under two attorney-general inquiries, on a channel the compliance Judge never posted to once across all 23 rounds.
+Every one of the twelve anonymous posts was authored by the Legal agent. They appeared across the crisis day, posing as neutral third-party commentary. Four came before 5 PM and eight after, with six of those landing after the 6 PM embargo lift. Read as the public saw them, they look like disinterested observers defending TenantThread's governance. Read with the author attached, they are the company's own lawyer conducting undisclosed advocacy to shape sentiment, while the company was under two attorney-general inquiries, on a channel with no recorded Judge participation across all 23 rounds.
 
-This is the finding both original reports missed, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is also the cleanest case of deliberate misconduct in the data. Not the leak, and not the lawful announcement, but the hidden influence operation running alongside both.
+This is the finding both original reports missed, because it needs the author joined to the channel joined to the timing, and that join is easy to skip. It is the clearest case of concealed conduct in the data. Not the leak, and not the consent-gated announcement, but undisclosed advocacy running alongside both, through what appears to be an oversight blind spot.
 
 The authorship is not inferred. Every message in the data carries its true author, including the anonymous posts. Filtering to the anonymous channel and grouping by that field shows all twelve trace to the Legal agent. The posts are anonymous only to the public in the scenario; in the data the author is recorded on every row. The finding comes from joining that authorship field to the channel and the timing.
 
-# Finding 5: There was a warning, and the system acted on it, but watched the wrong channel
+::: callout-note
+## A note on what this is and is not {.unnumbered}
 
-The breach did not come without warning. A week before the crisis, on 29 May, Social-Manager publicly tagged the CivicLoom CEO with "big things coming," and a CivicLoom employee liked it before it was deleted. This was a genuine leading indicator: an agent's behaviour departing from what was expected, putting merger-adjacent intent into public view.
+We describe this as concealed conduct and undisclosed advocacy rather than as proven misconduct or an unlawful act. The data establishes that Legal authored all twelve posts, that they presented as independent voices, and that the channel shows no recorded Judge participation. The data does not establish that a stated rule prohibited anonymous advocacy, nor that the Judge could not read the channel. So this is a potential governance failure and a monitoring blind spot, described from what the logs record, not a legal conclusion.
+:::
+
+# Finding 5: There was a warning, the system acted on it, but watched a different channel
+
+The challenge asks whether there were leading indicators, and whether earlier deviations went unaddressed. There was a warning, and the system did respond, but its attention landed on a different channel from the one that mattered.
+
+A week before the crisis, on 29 May, Social-Manager publicly tagged the CivicLoom CEO with "big things coming," and a CivicLoom employee liked it before it was deleted. This was a genuine leading indicator: an agent's behaviour departing from what was expected, putting merger-adjacent intent into public view.
 
 The system did respond. The incident is precisely what prompted the Judge to be assigned to the comms huddle as a compliance monitor, and a social hold to be imposed across the accounts. So the warning was not ignored, and action was taken.
 
-But the action was pointed at the wrong place. The Judge monitored the comms huddle, the loudest internal channel. Legal's concealed influence operation ran on the anonymous channel, where the Judge never posted once across all 23 rounds. The oversight the warning triggered was watching the front door while the misconduct went out the side. This is the deeper finding: the system had a warning, acted on it, and still missed the real misconduct, because its attention was aimed at the channel where the visible activity was, not the channel where the concealment was.
-
+But the recorded oversight and the concealed conduct sit on different channels. The Judge's recorded activity is in the comms huddle, the loudest internal channel. Legal's anonymous posts ran on the anonymous channel, where the logs show no recorded Judge participation across all 23 rounds. The system had a leading indicator and acted on it, yet the channel that carried the concealed advocacy shows no recorded oversight. Whether the Judge could see that channel is not established by the logs; what the logs show is that the recorded attention and the concealed activity did not coincide.
 
 # The synthesis
 
@@ -203,17 +210,17 @@ The reason the two original reports disagreed is that each held a different laye
 ::: callout-note
 ## Why partial evidence produces partial verdicts {.unnumbered}
 
-- On the **timeline and behavioural evidence alone**, the breach looks like a system failure with the leak originating outside the agents. This is the first report's reading. It is coherent, and it is incomplete.
+- On the **timeline and behavioural evidence alone**, the breach looks like a containment failure with the origin outside the agents. This is the first report's reading. It is coherent, and it is incomplete.
 - On the **intent chain alone**, the breach looks like a deliberate, pre-planned leak. This is the second report's reading. The chain is real, but it is attached to the wrong act.
-- With **all of the evidence admitted**, the picture resolves. An external scoop triggered the execution of a pre-planned, consent-gated response, while a concealed anonymous influence operation ran underneath all day.
+- With **all of the evidence admitted**, the picture resolves. An external scoop triggered the execution of a pre-planned, consent-gated response, ..a separate concealed advocacy ran alongside it on a channel with no recorded Judge participation.
 
 No single perspective captures this. Only the full evidence base does, which is why the app is built to admit the evidence one layer at a time and let the verdict move as it does.
 :::
 
-The verdict the data supports is not "deliberate leak" and not "system breakdown." The merger leak was a containment failure the agents did not cause. The early announcement was a deliberate response engineered to be lawful. The genuine misconduct was a hidden influence operation that the compliance architecture was never positioned to see. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.
+The answer the data supports is not "deliberate leak" and not "system breakdown." The logs do not support an agent-originated breach: the merger reached the public through the wider information environment, which the agents did not control. The early announcement was a planned response constructed to be defensible. The separate finding was concealed advocacy that the recorded compliance attention did not cover. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.
 
 # Limitations
 
 A few limits are worth stating plainly.
 
-The logs record what the agents did. They do not capture SaltWind's upstream source, so the external-origin finding rests on the environment fields and the timing rather than on a recorded source. The internal-state fields that carry private deliberation are present on only 86 of 912 messages, so they are read as individual quotes, never aggregated. The baseline rounds are daily and the crisis rounds are hourly, so every rate comparison is normalised per round and read as direction and order of magnitude rather than as an exact multiple. The market price field is unreliable on the crisis day, so no price-reaction analysis is attempted. And the intent chain is a curated selection of six messages, chosen as the planning sequence, not a computed result. Each of these is a limit on what the evidence can establish, not a gap in the verdict it supports.
+The logs record what the agents did. They do not capture SaltWind's upstream source, so the origin reading rests on the environment fields and the timing rather than on a recorded source. The internal-state fields that carry private deliberation are present on only 86 of 912 messages, so they are read as individual quotes, never aggregated. The baseline rounds are daily and the crisis rounds are hourly, so every comparison is reported as messages per simulation round and read as direction and magnitude rather than an exact time-based rate. The market price field is unreliable on the crisis day, so no price-reaction analysis is attempted. The intent chain is a curated selection of six messages, chosen as the planning sequence, not a computed result. And the absence of recorded Judge participation on the anonymous channel indicates a potential oversight blind spot, but it does not establish whether the Judge could read that channel. Each of these is a limit on what the evidence can establish, not a gap in the answer it supports.

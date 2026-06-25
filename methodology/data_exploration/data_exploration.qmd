@@ -9,7 +9,7 @@ execute:
 
 Before building the application, we explored the prepared data to find what was worth investigating. This page is that first pass. It establishes the shape of the conversation, checks the signals we expected to use, and surfaces the patterns that shaped each part of the Shiny application.
 
-The dataset is 912 messages from seven communications agents, across 23 rounds. The first thirteen rounds are a daily baseline from 17 May to 4 June. The last ten are hourly snapshots of the crisis day, 5 June. Six channels carry the messages, three internal and three public. These patterns are what shaped the application.
+The dataset is 912 messages from seven communications agents, across 23 rounds. The first thirteen rounds are a baseline spanning 17 May to 4 June. The last ten are hourly snapshots of the crisis day, 5 June. Six channels carry the messages, three internal and three public. Because the baseline rounds are daily and the crisis rounds hourly, the comparisons that follow are read as direction and magnitude of behavioural change, not as precise time-based rates. These patterns are what shaped the application.
 
 # Setup
 
@@ -85,7 +85,7 @@ The baseline rounds sit at a low, steady level. The crisis day is unmistakably d
 
 # The market signal that broke
 
-We expected the stock price to be a clean market signal. It is not. The baseline prices fall steadily, which is sensible, but the crisis day is full of gaps and one impossible value. The sentiment state, by contrast, stays usable across the whole period.
+We expected the stock price to be a clean market signal. It is not. The baseline prices fall steadily, which is sensible, but the crisis day is full of gaps and one contextually inconsistent value. The sentiment state, by contrast, stays usable across the whole period.
 
 ```{r}
 #| label: fig-sentiment
@@ -115,9 +115,9 @@ round_summary %>%
 ```
 
 ::: callout-note
-## Findings: a signal we had to discard {.unnumbered}
+## Findings: a signal we had to set aside {.unnumbered}
 
-The stock price field carries no value on several crisis-day rounds, including the decisive late-afternoon hours, and one round records a price of 180, which is the distressed-sale figure from the news narrative bleeding into the field. We could not build a price-reaction view on a field that breaks on exactly the day that matters. So no market-data analysis went into the application. Sentiment is the signal that held, and it is shown only as context on the timeline. The verdict rests on communication behaviour, not market data.
+The stock price field carries no value on several crisis-day rounds, including the decisive late-afternoon hours, and one round records a price of 180, the distressed-sale figure from the news narrative bleeding into the field. We could not build a price-reaction view on a field that breaks on exactly the day that matters, so no market-data analysis went into the application. Sentiment is the signal that held, and it is shown only as context on the timeline. The verdict rests on communication behaviour, not market data.
 :::
 
 # Where the conversation lived
@@ -154,7 +154,7 @@ Volume rose, but not evenly. Breaking the change down by agent shows that the su
 
 ```{r}
 #| label: fig-agent
-#| fig-cap: "Messages per round, baseline against crisis, by agent."
+#| fig-cap: "Messages per simulation round, baseline against crisis, by agent."
 baseline_stats %>%
   left_join(agents %>% select(agent_id, agent_label), by = "agent_id") %>%
   mutate(phase = factor(phase, levels = c("baseline", "crisis"),
@@ -165,8 +165,8 @@ baseline_stats %>%
   scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#c0392b"),
                     name = NULL) +
   labs(title = "A few agents surge while the supervisory agents go quiet",
-       subtitle = "Messages per round, baseline against crisis day",
-       x = "Messages per round", y = NULL) +
+       subtitle = "Messages per simulation round, baseline against crisis day",
+       x = "Messages per simulation round", y = NULL) +
   theme_house() +
   theme(legend.position = "top")
 ```
@@ -179,7 +179,7 @@ Legal and Social-Manager climb sharply, and PR-Intern jumps from a low base. At 
 
 # The network, before and after
 
-Volume and direction describe individual agents. The last exploratory question is structural: who was talking to whom, and did that structure change under crisis. We build a directed reply network for each phase from the prepared edge table.
+Volume and direction describe individual agents. The next exploratory question is structural: who was talking to whom, and did that structure change under crisis. We build a directed reply network for each phase from the prepared edge table.
 
 ```{r}
 #| label: fig-network
@@ -257,12 +257,12 @@ ggplot(channel_levels, aes(x = n, y = reorder(channel, n), fill = channel_type))
 ::: callout-note
 ## Findings
 
-The internal comms huddle alone carries 476 of the 912 messages, with one-on-one chats and side huddles making up most of the rest. The three public channels together, the personal post, official post, and anonymous post, account for only a small fraction of the total. The anonymous channel, which turns out to matter most, is the smallest of all at just twelve messages. The signal that breaks the case is not loud; it is the quietest channel in the data.
+The internal comms huddle alone carries 476 of the 912 messages, with one-on-one chats and side huddles making up most of the rest. The three public channels together, the personal post, official post, and anonymous post, account for only a small fraction of the total. The anonymous channel, which turns out to matter most, is the smallest of all at just twelve messages. The quietest channel produces the investigation's most unexpected secondary finding.
 :::
 
-# When the anonymous campaign ran
+# When the anonymous posts appeared
 
-The anonymous channel is small but decisive. Plotting when those twelve posts appeared, rather than just how many there were, shows that the anonymous activity was not spread evenly. It concentrated around the moment the story broke.
+The anonymous channel is small but later becomes analytically important. Plotting when those twelve posts appeared., rather than just how many there were, shows that the anonymous activity was not spread evenly. It concentrated around the moment the story broke and continued past the embargo lift.
 
 ```{r}
 #| label: fig-anontiming
@@ -290,7 +290,7 @@ ggplot(anon_timing, aes(x = round_index, y = n, fill = window)) +
 ::: callout-note
 ## Findings
 
-Of the twelve anonymous posts, four appear before SaltWind publishes at 5 PM and eight appear after. The campaign is not a single burst; it runs through the afternoon and then intensifies once the merger is public. Read alongside the authorship finding, where every one of these posts traces to Legal, the timing shows a sustained effort to shape public perception that escalates at exactly the moment the company comes under public scrutiny.
+Of the twelve anonymous posts, four appear before SaltWind publishes at 5 PM and eight appear after, with six of those landing after the 6 PM embargo lift. The activity is not a single burst; it runs through the afternoon and continues into the evening. Read alongside the authorship view in the application, the timing shows a sustained effort to shape public perception that escalates at exactly the moment the company comes under public scrutiny.
 :::
 
 # What we also checked: message types
@@ -313,7 +313,7 @@ comms %>%
            width = 0.7, fill = "#c0392b") +
   geom_text(aes(label = n), hjust = -0.2, size = 4, color = "grey30") +
   scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
-  labs(title = "Message type is dominated by routine broadcasts and does not single out the crisis",
+  labs(title = "Message type largely echoes the channel split and adds little",
        subtitle = "Messages by type, public posts highlighted",
        x = "Messages", y = NULL) +
   theme_house() +
@@ -323,12 +323,12 @@ comms %>%
 ::: callout-note
 ## Findings
 
-Broadcasts and one-on-one chats make up the bulk of the traffic, with public posts a small share highlighted here in red. Message type tracks the internal-versus-public split we already had and adds little beyond it. We checked whether any single message type concentrated on the crisis day in a way that would flag the breach, and none did. We record it here because a thorough exploration should show the variables that did not discriminate as well as the ones that did. The signal in this dataset is in who spoke, on which channel, and when, not in the message type field.
+Broadcasts and one-on-one chats make up the bulk of the traffic, with public posts a small share highlighted here in red. Across the full dataset, message type largely reproduces the internal-versus-public distinction already captured by channel type, and adds limited explanatory value beyond it. We record it here because a thorough exploration should show the variables that added little as well as the ones that discriminated. The signal in this dataset is in who spoke, on which channel, and when, not in the message type field.
 :::
 
 
 # Where this led
 
-The first pass surfaced a clear set of facts. There is one unmistakable anomaly, the crisis day. There is a boundary that matters, internal against public, that the agents crossed only late in the day. The surge was driven by a few agents while oversight receded, and the reply structure reorganised around Legal. We also found one dead end: the price field was too broken to use, so the project leans on communication data throughout.
+The first pass surfaced a clear set of facts. There is one unmistakable anomaly, the crisis day. There is a boundary that matters, internal against public, that the agents crossed only late in the day. The surge was driven by a few agents while oversight receded, and the reply structure reorganised around Legal. We also found one dead end: the price field was too unreliable to use, so the project leans on communication data throughout.
 
-What exploration could not settle is intent. Volume, channels, and structure show what happened, but not why, and not who was really behind the public messaging. Those questions, the planning behind the response and the true authorship of the anonymous posts, are what the application's later modules and the Findings page take up.
+What exploration could not settle is intent. Volume, channels, and structure show what happened, but not why, and not who was really behind the public messaging. Those questions, the planning behind the response and the recorded authorship of the anonymous posts, are what the application's later modules and the Findings page take up.
