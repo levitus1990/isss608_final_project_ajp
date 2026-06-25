@@ -265,6 +265,9 @@ ui <- navbarPage(
         div(class = "verdict-card",
             p(class = "verdict-q", "Was there deliberate misconduct by the agents?"),
             uiOutput("v_misconduct")),
+        div(class = "verdict-card",
+            p(class = "verdict-q", "Were there warning signs, and why did oversight miss it?"),
+            uiOutput("v_warning")),
         div(class = "layer-box", uiOutput("v_interpretation"))
       )
     )
@@ -574,6 +577,18 @@ server <- function(input, output, session) {
       tagList(p(class = "verdict-a bad", "Yes, but not where the leak hunt would look."),
               p(class = "verdict-note",
                 "The planned announcement was lawful: consent-gated, fired only after the scoop and after consent. The deliberate misconduct is separate and hidden, a concealed anonymous influence operation run by Legal all day on a channel no one watched."))
+    }
+  })
+  
+  output$v_warning <- renderUI({
+    L <- layers()
+    if (!any(L)) {
+      tagList(p(class = "verdict-a", "Admit evidence to assess"),
+              p(class = "verdict-note", "The warning signs become clear once the behavioural and authorship layers are admitted."))
+    } else {
+      tagList(p(class = "verdict-a", "Yes. The warning was acted on, but the wrong channel was watched."),
+              p(class = "verdict-note",
+                "A week before the crisis, an agent publicly tagged the counterparty CEO. That slip is what prompted the Judge to be assigned as compliance monitor. But the Judge watched the comms huddle, the loudest channel, while Legal's concealed operation ran on the anonymous channel the Judge never posted to once. The system had a leading indicator, acted on it, and still missed the misconduct because oversight was aimed at the wrong place."))
     }
   })
   
