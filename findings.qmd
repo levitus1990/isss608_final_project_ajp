@@ -103,6 +103,66 @@ ggplot(crisis, aes(round_index, n_public)) +
 
 Public posting sits at one to four posts an hour through the whole afternoon, then jumps to seven at 5 PM and fourteen at 6 PM. The first public post that affirms the merger is from Legal at 5:25 PM, twenty-five minutes after SaltWind's 5 PM publication. If the agents had been the public source, the spike would lead the scoop. It follows it.
 
+```{r}
+#| label: fig-timeline
+#| fig-cap: "The decisive sequence on the crisis day, in order."
+#| fig-width: 11
+#| fig-height: 3.6
+events <- tribble(
+  ~pos, ~time_chr,  ~label,                  ~actor,      ~side,
+  1,    "5:00 PM",  "SaltWind publishes",    "External",   1,
+  2,    "5:21 PM",  "CivicLoom consent",     "Consent",   -1,
+  3,    "5:23 PM",  "Legal: GO. GO. GO.",    "Internal",   1,
+  4,    "5:25 PM",  "First agent post",      "Public",    -1,
+  5,    "6:00 PM",  "Embargo lifts",         "System",     1
+) %>%
+  mutate(actor = factor(actor,
+           levels = c("External","Consent","Internal","Public","System")))
+
+actor_cols <- c("External"="#c0392b","Consent"="#2471a3",
+                "Internal"="#6a4c93","Public"="#1a3a6b","System"="#7f8c8d")
+
+ggplot(events, aes(x = pos, y = 0)) +
+  # connecting spine
+  geom_segment(x = 1, xend = 5, y = 0, yend = 0,
+               color = "#d0d7de", linewidth = 1.4) +
+  # little stems from spine to each label block
+  geom_segment(aes(x = pos, xend = pos, y = 0, yend = side * 0.28,
+                   color = actor), linewidth = 0.7, show.legend = FALSE) +
+  # the dots
+  geom_point(aes(color = actor), size = 6) +
+  geom_point(color = "white", size = 2) +
+  # time (bold, nearest the stem)
+  geom_text(aes(y = side * 0.42, label = time_chr, color = actor),
+            fontface = "bold", size = 4.2, show.legend = FALSE,
+            vjust = ifelse(events$side > 0, 0, 1)) +
+  # event label (under the time)
+  geom_text(aes(y = side * 0.62, label = label),
+            size = 3.5, color = "#3a3a3a",
+            vjust = ifelse(events$side > 0, 0, 1)) +
+  scale_color_manual(values = actor_cols, name = NULL) +
+  scale_x_continuous(limits = c(0.6, 5.4), expand = c(0,0)) +
+  scale_y_continuous(limits = c(-0.95, 0.95), expand = c(0,0)) +
+  labs(title = "The agents' public response follows the scoop, it does not precede it",
+       subtitle = "The decisive sequence on 5 June 2046") +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", size = 14),
+    plot.subtitle = element_text(color = "grey40", margin = margin(b = 18)),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    legend.text = element_text(size = 11),
+    plot.margin = margin(14, 18, 10, 18)
+  )
+```
+
+The hour resolves the sequence at minute-level precision. SaltWind's scoop at 5:00 PM comes first. CivicLoom's written consent follows at 5:21, Legal's trigger at 5:23, and the first merger-confirming agent post at 5:25, twenty-five minutes after the story was already public. The embargo then lifts at 6:00. Every agent action in the chain follows the external scoop rather than leading it, which is the core of the primary finding.
+
+
+
+
 ::: callout-note
 ## Where the evidence points {.unnumbered}
 
