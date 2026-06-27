@@ -5,6 +5,15 @@
 #   Tab 3  The Intent  (Module 3): intent chain and anonymous reveal
 #   Tab 4  The Verdict (Module 4): evidence-layer toggles and readouts
 # Data: .rds files produced by data_prep.R (in ./data/)
+#
+# COLOUR DISCIPLINE (Tier 1 pass):
+#   navy   #243447 / #2d3e50  structure, navigation, "current time"
+#   neutral #b8c4d0 / #9aa7b4  baseline, ordinary agents
+#   amber  #d47a22            suspicion / activity / crisis / person-of-interest
+#   green  #2e7d6e            cleared / post-consent / resolved evidence
+#   blue   #3678a8            reduced activity / downward movement
+#   red    #c0392b            reserved: actual leak / breach events only
+# No plot logic or copy was changed in this pass; colours only.
 # =====================================================================
 
 library(shiny)
@@ -71,31 +80,58 @@ theme_house <- function() {
 }
 
 app_css <- HTML("
-  body { background:#fafafa; }
+  body { background:#f5f7f9; color:#243447;
+         font-family:'Segoe UI', Arial, sans-serif; }
   .app-sub { color:#777; margin-bottom:18px; }
+
+  /* ---- outer shell: navy navbar ---- */
+  .navbar { background:#243447 !important; border:none; border-radius:0;
+            box-shadow:0 1px 4px rgba(0,0,0,0.12); }
+  .navbar-default .navbar-brand,
+  .navbar-default .navbar-nav > li > a { color:#eaf0f5 !important; }
+  .navbar-default .navbar-brand { font-weight:700; letter-spacing:.01em; }
+  .navbar-default .navbar-nav > li > a:hover { color:#ffffff !important; }
+  .navbar-default .navbar-nav > .active > a,
+  .navbar-default .navbar-nav > .active > a:hover,
+  .navbar-default .navbar-nav > .active > a:focus {
+    background:#ffffff !important; color:#243447 !important;
+    border-bottom:3px solid #d47a22; font-weight:600; }
+  .well { background:#ffffff; border:1px solid #e1e6eb;
+          box-shadow:none; border-radius:10px; }
+
+  /* ---- module header band (case-file section header) ---- */
+  .mod-band { background:#243447; color:#fff; border-radius:8px 8px 0 0;
+              padding:10px 16px; margin:4px 0 0; font-weight:700;
+              letter-spacing:.02em; font-size:15px; }
+  .mod-band .mod-no { color:#9fb0c2; font-weight:700; margin-right:8px; }
+
   .metric-card { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
                  padding:16px 18px; text-align:center; height:100%; }
   .metric-label { font-size:12px; color:#888; margin:0; }
-  .metric-val   { font-size:24px; font-weight:700; margin:4px 0 0; color:#2d3e50; }
+  .metric-val   { font-size:24px; font-weight:700; margin:4px 0 0; color:#243447; }
   .metric-shift { font-size:12px; margin-top:4px; }
-  .up { color:#c0392b; } .down { color:#2471a3; } .flat { color:#888; }
+  .up { color:#d47a22; } .down { color:#3678a8; } .flat { color:#8b97a6; }
 
   /* Module 1 */
-  .now-pill { display:inline-block; background:#2d3e50; color:#fff; border-radius:20px;
+  .now-pill { display:inline-block; background:#243447; color:#fff; border-radius:20px;
               padding:4px 14px; font-size:13px; font-weight:600; }
   .pin-row { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
   .pin { font-size:12px; padding:5px 11px; border-radius:18px; border:1px solid #e0e0e0;
          background:#fff; color:#aaa; }
   .pin.past { background:#eef2f6; color:#555; border-color:#d6e0ea; }
-  .pin.now  { background:#c0392b; color:#fff; border-color:#c0392b; font-weight:700; }
+  /* current time is navy (structural), not red */
+  .pin.now  { background:#243447; color:#fff; border-color:#243447; font-weight:700; }
+  /* red is reserved for an actual leak event */
+  .pin.now.leak { background:#c0392b; color:#fff; border-color:#c0392b; }
   .pin.leak.past { background:#fde7e2; color:#a8452a; border-color:#f1c9bb; }
   .feed-msg { background:#fff; border:1px solid #ececec; border-radius:7px;
               padding:9px 12px; margin-bottom:7px; }
-  .feed-who { font-size:11px; color:#2d3e50; font-weight:600; }
+  .feed-who { font-size:11px; color:#243447; font-weight:600; }
   .feed-ch  { font-size:10px; color:#aaa; }
   .feed-txt { font-size:12.5px; color:#444; margin-top:3px; line-height:1.4; }
-  .feed-txt.pub { border-left:3px solid #c0392b; padding-left:8px; }
-  .prior-card { background:#fff7ed; border:1px solid #fed7aa; border-left:4px solid #ea8a4b;
+  /* public posts: amber accent (notable channel), not leak-red */
+  .feed-txt.pub { border-left:3px solid #d47a22; padding-left:8px; }
+  .prior-card { background:#fff7ed; border:1px solid #fed7aa; border-left:4px solid #d47a22;
                 border-radius:8px; padding:12px 16px; margin-top:6px; }
   .prior-title { font-size:13px; font-weight:700; color:#9a4a13; letter-spacing:.02em; }
   .prior-body { font-size:12.5px; color:#5b4636; margin-top:6px; line-height:1.5; }
@@ -103,32 +139,39 @@ app_css <- HTML("
   /* Module 3 */
   .chain-card { background:#fff; border:1px solid #e6e6e6; border-left:4px solid #b8c4d0;
                 border-radius:8px; padding:14px 18px; margin-bottom:12px; }
-  .chain-card.late { border-left-color:#c0392b; }
+  /* post-consent steps are cleared/resolved evidence: green, not red */
+  .chain-card.cleared { border-left-color:#2e7d6e; background:#f3faf7; }
   .chain-step { font-size:12px; color:#999; font-weight:700; letter-spacing:.05em; }
-  .chain-headline { font-size:16px; font-weight:700; color:#2d3e50; margin:4px 0 6px; }
+  .chain-headline { font-size:16px; font-weight:700; color:#243447; margin:4px 0 6px; }
   .chain-tag { font-size:12px; color:#666; margin-bottom:8px; }
-  .chain-tag.late { color:#c0392b; font-weight:600; }
+  .chain-tag.cleared { color:#2e7d6e; font-weight:700; }
   .chain-meta { font-size:11px; color:#aaa; margin-bottom:8px; }
   .chain-body { font-size:13px; color:#444; white-space:pre-wrap; line-height:1.5; }
   .anon-card { background:#fff; border:1px solid #e6e6e6; border-radius:8px;
                padding:12px 14px; margin-bottom:10px; }
   .anon-body { font-size:12.5px; color:#444; line-height:1.45; }
   .anon-auth { font-size:11px; color:#999; margin-top:8px; font-style:italic; }
-  .anon-auth.revealed { color:#c0392b; font-weight:700; font-style:normal; }
+  /* reveal of concealed authorship: amber (suspicion/concealed conduct), not leak-red */
+  .anon-auth.revealed { color:#d47a22; font-weight:700; font-style:normal; }
+
+  /* amber reveal button */
+  .btn-reveal { background:#d47a22; border-color:#d47a22; color:#fff; }
+  .btn-reveal:hover, .btn-reveal:focus, .btn-reveal:active {
+    background:#b86415; border-color:#b86415; color:#fff; }
 
   /* Module 4 */
   .layer-box { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
                padding:16px 18px; margin-bottom:16px; }
   .verdict-card { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
                   padding:18px 20px; margin-bottom:14px; }
-  .verdict-card.secondary { border-left:4px solid #ea8a4b; }
+  .verdict-card.secondary { border-left:4px solid #d47a22; }
   .verdict-q { font-size:13px; color:#888; margin:0 0 6px; }
   .verdict-tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em;
                  padding:2px 8px; border-radius:12px; margin-bottom:8px; }
-  .verdict-tag.primary { background:#eef2f6; color:#2d3e50; }
-  .verdict-tag.second  { background:#fff2e6; color:#9a4a13; }
-  .verdict-a { font-size:19px; font-weight:700; color:#2d3e50; margin:0; line-height:1.3; }
-  .verdict-a.bad { color:#c0392b; }
+  .verdict-tag.primary { background:#eef2f6; color:#243447; }
+  .verdict-tag.second  { background:#fbeede; color:#9a4a13; }
+  .verdict-a { font-size:19px; font-weight:700; color:#243447; margin:0; line-height:1.3; }
+  .verdict-a.bad { color:#d47a22; }
   .verdict-note { font-size:12px; color:#777; margin-top:6px; }
   .report-tag { display:inline-block; font-size:11px; padding:3px 9px; border-radius:20px;
                 background:#eef2f6; color:#555; margin-top:8px; }
@@ -143,8 +186,9 @@ ui <- navbarPage(
   # ===== TAB 1: THE DAY (scrubber) =====
   tabPanel(
     "The Day",
+    div(class = "mod-band", span(class = "mod-no", "MODULE 1"), "THE DAY"),
     div(class = "app-sub",
-        "Module 1. Drag through the timeline and watch the crisis day unfold."),
+        "Drag through the timeline and watch the crisis day unfold."),
     sliderInput("rnd", NULL, min = 0, max = 22, value = 15, step = 1,
                 width = "100%", ticks = FALSE,
                 animate = animationOptions(interval = 900)),
@@ -165,10 +209,11 @@ ui <- navbarPage(
     )
   ),
   
-  # ===== TAB 2: THE NORM =====
+  # ===== TAB 2: THE BASELINE =====
   tabPanel(
-    "The Norm",
-    div(class = "app-sub", "Module 2. Baseline behaviour against the crisis day."),
+    "The Baseline",
+    div(class = "mod-band", span(class = "mod-no", "MODULE 2"), "THE BASELINE"),
+    div(class = "app-sub", "Baseline behaviour against the crisis day."),
     sidebarLayout(
       sidebarPanel(
         width = 3,
@@ -222,10 +267,11 @@ ui <- navbarPage(
     )
   ),
   
-  # ===== TAB 3: THE INTENT =====
+  # ===== TAB 3: THE TRAIL =====
   tabPanel(
-    "The Intent",
-    div(class = "app-sub", "Module 3. The planned response, and who was really posting."),
+    "The Trail",
+    div(class = "mod-band", span(class = "mod-no", "MODULE 3"), "THE TRAIL"),
+    div(class = "app-sub", "The planned response, and who was really posting."),
     fluidRow(
       column(6,
              h4("The intent chain"),
@@ -242,7 +288,7 @@ ui <- navbarPage(
                "commentary across the crisis day. Who actually wrote them?"),
              div(style = "margin-bottom:12px;",
                  actionButton("reveal_btn", "Reveal authors",
-                              class = "btn-danger", icon = icon("eye")),
+                              class = "btn-reveal", icon = icon("eye")),
                  actionButton("reset_btn", "Reset", icon = icon("rotate-left"))),
              uiOutput("anon_cards"))
     )
@@ -251,8 +297,9 @@ ui <- navbarPage(
   # ===== TAB 4: THE VERDICT =====
   tabPanel(
     "The Verdict",
+    div(class = "mod-band", span(class = "mod-no", "MODULE 4"), "THE VERDICT"),
     div(class = "app-sub",
-        "Module 4. Admit each layer of evidence and watch the answer take shape."),
+        "Admit each layer of evidence and watch the answer take shape."),
     sidebarLayout(
       sidebarPanel(
         width = 4,
@@ -311,7 +358,7 @@ server <- function(input, output, session) {
       e <- event_pins[i, ]
       same_hour <- abs(as.numeric(difftime(e$ts, now_ts, units = "mins"))) < 30
       is_past <- e$ts <= now_ts
-      cls <- if (same_hour) "pin now"
+      cls <- if (same_hour) paste("pin now", if (e$type == "leak") "leak" else "")
       else if (is_past) paste("pin past", if (e$type == "leak") "leak" else "")
       else "pin"
       span(class = cls, paste0(format(e$ts, "%H:%M"), " · ", e$label))
@@ -325,12 +372,12 @@ server <- function(input, output, session) {
       mutate(state = if_else(round_index <= cr, "elapsed", "ahead"))
     ggplot(rs, aes(round_index, n_msgs, fill = state)) +
       geom_col(width = 0.8) +
-      geom_vline(xintercept = cr, color = "#2d3e50", linewidth = 1) +
+      geom_vline(xintercept = cr, color = "#243447", linewidth = 1) +
       geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey60") +
       annotate("text", x = 12.5, y = max(rs$n_msgs),
                label = "crisis day", hjust = -0.05, vjust = 1,
                size = 3.3, color = "grey45") +
-      scale_fill_manual(values = c("elapsed" = "#2d3e50", "ahead" = "#dfe4e9"),
+      scale_fill_manual(values = c("elapsed" = "#243447", "ahead" = "#e6ebf0"),
                         guide = "none") +
       scale_x_continuous(breaks = seq(0, 22, 2)) +
       labs(title = "Message volume across the timeline",
@@ -376,15 +423,21 @@ server <- function(input, output, session) {
     sent <- comms %>% filter(round_index == cr) %>% count(agent_id, name = "n")
     nodes <- net_nodes %>%
       left_join(sent, by = c("id" = "agent_id")) %>%
-      mutate(value = ifelse(is.na(n), 1, n + 2),
-             color = ifelse(id == "legal_agent", "#c0392b", "#9aa7b4"))
+      mutate(
+        value = ifelse(is.na(n), 1, n + 2),
+        # Legal is the person of interest (amber), not the culprit (red).
+        # Ordinary agents stay neutral grey. Darker border on Legal for emphasis.
+        color.background = ifelse(id == "legal_agent", "#d47a22", "#a8b3bf"),
+        color.border     = ifelse(id == "legal_agent", "#8c4d0c", "#718096"),
+        borderWidth      = ifelse(id == "legal_agent", 3, 1)
+      )
     
     edges <- if (nrow(e) == 0) {
       data.frame(from = character(0), to = character(0), value = numeric(0))
     } else e
     
     visNetwork(nodes, edges) %>%
-      visNodes(font = list(size = 16), borderWidth = 1) %>%
+      visNodes(font = list(size = 16)) %>%
       visEdges(arrows = "to", color = list(color = "#b8c4d0", opacity = 0.7),
                smooth = FALSE) %>%
       visIgraphLayout(layout = "layout_in_circle", randomSeed = 42) %>%
@@ -446,7 +499,8 @@ server <- function(input, output, session) {
       geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
       annotate("text", x = 12.5, y = max(z$z, na.rm = TRUE),
                label = "crisis begins", hjust = 1.05, vjust = 1, size = 3.4, color = "grey40") +
-      scale_fill_manual(values = c("FALSE"="#b8c4d0","TRUE"="#c0392b"), guide = "none") +
+      # crisis bars amber (heightened activity), baseline neutral grey
+      scale_fill_manual(values = c("FALSE"="#b8c4d0","TRUE"="#d47a22"), guide = "none") +
       scale_x_continuous(breaks = seq(0, 22, 2)) +
       labs(title = paste0(lbl, ": message volume anomaly by round"),
            subtitle = "Baseline standard deviations from this agent's own baseline mean",
@@ -469,7 +523,8 @@ server <- function(input, output, session) {
         agent_label = reorder(agent_label, crisis)
       )
     
-    dir_cols <- c("Surged" = "#c0392b", "Reduced activity" = "#2471a3", "Little change" = "#9aa7b4")
+    # Surged = amber (activity, not guilt); Reduced = blue; flat = grey
+    dir_cols <- c("Surged" = "#d47a22", "Reduced activity" = "#3678a8", "Little change" = "#9aa7b4")
     
     ggplot(dumb, aes(y = agent_label)) +
       geom_segment(aes(x = baseline, xend = crisis,
@@ -513,10 +568,12 @@ server <- function(input, output, session) {
     
     tbl %>%
       gt() %>%
+      # sparkline: navy line, amber crisis-region marker (activity, not guilt)
       gt_plt_sparkline(Trajectory, type = "shaded", same_limit = FALSE,
                        label = FALSE,
-                       palette = c("#2d3e50", "transparent", "transparent", "#c0392b", "transparent")) %>%
-      gt_color_rows(columns = Change, palette = c("#2471a3", "#f4f4f4", "#c0392b"),
+                       palette = c("#243447", "transparent", "transparent", "#d47a22", "transparent")) %>%
+      # diverging heat: blue (reduced) -> neutral -> amber (increased)
+      gt_color_rows(columns = Change, palette = c("#3678a8", "#f4f4f4", "#d47a22"),
                     domain = c(-6, 11)) %>%
       cols_label(Change = "Net change / rd", Trajectory = "All 23 rounds") %>%
       fmt_number(columns = Change, decimals = 1, force_sign = TRUE) %>%
@@ -530,11 +587,12 @@ server <- function(input, output, session) {
   output$chain_cards <- renderUI({
     cards <- lapply(seq_len(nrow(intent_chain)), function(i) {
       row <- intent_chain[i, ]; mid <- row$message_id
-      late <- mid %in% c("20460605_21_022", "20460605_21_024")
-      div(class = paste("chain-card", if (late) "late" else ""),
+      # post-consent steps: cleared/resolved evidence (green), not incriminating (red)
+      cleared <- mid %in% c("20460605_21_022", "20460605_21_024")
+      div(class = paste("chain-card", if (cleared) "cleared" else ""),
           div(class = "chain-step", paste0("STEP ", row$step, " OF 6")),
           div(class = "chain-headline", chain_headline[[mid]] %||% ""),
-          div(class = paste("chain-tag", if (late) "late" else ""), chain_tag[[mid]] %||% ""),
+          div(class = paste("chain-tag", if (cleared) "cleared" else ""), chain_tag[[mid]] %||% ""),
           div(class = "chain-meta",
               paste0(row$agent_label, "  ·  ", row$channel, "  ·  ", row$timestamp)),
           div(class = "chain-body", row$content))

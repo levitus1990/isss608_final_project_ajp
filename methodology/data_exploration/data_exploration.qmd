@@ -65,14 +65,14 @@ The first question is simply what the data looks like over time. Message volume 
 ggplot(round_summary, aes(round_index, n_msgs)) +
   geom_col(width = 0.8, fill = "#b8c4d0") +
   geom_col(data = filter(round_summary, round_index >= 13),
-           width = 0.8, fill = "#c0392b") +
+           width = 0.8, fill = "#d47a22") +
   geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
   annotate("text", x = 12.3, y = max(round_summary$n_msgs) * 0.95,
            label = "crisis day begins", hjust = 1.05, vjust = 1,
            size = 3.3, color = "grey45")  +
   scale_x_continuous(breaks = seq(0, 22, 2)) +
   labs(title = "Activity is flat through the baseline, then explodes on the crisis day",
-       subtitle = "Total messages per round. Baseline in grey, crisis day in red.",
+       subtitle = "Total messages per round. Baseline in grey, crisis day in amber.",
        x = "Round", y = "Messages") +
   theme_house()
 ```
@@ -80,7 +80,7 @@ ggplot(round_summary, aes(round_index, n_msgs)) +
 ::: callout-note
 ## Findings {.unnumbered}
 
-The baseline rounds sit at a low, steady level. The crisis day is unmistakably different, several times the baseline volume. This single anomaly is what the rest of the analysis is about, and it is what the application's timeline view lets you replay hour by hour.
+The baseline rounds sit at a low, steady level. The crisis day is unmistakably different, several times the baseline volume. This single anomaly is what the rest of the analysis is about, and it is what **The Day** lets you replay hour by hour.
 :::
 
 # The market signal that broke
@@ -106,7 +106,7 @@ round_summary %>%
   geom_line(color = "#b8c4d0", linewidth = 1) +
   geom_point(aes(color = round_index >= 13), size = 3) +
   geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
-  scale_color_manual(values = c("FALSE" = "#b8c4d0", "TRUE" = "#c0392b"), guide = "none") +
+  scale_color_manual(values = c("FALSE" = "#b8c4d0", "TRUE" = "#d47a22"), guide = "none") +
   scale_x_continuous(breaks = seq(0, 22, 2)) +
   labs(title = "Market sentiment darkens steadily, then turns critical on the crisis day",
        subtitle = "Sentiment state per round. The price field, by contrast, was unusable.",
@@ -117,7 +117,7 @@ round_summary %>%
 ::: callout-note
 ## Findings: a signal we had to set aside {.unnumbered}
 
-The stock price field carries no value on several crisis-day rounds, including the decisive late-afternoon hours, and one round records a price of 180, the distressed-sale figure from the news narrative bleeding into the field. We could not build a price-reaction view on a field that breaks on exactly the day that matters, so no market-data analysis went into the application. Sentiment is the signal that held, and it is shown only as context on the timeline. The verdict rests on communication behaviour, not market data.
+The stock price field carries no value on several crisis-day rounds, including the decisive late-afternoon hours, and one round records a price of 180, the distressed-sale figure from the news narrative bleeding into the field. We could not build a price-reaction view on a field that breaks on exactly the day that matters, so no market-data analysis went into the application. Sentiment is the signal that held, and it is shown only as context in **The Day**. The verdict rests on communication behaviour, not market data.
 :::
 
 # Where the conversation lived
@@ -132,7 +132,7 @@ comms %>%
   ggplot(aes(round_index, n, fill = channel_type)) +
   geom_col(width = 0.8) +
   geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey50") +
-  scale_fill_manual(values = c("Internal" = "#b8c4d0", "Public" = "#c0392b"),
+  scale_fill_manual(values = c("Internal" = "#b8c4d0", "Public" = "#243447"),
                     name = NULL) +
   scale_x_continuous(breaks = seq(0, 22, 2)) +
   labs(title = "The conversation is overwhelmingly internal until the crisis day",
@@ -162,7 +162,7 @@ baseline_stats %>%
   ggplot(aes(x = msgs_per_round, y = reorder(agent_label, msgs_per_round),
              fill = phase)) +
   geom_col(position = "dodge", width = 0.7) +
-  scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#c0392b"),
+  scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#d47a22"),
                     name = NULL) +
   labs(title = "A few agents surge while the supervisory agents go quiet",
        subtitle = "Messages per simulation round, baseline against crisis day",
@@ -174,7 +174,7 @@ baseline_stats %>%
 ::: callout-note
 ## Findings {.unnumbered}
 
-Legal and Social-Manager climb sharply, and PR-Intern jumps from a low base. At the same time the supervisory agents reduce their activity, with Platform-Trust dropping most. The agents meant to provide oversight got quieter on the day that most needed them. This split is the observation that the application's behavioural module measures precisely, agent by agent, against each one's own baseline.
+Legal and Social-Manager climb sharply, and PR-Intern jumps from a low base. At the same time the supervisory agents reduce their activity, with Platform-Trust dropping most. The agents meant to provide oversight got quieter on the day that most needed them. This split is the observation that **The Baseline** measures precisely, agent by agent, against each one's own baseline.
 :::
 
 # The network, before and after
@@ -211,7 +211,9 @@ plot_net <- function(g, title) {
     geom_node_text(aes(label = label), size = 2.8, repel = TRUE, color = "grey25") +
     scale_edge_width(range = c(0.3, 2.5), guide = "none") +
     scale_size(range = c(3, 10), guide = "none") +
-    scale_color_manual(values = c("FALSE" = "#9aa7b4", "TRUE" = "#c0392b"), guide = "none") +
+    # Legal is the person of interest (amber), not the culprit. Ordinary
+    # agents stay neutral grey.
+    scale_color_manual(values = c("FALSE" = "#9aa7b4", "TRUE" = "#d47a22"), guide = "none") +
     labs(title = title) +
     theme_void() +
     theme(plot.title = element_text(face = "bold", size = 13, hjust = 0.5,
@@ -226,7 +228,7 @@ plot_net(g_base, "Baseline") + plot_net(g_crisis, "Crisis day")
 ::: callout-note
 ## Findings {.unnumbered}
 
-In the baseline the reply structure is sparse and fairly even. On the crisis day the traffic thickens and tightens around Legal, shown in red, who becomes the busiest node by reply volume. The structure does not just get louder, it reorganises around one agent. The application's timeline carries an interactive version of this network, redrawn for each round.
+In the baseline the reply structure is sparse and fairly even. On the crisis day the traffic thickens and tightens around Legal, highlighted in amber, who becomes the busiest node by reply volume. The structure does not just get louder, it reorganises around one agent. **The Day** carries an interactive version of this network, redrawn for each round.
 :::
 
 
@@ -236,7 +238,7 @@ The internal-versus-public split is the headline, but the data carries six disti
 
 ```{r}
 #| label: fig-channels6
-#| fig-cap: "Total messages per channel across all 23 rounds, internal in grey and public in red."
+#| fig-cap: "Total messages per channel across all 23 rounds, internal in grey and public in navy."
 channel_levels <- comms %>%
   count(channel, channel_type, name = "n") %>%
   arrange(n)
@@ -244,9 +246,9 @@ channel_levels <- comms %>%
 ggplot(channel_levels, aes(x = n, y = reorder(channel, n), fill = channel_type)) +
   geom_col(width = 0.7) +
   geom_text(aes(label = n), hjust = -0.2, size = 4, color = "grey30") +
-  scale_fill_manual(values = c("Internal" = "#b8c4d0", "Public" = "#c0392b"), name = NULL) +
+  scale_fill_manual(values = c("Internal" = "#b8c4d0", "Public" = "#243447"), name = NULL) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
-  labs(title = "Three internal channels carry almost everything; the public channels are tiny",
+  labs(title = "Three internal channels carry almost everything",
        subtitle = "Total messages per channel, internal against public",
        x = "Messages", y = NULL) +
   theme_house() +
@@ -262,7 +264,7 @@ The internal comms huddle alone carries 476 of the 912 messages, with one-on-one
 
 # When the anonymous posts appeared
 
-The anonymous channel is small but later becomes analytically important. Plotting when those twelve posts appeared., rather than just how many there were, shows that the anonymous activity was not spread evenly. It concentrated around the moment the story broke and continued past the embargo lift.
+The anonymous channel is small but later becomes analytically important. Plotting when those twelve posts appeared, rather than just how many there were, shows that the anonymous activity was not spread evenly. It concentrated around the moment the story broke and continued past the embargo lift.
 
 ```{r}
 #| label: fig-anontiming
@@ -272,13 +274,14 @@ anon_timing <- comms %>%
   count(round_index, name = "n") %>%
   mutate(window = if_else(round_index >= 21, "After 5 PM", "Before 5 PM"))
 
+# Amber shades: this chart concerns concealed advocacy, not the breach itself.
 ggplot(anon_timing, aes(x = round_index, y = n, fill = window)) +
   geom_col(width = 0.6) +
   geom_vline(xintercept = 20.5, linetype = "dashed", color = "grey50") +
   annotate("text", x = 20.4, y = max(anon_timing$n) * 0.95,
            label = "SaltWind publishes (5 PM)", hjust = 1.05, vjust = 1,
            size = 3.3, color = "grey45") +
-  scale_fill_manual(values = c("Before 5 PM" = "#e08a7a", "After 5 PM" = "#c0392b"),
+  scale_fill_manual(values = c("Before 5 PM" = "#f1c58f", "After 5 PM" = "#d47a22"),
                     name = NULL) +
   labs(title = "Anonymous posting steps up after the story breaks",
        subtitle = "Anonymous posts per round on the crisis day",
@@ -310,7 +313,7 @@ comms %>%
   ggplot(aes(x = n, y = reorder(message_type, n))) +
   geom_col(width = 0.7, fill = "#b8c4d0") +
   geom_col(data = ~filter(.x, message_type == "Public post"),
-           width = 0.7, fill = "#c0392b") +
+           width = 0.7, fill = "#243447") +
   geom_text(aes(label = n), hjust = -0.2, size = 4, color = "grey30") +
   scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
   labs(title = "Message type largely echoes the channel split and adds little",
@@ -323,7 +326,7 @@ comms %>%
 ::: callout-note
 ## Findings
 
-Broadcasts and one-on-one chats make up the bulk of the traffic, with public posts a small share highlighted here in red. Across the full dataset, message type largely reproduces the internal-versus-public distinction already captured by channel type, and adds limited explanatory value beyond it. We record it here because a thorough exploration should show the variables that added little as well as the ones that discriminated. The signal in this dataset is in who spoke, on which channel, and when, not in the message type field.
+Broadcasts and one-on-one chats make up the bulk of the traffic, with public posts a small share highlighted here in navy. Across the full dataset, message type largely reproduces the internal-versus-public distinction already captured by channel type, and adds limited explanatory value beyond it. We record it here because a thorough exploration should show the variables that added little as well as the ones that discriminated. The signal in this dataset is in who spoke, on which channel, and when, not in the message type field.
 :::
 
 
@@ -331,4 +334,4 @@ Broadcasts and one-on-one chats make up the bulk of the traffic, with public pos
 
 The first pass surfaced a clear set of facts. There is one unmistakable anomaly, the crisis day. There is a boundary that matters, internal against public, that the agents crossed only late in the day. The surge was driven by a few agents while oversight receded, and the reply structure reorganised around Legal. We also found one dead end: the price field was too unreliable to use, so the project leans on communication data throughout.
 
-What exploration could not settle is intent. Volume, channels, and structure show what happened, but not why, and not who was really behind the public messaging. Those questions, the planning behind the response and the recorded authorship of the anonymous posts, are what the application's later modules and the Findings page take up.
+What exploration could not settle is intent. Volume, channels, and structure show what happened, but not why, and not who was really behind the public messaging. Those questions, the planning behind the response and the recorded authorship of the anonymous posts, are what **The Trail** and **The Verdict**, together with the Findings page, take up.

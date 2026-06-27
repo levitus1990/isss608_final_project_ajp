@@ -88,15 +88,15 @@ crisis <- round_summary %>% filter(round_index >= 13)
 ggplot(crisis, aes(round_index, n_public)) +
   geom_col(width = 0.7, fill = "#b8c4d0") +
   geom_col(data = filter(crisis, round_index >= 21),
-           width = 0.7, fill = "#c0392b") +
+           width = 0.7, fill = "#2e7d6e") +
   geom_vline(xintercept = 20.5, linetype = "dashed", color = "grey50") +
   annotate("text", x = 20.5, y = max(crisis$n_public),
            label = "SaltWind publishes (5 PM)",
            hjust = 1.05, vjust = 1, size = 3.3, color = "grey40") +
   scale_x_continuous(breaks = 13:22,
                      labels = c("9 AM","10","11","12 PM","1","2","3","4","5 PM","6 PM")) +
-  labs(title = "Public posting holds flat all afternoon, then jumps after SaltWind",
-       subtitle = "Public posts per hour on the crisis day",
+  labs(title = "Public posting holds flat, then jumps after SaltWind",
+       subtitle = "Public posts per hour. Green marks posts after the 5 PM scoop.",
        x = "Hour of the crisis day", y = "Public posts") +
   theme_house()
 ```
@@ -119,8 +119,12 @@ events <- tribble(
   mutate(actor = factor(actor,
            levels = c("External","Consent","Internal","Public","System")))
 
-actor_cols <- c("External"="#c0392b","Consent"="#2471a3",
-                "Internal"="#6a4c93","Public"="#1a3a6b","System"="#7f8c8d")
+# Colour logic: red = the actual external scoop; green = the consent that
+# clears the agents; navy = neutral internal/public agent actions (the trigger
+# and first post are a defensible consent-gated response, not suspicious
+# conduct, so they are NOT amber); grey = the system embargo event.
+actor_cols <- c("External"="#b73a3a","Consent"="#2e7d6e",
+                "Internal"="#243447","Public"="#243447","System"="#7f8c8d")
 
 ggplot(events, aes(x = pos, y = 0)) +
   # connecting spine
@@ -187,9 +191,9 @@ baseline_stats %>%
   ggplot(aes(x = msgs_per_round, y = reorder(agent_label, msgs_per_round),
              fill = phase)) +
   geom_col(position = "dodge", width = 0.7) +
-  scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#c0392b"),
+  scale_fill_manual(values = c("Baseline" = "#b8c4d0", "Crisis" = "#d47a22"),
                     name = NULL) +
-  labs(title = "Legal and Social-Manager surge while the supervisors go quiet",
+  labs(title = "Legal and Social-Manager surge; supervisors go quiet",
        subtitle = "Messages per simulation round, baseline against crisis day",
        x = "Messages per simulation round", y = NULL) +
   theme_house() +
@@ -202,7 +206,7 @@ The sharpest single signal is Legal's anonymous posting. It does not amplify on 
 
 # Finding 3: The response was planned in advance
 
-The third question is intent. The intent chain is six messages from Legal's own communications, in order. It is the strongest evidence in the dataset, and it is the half that the external-leak reading did not have.
+The third question is intent. This sequence is explored interactively in **The Trail**. The intent chain is six messages from Legal's own communications, in order. It is the strongest evidence in the dataset, and it is the half that the external-leak reading did not have.
 
 ::: callout-warning
 ## The intent chain, in Legal's own words {.unnumbered}
@@ -239,6 +243,9 @@ anon_timing <- comms %>%
     "Scoop to lift (5 to 6 PM)",
     "After the embargo lifted (post-6 PM)")))
 
+# Three shades of amber. The post-lift bars are NOT green: although those posts
+# ran after the embargo lifted, the conduct is still concealed advocacy and is
+# not cleared.
 ggplot(anon_timing, aes(x = round_index, y = n, fill = window)) +
   geom_col(width = 0.6) +
   geom_vline(xintercept = 20.5, linetype = "dashed", color = "grey50") +
@@ -250,9 +257,9 @@ ggplot(anon_timing, aes(x = round_index, y = n, fill = window)) +
            label = "embargo lifts (6 PM)", hjust = -0.05, vjust = 1,
            size = 3.2, color = "grey45") +
   scale_fill_manual(values = c(
-    "Before the scoop (pre-5 PM)"          = "#e9b7ac",
-    "Scoop to lift (5 to 6 PM)"            = "#d4664f",
-    "After the embargo lifted (post-6 PM)" = "#c0392b"),
+    "Before the scoop (pre-5 PM)"          = "#f4d6ad",
+    "Scoop to lift (5 to 6 PM)"            = "#e5a253",
+    "After the embargo lifted (post-6 PM)" = "#b96518"),
     name = NULL) +
   labs(title = "Half the anonymous posts came after the embargo had already lifted",
        subtitle = "Anonymous posts per round on the crisis day",
@@ -292,9 +299,9 @@ The reason the two original reports disagreed is that each held a different laye
 
 - On the **timeline and behavioural evidence alone**, the breach looks like a containment failure with the origin outside the agents. This is the first report's reading. It is coherent, and it is incomplete.
 - On the **intent chain alone**, the breach looks like a deliberate, pre-planned leak. This is the second report's reading. The chain is real, but it is attached to the wrong act.
-- With **all of the evidence admitted**, the picture resolves. An external scoop triggered the execution of a pre-planned, consent-gated response, ..a separate concealed advocacy ran alongside it on a channel with no recorded Judge participation.
+- With **all of the evidence admitted**, the picture resolves. An external scoop triggered the execution of a pre-planned, consent-gated response, and a separate concealed advocacy ran alongside it on a channel with no recorded Judge participation.
 
-No single perspective captures this. Only the full evidence base does, which is why the app is built to admit the evidence one layer at a time and let the verdict move as it does.
+No single perspective captures this. Only the full evidence base does. This is why **The Verdict** admits the evidence one layer at a time and shows how the conclusion changes.
 :::
 
 The answer the data supports is not "deliberate leak" and not "system breakdown." The logs do not support an agent-originated breach: the merger reached the public through the wider information environment, which the agents did not control. The early announcement was a planned response constructed to be defensible. The separate finding was concealed advocacy that the recorded compliance attention did not cover. Both original analyses were half right. The full answer needed both halves, plus the layer that neither had looked at closely.
