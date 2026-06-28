@@ -24,6 +24,7 @@ library(visNetwork)
 library(gt)
 library(gtExtras)
 library(igraph)
+library(svglite)
 
 `%||%` <- function(a, b) if (is.null(a)) b else a
 
@@ -568,11 +569,10 @@ server <- function(input, output, session) {
     
     tbl %>%
       gt() %>%
-      # sparkline: navy line, amber crisis-region marker (activity, not guilt)
-      gt_plt_sparkline(Trajectory, type = "shaded", same_limit = FALSE,
+      # FIX: Changed type to "default" based on the allowed arguments
+      gt_plt_sparkline(Trajectory, type = "default", same_limit = FALSE,
                        label = FALSE,
                        palette = c("#243447", "transparent", "transparent", "#d47a22", "transparent")) %>%
-      # diverging heat: blue (reduced) -> neutral -> amber (increased)
       gt_color_rows(columns = Change, palette = c("#3678a8", "#f4f4f4", "#d47a22"),
                     domain = c(-6, 11)) %>%
       cols_label(Change = "Net change / rd", Trajectory = "All 23 rounds") %>%
@@ -581,8 +581,9 @@ server <- function(input, output, session) {
       tab_options(table.font.size = px(13),
                   heading.title.font.size = px(15),
                   column_labels.font.weight = "bold")
+    
   })
-  
+     
   # ============ MODULE 3 ============
   output$chain_cards <- renderUI({
     cards <- lapply(seq_len(nrow(intent_chain)), function(i) {
