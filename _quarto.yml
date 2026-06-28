@@ -31,7 +31,7 @@ website:
           - text: "{{< fa book >}} User Guide"
             href: user_guide.qmd
           - text: "{{< fa rocket >}} Shiny App"
-            href: "https://isss608amk.shinyapps.io/isss608-finalproject/"
+            href: "https://isss608amk.shinyapps.io/isss608-final-project-ajp/"
       - text: "Github"
         menu:
           - text: "{{< fa code >}} Project Site"
