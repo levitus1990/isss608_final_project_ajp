@@ -217,7 +217,7 @@ ui <- navbarPage(
     div(class = "app-sub", "Baseline behaviour against the crisis day."),
     sidebarLayout(
       sidebarPanel(
-        width = 3,
+        width = 4,
         selectInput("agent", "Select agent",
                     choices = agent_choices, selected = "legal_agent"),
         helpText("Baseline is rounds 0 to 12 (May 17 to Jun 4, daily).",
@@ -228,10 +228,20 @@ ui <- navbarPage(
         hr(),
         helpText("Cards compare the selected agent's baseline against the",
                  "crisis day. The chart shows each round's deviation from",
-                 "that agent's own baseline.")
+                 "that agent's own baseline."),
+        
+        # --- NEW PLACEMENT: Table moved to the sidebar ---
+        hr(),
+        h4("Agent summary", style = "font-size: 15px; font-weight: bold; margin-top: 20px;"),
+        p(style = "color:#777; font-size:12px;",
+          "The net shift per agent, and their activity across all 23 rounds."),
+        # Wrapped in a div to prevent horizontal overlap on small screens
+        div(style = "overflow-x: auto; margin-top: 10px;", 
+            gt_output("agent_table"))
       ),
+      
       mainPanel(
-        width = 9,
+        width = 8,
         fluidRow(
           column(3, div(class = "metric-card",
                         p(class = "metric-label", "Messages / round"),
@@ -257,13 +267,9 @@ ui <- navbarPage(
         p(style = "color:#777; font-size:13px;",
           "Each agent's shift from baseline to crisis. Legal and Social-Manager surged;",
           "the supervisory agents reduced activity, with Platform-Trust dropping most."),
-        plotOutput("slopeplot", height = "460px"),
-        br(),
-        h4("Agent summary: trajectory and magnitude"),
-        p(style = "color:#777; font-size:13px;",
-          "The net shift per agent, and the full shape of their activity across all 23 rounds.",
-          "The chart above shows where each agent started and ended; this shows how they got there."),
-        gt_output("agent_table")
+        plotOutput("slopeplot", height = "460px")
+        
+        # --- DELETED: Table UI elements used to be here ---
       )
     )
   ),
