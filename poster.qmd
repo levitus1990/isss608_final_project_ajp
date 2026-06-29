@@ -1,6 +1,9 @@
 ---
-title: "poster"
+title: "Poster"
 format: html
+lightbox: auto
 ---
 
 Click the poster to view full size.
+
+![](image/Unmasking%20the%20Leak%20Poster%20v1.jpg)
