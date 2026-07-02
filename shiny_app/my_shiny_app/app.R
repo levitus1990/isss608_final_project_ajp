@@ -1,25 +1,44 @@
 # =====================================================================
 # app.R   Unmasking the Leak (VAST Challenge 2026 MC1)
-#   Tab 1  The Day     (Module 1): crisis scrubber, timeline, feed, metrics
-#   Tab 2  The Norm    (Module 2): baseline vs crisis, z-score anomaly
-#   Tab 3  The Intent  (Module 3): intent chain and anonymous reveal
-#   Tab 4  The Verdict (Module 4): evidence-layer toggles and readouts
+#   Tab 1  The Day      (Module 1): crisis scrubber, timeline, feed
+#   Tab 2  The Baseline (Module 2): baseline vs crisis, z-score anomaly
+#   Tab 3  The Trail    (Module 3): intent chain and anonymous reveal
+#   Tab 4  The Verdict  (Module 4): evidence-layer toggles and readouts
 # Data: .rds files produced by data_prep.R (in ./data/)
 #
-# COLOUR DISCIPLINE (Tier 1 pass):
-#   navy   #243447 / #2d3e50  structure, navigation, "current time"
-#   neutral #b8c4d0 / #9aa7b4  baseline, ordinary agents
+# COLOUR DISCIPLINE:
+#   navy   #243447            structure, navigation, the selected round
+#   neutral #b8c4d0 / #E6EBF0 baseline agents / unselected interface state
 #   amber  #d47a22            suspicion / activity / crisis / person-of-interest
 #   green  #2e7d6e            cleared / post-consent / resolved evidence
 #   blue   #3678a8            reduced activity / downward movement
-#   red    #c0392b            reserved: actual leak / breach events only
-# No plot logic or copy was changed in this pass; colours only.
+#   red    #b73a3a / #c0392b  reserved: actual leak / scoop events only
+#
+# FEEDBACK REVISION (this pass):
+#   Module 1: volume chart is now interactive (plotly). Hover shows the
+#     round, time, and message count; clicking a bar jumps the whole
+#     module (slider, pins, network, feed) to that round. Only the
+#     selected round is highlighted navy (the old elapsed/ahead fill
+#     implied the views were cumulative; they are per-round). A red
+#     marker at the 5 PM boundary fixes SaltWind's scoop in the chart.
+#     The slider and play button remain for narrative replay; bar click,
+#     slider, and play are synchronised. Network nodes and edges carry
+#     hover tooltips, with a one-line legend.
+#   Module 2: the four metric cards were removed as redundant; a single
+#     dynamic summary line replaces them. The z-score chart and the
+#     dumbbell sit side by side so the module fits one page. The agent
+#     table stays in the sidebar, compacted.
+#   Module 3: both evidence stacks scroll internally with sticky
+#     headers, so the page itself does not scroll.
+#   Module 4: an "Evidence admitted: X of 4" counter reinforces the
+#     layer mechanic. Verdict logic unchanged.
 # =====================================================================
 
 library(shiny)
 library(dplyr)
 library(ggplot2)
 library(scales)
+library(plotly)
 library(visNetwork)
 library(gt)
 library(gtExtras)
@@ -46,12 +65,6 @@ net_nodes <- data.frame(
   id    = agents$agent_id,
   label = agents$agent_label,
   stringsAsFactors = FALSE
-)
-
-# round_index to human label for the slider
-round_labels <- setNames(
-  format(round_summary$ts, "%b %d, %H:%M"),
-  as.character(round_summary$round_index)
 )
 
 chain_headline <- c(
@@ -83,7 +96,7 @@ theme_house <- function() {
 app_css <- HTML("
   body { background:#f5f7f9; color:#243447;
          font-family:'Segoe UI', Arial, sans-serif; }
-  .app-sub { color:#777; margin-bottom:18px; }
+  .app-sub { color:#777; margin-bottom:10px; }
 
   /* ---- outer shell: navy navbar ---- */
   .navbar { background:#243447 !important; border:none; border-radius:0;
@@ -106,12 +119,15 @@ app_css <- HTML("
               letter-spacing:.02em; font-size:15px; }
   .mod-band .mod-no { color:#9fb0c2; font-weight:700; margin-right:8px; }
 
-  .metric-card { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
-                 padding:16px 18px; text-align:center; height:100%; }
-  .metric-label { font-size:12px; color:#888; margin:0; }
-  .metric-val   { font-size:24px; font-weight:700; margin:4px 0 0; color:#243447; }
-  .metric-shift { font-size:12px; margin-top:4px; }
-  .up { color:#d47a22; } .down { color:#3678a8; } .flat { color:#8b97a6; }
+  /* ---- what-to-notice line (one interpretation per screen) ---- */
+  .notice-line { font-size:13px; color:#243447; margin:0 0 14px; }
+  .notice-tag { display:inline-block; font-size:10px; font-weight:700;
+                letter-spacing:.05em; padding:2px 8px; border-radius:12px;
+                background:#eef2f6; color:#243447; margin-right:8px; }
+
+  /* ---- chart heading (plotly charts carry their titles as HTML) ---- */
+  .chart-title { font-weight:700; font-size:14px; color:#243447; margin:0 0 2px; }
+  .chart-sub   { font-size:12px; color:#8a949f; margin:0 0 4px; }
 
   /* Module 1 */
   .now-pill { display:inline-block; background:#243447; color:#fff; border-radius:20px;
@@ -137,7 +153,17 @@ app_css <- HTML("
   .prior-title { font-size:13px; font-weight:700; color:#9a4a13; letter-spacing:.02em; }
   .prior-body { font-size:12.5px; color:#5b4636; margin-top:6px; line-height:1.5; }
 
-  /* Module 3 */
+  /* Module 2 */
+  .agent-strip { background:#fff; border:1px solid #e6e6e6; border-left:4px solid #243447;
+                 border-radius:8px; padding:10px 14px; margin-bottom:12px;
+                 font-size:14px; color:#243447; font-weight:600; }
+  .agent-table-wrap { width:100%; overflow-x:auto; }
+  .agent-table-wrap .gt_table { min-width:100%; }
+
+  /* Module 3: internal scroll panels with sticky headers */
+  .trail-panel { max-height: calc(100vh - 260px); overflow-y:auto; padding-right:8px; }
+  .trail-head  { position: sticky; top:0; background:#f5f7f9; z-index:5;
+                 padding-bottom:10px; }
   .chain-card { background:#fff; border:1px solid #e6e6e6; border-left:4px solid #b8c4d0;
                 border-radius:8px; padding:14px 18px; margin-bottom:12px; }
   /* post-consent steps are cleared/resolved evidence: green, not red */
@@ -163,6 +189,9 @@ app_css <- HTML("
   /* Module 4 */
   .layer-box { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
                padding:16px 18px; margin-bottom:16px; }
+  .count-pill { display:inline-block; background:#eef2f6; color:#243447;
+                border-radius:20px; padding:5px 14px; font-size:12px;
+                font-weight:700; letter-spacing:.03em; margin-bottom:12px; }
   .verdict-card { background:#fff; border:1px solid #e6e6e6; border-radius:10px;
                   padding:18px 20px; margin-bottom:14px; }
   .verdict-card.secondary { border-left:4px solid #d47a22; }
@@ -189,7 +218,10 @@ ui <- navbarPage(
     "The Day",
     div(class = "mod-band", span(class = "mod-no", "MODULE 1"), "THE DAY"),
     div(class = "app-sub",
-        "Drag through the timeline and watch the crisis day unfold."),
+        "Drag the slider, press play, or click any bar in the volume chart.",
+        " Every view shows the selected round only."),
+    div(class = "notice-line", span(class = "notice-tag", "WHAT TO NOTICE"),
+        "The agents' merger-confirming posts follow the 5 PM scoop; they do not precede it."),
     sliderInput("rnd", NULL, min = 0, max = 22, value = 15, step = 1,
                 width = "100%", ticks = FALSE,
                 animate = animationOptions(interval = 900)),
@@ -197,10 +229,14 @@ ui <- navbarPage(
       column(8,
              uiOutput("day_now"),
              uiOutput("day_pins"),
-             plotOutput("day_plot", height = "230px"),
+             p(class = "chart-title", "Message volume by round"),
+             p(class = "chart-sub",
+               "Each bar is one round; the navy bar is the selected round. Click any bar to jump to it. The red line is SaltWind's 5 PM publication."),
+             plotlyOutput("day_plot", height = "230px"),
              div(style = "margin-top:8px;",
                  p(style = "font-size:12px; color:#888; margin-bottom:2px;",
-                   "Who replied to whom this hour. Node size shows messages sent; Legal stays central."),
+                   "Who replied to whom in the selected round. Hover a node for details.",
+                   " Grey = other agents \u00b7 Amber = Legal-Agent \u00b7 Arrow = reply direction."),
                  visNetworkOutput("day_network", height = "230px")),
              uiOutput("prior_incident")),
       
@@ -215,6 +251,8 @@ ui <- navbarPage(
     "The Baseline",
     div(class = "mod-band", span(class = "mod-no", "MODULE 2"), "THE BASELINE"),
     div(class = "app-sub", "Baseline behaviour against the crisis day."),
+    div(class = "notice-line", span(class = "notice-tag", "WHAT TO NOTICE"),
+        "Legal and Social-Manager surged, while the supervisory agents reduced activity. Anomaly is not proof of wrongdoing."),
     sidebarLayout(
       sidebarPanel(
         width = 4,
@@ -226,50 +264,23 @@ ui <- navbarPage(
                  "messages per simulation round, read as direction and magnitude",
                  "rather than exact time-based rates."),
         hr(),
-        helpText("Cards compare the selected agent's baseline against the",
-                 "crisis day. The chart shows each round's deviation from",
-                 "that agent's own baseline."),
-        
-        # --- NEW PLACEMENT: Table moved to the sidebar ---
-        hr(),
         h4("Agent summary", style = "font-size: 15px; font-weight: bold; margin-top: 20px;"),
         p(style = "color:#777; font-size:12px;",
           "The net shift per agent, and their activity across all 23 rounds."),
-        # Wrapped in a div to prevent horizontal overlap on small screens
-        div(style = "overflow-x: auto; margin-top: 10px;", 
+        div(class = "agent-table-wrap", style = "margin-top: 10px;",
             gt_output("agent_table"))
       ),
       
       mainPanel(
         width = 8,
+        uiOutput("agent_strip"),
         fluidRow(
-          column(3, div(class = "metric-card",
-                        p(class = "metric-label", "Messages / round"),
-                        p(class = "metric-val", textOutput("m_rate", inline = TRUE)),
-                        p(class = "metric-shift", uiOutput("m_rate_shift")))),
-          column(3, div(class = "metric-card",
-                        p(class = "metric-label", "Public share"),
-                        p(class = "metric-val", textOutput("m_pub", inline = TRUE)),
-                        p(class = "metric-shift", uiOutput("m_pub_shift")))),
-          column(3, div(class = "metric-card",
-                        p(class = "metric-label", "Anonymous posts"),
-                        p(class = "metric-val", textOutput("m_anon", inline = TRUE)),
-                        p(class = "metric-shift", uiOutput("m_anon_shift")))),
-          column(3, div(class = "metric-card",
-                        p(class = "metric-label", "Peak crisis z-score"),
-                        p(class = "metric-val", textOutput("m_z", inline = TRUE)),
-                        p(class = "metric-shift", span(class = "flat", "vs own baseline"))))
+          column(6, plotOutput("zplot", height = "430px")),
+          column(6, plotOutput("slopeplot", height = "430px"))
         ),
-        br(),
-        plotOutput("zplot", height = "380px"),
-        br(),
-        h4("Every agent at once: baseline to crisis"),
-        p(style = "color:#777; font-size:13px;",
-          "Each agent's shift from baseline to crisis. Legal and Social-Manager surged;",
-          "the supervisory agents reduced activity, with Platform-Trust dropping most."),
-        plotOutput("slopeplot", height = "460px")
-        
-        # --- DELETED: Table UI elements used to be here ---
+        p(style = "color:#777; font-size:12px; margin-top:8px;",
+          "Left: each round's deviation from the selected agent's own baseline; crisis bars are amber.",
+          " Right: every agent's baseline-to-crisis shift; amber rows surged, blue rows reduced activity.")
       )
     )
   ),
@@ -279,25 +290,30 @@ ui <- navbarPage(
     "The Trail",
     div(class = "mod-band", span(class = "mod-no", "MODULE 3"), "THE TRAIL"),
     div(class = "app-sub", "The planned response, and who was really posting."),
+    div(class = "notice-line", span(class = "notice-tag", "WHAT TO NOTICE"),
+        "The response was planned and consent-gated. Separately, all twelve anonymous posts trace to Legal."),
     fluidRow(
       column(6,
-             h4("The intent chain"),
-             p(style = "color:#777; font-size:13px;",
-               "Six messages, in order, from Legal's own communications.",
-               "Briefing counsel the day before could look like Legal planned the breach,",
-               "but by then a leak was clearly coming. This is a planned response,",
-               "not a planned leak. The trigger fires only after the scoop and after consent."),
-             uiOutput("chain_cards")),
+             div(class = "trail-panel",
+                 div(class = "trail-head",
+                     h4("The intent chain"),
+                     p(style = "color:#777; font-size:13px; margin-bottom:0;",
+                       "Six messages, in order, from Legal's own communications.",
+                       "Briefing counsel the day before could look like Legal planned the breach,",
+                       "but by then a leak was clearly coming. This is a planned response,",
+                       "not a planned leak. The trigger fires only after the scoop and after consent.")),
+                 uiOutput("chain_cards"))),
       column(6,
-             h4("The anonymous channel"),
-             p(style = "color:#777; font-size:13px;",
-               "Twelve posts that appeared to the public as neutral, third party",
-               "commentary across the crisis day. Who actually wrote them?"),
-             div(style = "margin-bottom:12px;",
-                 actionButton("reveal_btn", "Reveal authors",
-                              class = "btn-reveal", icon = icon("eye")),
-                 actionButton("reset_btn", "Reset", icon = icon("rotate-left"))),
-             uiOutput("anon_cards"))
+             div(class = "trail-panel",
+                 div(class = "trail-head",
+                     h4("The anonymous channel"),
+                     p(style = "color:#777; font-size:13px;",
+                       "Twelve posts that appeared to the public as neutral, third party",
+                       "commentary across the crisis day. Who actually wrote them?"),
+                     div(actionButton("reveal_btn", "Reveal authors",
+                                      class = "btn-reveal", icon = icon("eye")),
+                         actionButton("reset_btn", "Reset", icon = icon("rotate-left")))),
+                 uiOutput("anon_cards")))
     )
   ),
   
@@ -307,6 +323,8 @@ ui <- navbarPage(
     div(class = "mod-band", span(class = "mod-no", "MODULE 4"), "THE VERDICT"),
     div(class = "app-sub",
         "Admit each layer of evidence and watch the answer take shape."),
+    div(class = "notice-line", span(class = "notice-tag", "WHAT TO NOTICE"),
+        "The primary breach question and the concealed-conduct question have different answers."),
     sidebarLayout(
       sidebarPanel(
         width = 4,
@@ -315,10 +333,10 @@ ui <- navbarPage(
             p(style = "font-size:12px; color:#888;",
               "Tick layers to admit them into the analysis. The answers",
               "update as the evidence base grows."),
-            checkboxInput("L1", "1 · Public timeline", value = FALSE),
-            checkboxInput("L2", "2 · Behavioural anomalies", value = FALSE),
-            checkboxInput("L3", "3 · Intent chain", value = FALSE),
-            checkboxInput("L4", "4 · Anonymous authorship", value = FALSE),
+            checkboxInput("L1", "1 \u00b7 Public timeline", value = FALSE),
+            checkboxInput("L2", "2 \u00b7 Behavioural anomalies", value = FALSE),
+            checkboxInput("L3", "3 \u00b7 Intent chain", value = FALSE),
+            checkboxInput("L4", "4 \u00b7 Anonymous authorship", value = FALSE),
             hr(),
             actionButton("admit_all", "Admit all four", class = "btn-primary btn-sm"),
             actionButton("clear_all", "Clear", class = "btn-sm")
@@ -326,6 +344,7 @@ ui <- navbarPage(
       ),
       mainPanel(
         width = 8,
+        uiOutput("v_count"),
         div(class = "verdict-card",
             span(class = "verdict-tag primary", "PRIMARY QUESTION"),
             p(class = "verdict-q", "Did an agent cause the embargo breach?"),
@@ -351,11 +370,22 @@ server <- function(input, output, session) {
   # debounce the slider so dragging doesn't thrash the renders
   cur_round <- reactive(input$rnd) %>% debounce(250)
   
+  # Bar chart -> network interactivity: clicking a bar jumps every view
+  # (slider, pins, network, feed) to that round. Slider, play, and click
+  # all drive the same value, so the three controls stay synchronised.
+  observeEvent(event_data("plotly_click", source = "dayplot"), {
+    d <- event_data("plotly_click", source = "dayplot")
+    if (!is.null(d) && !is.null(d$x)) {
+      rd <- max(0, min(22, round(d$x)))
+      updateSliderInput(session, "rnd", value = rd)
+    }
+  })
+  
   output$day_now <- renderUI({
     rs <- round_summary %>% filter(round_index == cur_round())
     div(span(class = "now-pill", format(rs$ts, "%A %b %d, %H:%M")),
         span(style = "margin-left:12px; color:#888; font-size:13px;",
-             paste0("Round ", rs$round_index, " of 22  ·  market: ",
+             paste0("Round ", rs$round_index, " of 22  \u00b7  market: ",
                     rs$sentiment_state %||% "n/a")))
   })
   
@@ -368,29 +398,59 @@ server <- function(input, output, session) {
       cls <- if (same_hour) paste("pin now", if (e$type == "leak") "leak" else "")
       else if (is_past) paste("pin past", if (e$type == "leak") "leak" else "")
       else "pin"
-      span(class = cls, paste0(format(e$ts, "%H:%M"), " · ", e$label))
+      span(class = cls, paste0(format(e$ts, "%H:%M"), " \u00b7 ", e$label))
     })
     div(class = "pin-row", tagList(pins))
   })
   
-  output$day_plot <- renderPlot({
+  # Interactive volume chart. Only the selected round is navy (interface
+  # state); every other bar is a light neutral. Red is reserved for the
+  # SaltWind 5 PM publication marker. Hover gives round, time, and count.
+  output$day_plot <- renderPlotly({
     cr <- cur_round()
     rs <- round_summary %>%
-      mutate(state = if_else(round_index <= cr, "elapsed", "ahead"))
-    ggplot(rs, aes(round_index, n_msgs, fill = state)) +
-      geom_col(width = 0.8) +
-      geom_vline(xintercept = cr, color = "#243447", linewidth = 1) +
-      geom_vline(xintercept = 12.5, linetype = "dashed", color = "grey60") +
-      annotate("text", x = 12.5, y = max(rs$n_msgs),
-               label = "crisis day", hjust = -0.05, vjust = 1,
-               size = 3.3, color = "grey45") +
-      scale_fill_manual(values = c("elapsed" = "#243447", "ahead" = "#e6ebf0"),
-                        guide = "none") +
-      scale_x_continuous(breaks = seq(0, 22, 2)) +
-      labs(title = "Message volume across the timeline",
-           subtitle = "Dark is elapsed up to the slider. The line is the current position.",
-           x = "Round", y = "Messages") +
-      theme_house()
+      mutate(
+        selected = round_index == cr,
+        hovertxt = sprintf("Round %d \u00b7 %s<br>%d messages",
+                           round_index, format(ts, "%b %d, %H:%M"), n_msgs)
+      )
+    ymax <- max(rs$n_msgs)
+    
+    p <- plot_ly(
+      rs, x = ~round_index, y = ~n_msgs, type = "bar",
+      marker = list(color = ifelse(rs$selected, "#243447", "#E6EBF0"),
+                    line = list(width = 0)),
+      text = ~hovertxt, hoverinfo = "text",
+      source = "dayplot"
+    ) %>%
+      layout(
+        bargap = 0.2,
+        xaxis = list(title = "Round", dtick = 2, fixedrange = TRUE),
+        yaxis = list(title = "Messages", fixedrange = TRUE),
+        showlegend = FALSE,
+        margin = list(l = 55, r = 15, t = 30, b = 40),
+        hoverlabel = list(bgcolor = "white", font = list(color = "#243447")),
+        shapes = list(
+          # crisis-day divider (structural, dashed grey)
+          list(type = "line", x0 = 12.5, x1 = 12.5, yref = "paper",
+               y0 = 0, y1 = 1, line = list(dash = "dash", color = "#9aa7b4", width = 1)),
+          # SaltWind publishes at 5 PM: the boundary before round 21 (red, reserved)
+          list(type = "line", x0 = 20.5, x1 = 20.5, yref = "paper",
+               y0 = 0, y1 = 1, line = list(color = "#b73a3a", width = 2))
+        ),
+        annotations = list(
+          list(x = 12.5, y = 1.04, yref = "paper", xanchor = "left",
+               text = "crisis day", showarrow = FALSE,
+               font = list(size = 11, color = "#8a949f")),
+          list(x = 20.4, y = 1.04, yref = "paper", xanchor = "right",
+               text = "SaltWind publishes \u00b7 5 PM", showarrow = FALSE,
+               font = list(size = 11, color = "#b73a3a"))
+        )
+      ) %>%
+      config(displaylogo = FALSE,
+             modeBarButtonsToRemove = c("lasso2d", "select2d", "autoScale2d", "zoomIn2d", "zoomOut2d"))
+    
+    event_register(p, "plotly_click")
   })
   
   output$day_feed_head <- renderUI({
@@ -399,7 +459,7 @@ server <- function(input, output, session) {
     tagList(
       h4("Message feed"),
       p(style = "color:#888; font-size:12px; margin-bottom:10px;",
-        sprintf("%s  ·  showing %d of %d messages this round",
+        sprintf("%s  \u00b7  showing %d of %d messages this round",
                 format(rs$ts, "%H:%M"), min(10, nrow(cm)), nrow(cm)))
     )
   })
@@ -407,7 +467,7 @@ server <- function(input, output, session) {
   # ----- prior-incident card: the @Elena leading indicator (Q3) -----
   output$prior_incident <- renderUI({
     div(class = "prior-card",
-        div(class = "prior-title", "PRIOR INCIDENT  ·  29 MAY, A WEEK BEFORE THE CRISIS"),
+        div(class = "prior-title", "PRIOR INCIDENT  \u00b7  29 MAY, A WEEK BEFORE THE CRISIS"),
         div(class = "prior-body",
             "Social-Manager publicly tagged the CivicLoom CEO with \"big things coming.\" ",
             "A CivicLoom employee liked the post before it was deleted after fourteen minutes. ",
@@ -431,7 +491,11 @@ server <- function(input, output, session) {
     nodes <- net_nodes %>%
       left_join(sent, by = c("id" = "agent_id")) %>%
       mutate(
-        value = ifelse(is.na(n), 1, n + 2),
+        n = ifelse(is.na(n), 0L, n),
+        value = n + 2,
+        # hover tooltip: agent and activity in the selected round
+        title = sprintf("<b>%s</b><br>%d message%s this round",
+                        label, n, ifelse(n == 1, "", "s")),
         # Legal is the person of interest (amber), not the culprit (red).
         # Ordinary agents stay neutral grey. Darker border on Legal for emphasis.
         color.background = ifelse(id == "legal_agent", "#d47a22", "#a8b3bf"),
@@ -440,8 +504,11 @@ server <- function(input, output, session) {
       )
     
     edges <- if (nrow(e) == 0) {
-      data.frame(from = character(0), to = character(0), value = numeric(0))
-    } else e
+      data.frame(from = character(0), to = character(0), value = numeric(0),
+                 title = character(0))
+    } else {
+      e %>% mutate(title = sprintf("%d repl%s", value, ifelse(value == 1, "y", "ies")))
+    }
     
     visNetwork(nodes, edges) %>%
       visNodes(font = list(size = 16)) %>%
@@ -461,41 +528,30 @@ server <- function(input, output, session) {
       if (nchar(txt) > 240) txt <- paste0(substr(txt, 1, 240), "\u2026")
       div(class = "feed-msg",
           span(class = "feed-who", m$agent_label %||% m$agent_id),
-          span(class = "feed-ch", paste0("  ·  ", m$channel)),
+          span(class = "feed-ch", paste0("  \u00b7  ", m$channel)),
           div(class = paste("feed-txt", if (is_pub) "pub" else ""), txt))
     })
     tagList(msgs)
   })
   
   # ============ MODULE 2 ============
-  ag_stats <- reactive({
-    bs <- baseline_stats %>% filter(agent_id == input$agent)
-    list(base = bs %>% filter(phase == "baseline"),
-         crisis = bs %>% filter(phase == "crisis"))
+  # One compact dynamic summary line replaces the four metric cards.
+  output$agent_strip <- renderUI({
+    lbl <- agents$agent_label[agents$agent_id == input$agent]
+    bs  <- baseline_stats %>% filter(agent_id == input$agent)
+    b   <- bs %>% filter(phase == "baseline")
+    cr  <- bs %>% filter(phase == "crisis")
+    gv  <- function(df, col) if (nrow(df) == 0) 0 else df[[col]][1]
+    z   <- zscores %>% filter(agent_id == input$agent, is_crisis)
+    zmax <- if (nrow(z) == 0) NA_real_ else max(z$z, na.rm = TRUE)
+    div(class = "agent-strip",
+        sprintf("%s: %.1f \u2192 %.1f messages per round \u00b7 peak crisis z %s \u00b7 %d anonymous post%s",
+                lbl,
+                gv(b, "msgs_per_round"), gv(cr, "msgs_per_round"),
+                ifelse(is.na(zmax), "n/a", sprintf("+%.1f\u03c3", zmax)),
+                as.integer(gv(cr, "n_anon")),
+                ifelse(as.integer(gv(cr, "n_anon")) == 1, "", "s")))
   })
-  getv <- function(df, col) if (nrow(df) == 0) 0 else df[[col]][1]
-  
-  output$m_rate <- renderText({ s <- ag_stats()
-  sprintf("%.1f \u2192 %.1f", getv(s$base,"msgs_per_round"), getv(s$crisis,"msgs_per_round")) })
-  output$m_pub <- renderText({ s <- ag_stats()
-  sprintf("%.0f%% \u2192 %.0f%%", 100*getv(s$base,"public_share"), 100*getv(s$crisis,"public_share")) })
-  output$m_anon <- renderText({ s <- ag_stats()
-  sprintf("%d \u2192 %d", as.integer(getv(s$base,"n_anon")), as.integer(getv(s$crisis,"n_anon"))) })
-  output$m_z <- renderText({ z <- zscores %>% filter(agent_id == input$agent, is_crisis)
-  if (nrow(z) == 0) "n/a" else sprintf("+%.1f \u03c3", max(z$z, na.rm = TRUE)) })
-  
-  shift_ui <- function(from, to, fmt = "%.1f", invert = FALSE) {
-    d <- to - from
-    cls <- if (abs(d) < 1e-9) "flat" else if ((d > 0) != invert) "up" else "down"
-    arrow <- if (abs(d) < 1e-9) "no change" else if (d > 0) "\u25b2" else "\u25bc"
-    span(class = cls, sprintf("%s %s", arrow, sprintf(fmt, abs(d))))
-  }
-  output$m_rate_shift <- renderUI({ s <- ag_stats()
-  shift_ui(getv(s$base,"msgs_per_round"), getv(s$crisis,"msgs_per_round")) })
-  output$m_pub_shift <- renderUI({ s <- ag_stats()
-  shift_ui(100*getv(s$base,"public_share"), 100*getv(s$crisis,"public_share"), "%.0f pts") })
-  output$m_anon_shift <- renderUI({ s <- ag_stats()
-  shift_ui(getv(s$base,"n_anon"), getv(s$crisis,"n_anon"), "%.0f") })
   
   output$zplot <- renderPlot({
     z <- zscores %>% filter(agent_id == input$agent)
@@ -509,8 +565,8 @@ server <- function(input, output, session) {
       # crisis bars amber (heightened activity), baseline neutral grey
       scale_fill_manual(values = c("FALSE"="#b8c4d0","TRUE"="#d47a22"), guide = "none") +
       scale_x_continuous(breaks = seq(0, 22, 2)) +
-      labs(title = paste0(lbl, ": message volume anomaly by round"),
-           subtitle = "Baseline standard deviations from this agent's own baseline mean",
+      labs(title = paste0(lbl, ": volume anomaly by round"),
+           subtitle = "Deviation from this agent's own baseline mean",
            x = "Round (0 to 12 baseline, 13 to 22 crisis day)", y = "Z-score") +
       theme_house()
   })
@@ -545,7 +601,7 @@ server <- function(input, output, session) {
       scale_color_manual(values = dir_cols, name = NULL) +
       scale_x_continuous(expand = expansion(mult = c(0.08, 0.12))) +
       labs(
-        title = "Messages per simulation round, baseline to crisis",
+        title = "Every agent: baseline to crisis",
         subtitle = "Grey dot is baseline, coloured dot is crisis. Each row is one agent.",
         x = "Messages per simulation round", y = NULL
       ) +
@@ -575,7 +631,6 @@ server <- function(input, output, session) {
     
     tbl %>%
       gt() %>%
-      # FIX: Changed type to "default" based on the allowed arguments
       gt_plt_sparkline(Trajectory, type = "default", same_limit = FALSE,
                        label = FALSE,
                        palette = c("#243447", "transparent", "transparent", "#d47a22", "transparent")) %>%
@@ -584,12 +639,14 @@ server <- function(input, output, session) {
       cols_label(Change = "Net change / rd", Trajectory = "All 23 rounds") %>%
       fmt_number(columns = Change, decimals = 1, force_sign = TRUE) %>%
       cols_align(align = "left", columns = Agent) %>%
-      tab_options(table.font.size = px(13),
-                  heading.title.font.size = px(15),
-                  column_labels.font.weight = "bold")
+      cols_width(Agent ~ px(105), Change ~ px(70), Trajectory ~ px(130)) %>%
+      tab_options(table.font.size = px(11),
+                  column_labels.font.size = px(10),
+                  column_labels.font.weight = "bold",
+                  data_row.padding = px(3))
     
   })
-     
+  
   # ============ MODULE 3 ============
   output$chain_cards <- renderUI({
     cards <- lapply(seq_len(nrow(intent_chain)), function(i) {
@@ -601,7 +658,7 @@ server <- function(input, output, session) {
           div(class = "chain-headline", chain_headline[[mid]] %||% ""),
           div(class = paste("chain-tag", if (cleared) "cleared" else ""), chain_tag[[mid]] %||% ""),
           div(class = "chain-meta",
-              paste0(row$agent_label, "  ·  ", row$channel, "  ·  ", row$timestamp)),
+              paste0(row$agent_label, "  \u00b7  ", row$channel, "  \u00b7  ", row$timestamp)),
           div(class = "chain-body", row$content))
     })
     tagList(cards)
@@ -618,7 +675,7 @@ server <- function(input, output, session) {
       div(class = "anon-card",
           div(class = "anon-body", row$content),
           div(class = paste("anon-auth", if (is_rev) "revealed" else ""),
-              paste0(auth_txt, "  ·  ", format(row$ts, "%H:%M"))))
+              paste0(auth_txt, "  \u00b7  ", format(row$ts, "%H:%M"))))
     })
     tagList(cards)
   })
@@ -632,6 +689,12 @@ server <- function(input, output, session) {
   })
   layers <- reactive(c(L1 = isTRUE(input$L1), L2 = isTRUE(input$L2),
                        L3 = isTRUE(input$L3), L4 = isTRUE(input$L4)))
+  
+  # progress indicator: reinforces the layer mechanic without clutter
+  output$v_count <- renderUI({
+    div(class = "count-pill",
+        sprintf("Evidence admitted: %d of 4", sum(layers())))
+  })
   
   # ---- PRIMARY QUESTION: did an agent cause the breach? ----
   # Origin can only be assessed once the public timeline (L1) is admitted.
