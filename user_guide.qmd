@@ -1,67 +1,152 @@
 ---
 title: "User Guide"
+subtitle: "A field guide to the evidence room"
+format:
+  html:
+    toc: true
+    toc-depth: 2
 ---
 
 # User Guide
 
-The application, *Unmasking the Leak*, is an evidence room for the TenantThread embargo breach. It is organised into four tabs, each answering one part of the investigation. This guide walks through what each tab shows and how to use it.
+## What this application is
 
-The application is live at the link in the navigation bar. You can follow along in the app as you read.
+On 5 June 2046, news of the HarborCrest merger between TenantThread and CivicLoom reached the public an hour before the 6 PM embargo lifted. Seven AI agents handled the response across 912 messages and 23 rounds. The same log produced two opposite verdicts: an external containment failure, or a deliberate act by Legal.
 
-# The Day
+This application is built as an evidence room rather than a dashboard. Each of the four modules answers one investigative question, and the final module admits evidence one layer at a time so you can watch the verdict change as the evidence base grows.
 
-The first tab replays the crisis as it happened, hour by hour.
+## The journey
 
-![The Day tab: the timeline scrubber, event pins, message volume, the reply network, the prior-incident card, and the live message feed.](image/guide_day_new.png)
+Work through the tabs in order. Each module builds on the one before.
 
-**How to use it.** Drag the slider at the top through the 23 rounds, or press the play button to the right of it to advance automatically. As you move, everything on the tab updates to that moment:
+1.  **The Day.** What happened, hour by hour? Replay the crisis with the timeline scrubber.
+2.  **The Baseline.** Who behaved differently? Compare each agent's crisis behaviour against its own normal.
+3.  **The Trail.** Who was really posting? Follow Legal's planning chain and unmask the anonymous channel.
+4.  **The Verdict.** What does it all mean? Admit the evidence layer by layer and watch the answer take shape.
 
-- The **event pins** below the slider mark key moments. A filled grey pin has already happened, a red pin is the current hour, and a faint pin is still ahead. The leak-related pins are tinted red.
-- The **volume chart** fills in dark up to your current position, so you can see how much of the conversation has elapsed.
-- The **reply network** shows who replied to whom that hour. Node size is the number of messages an agent sent, and Legal stays at the centre in red.
-- The **message feed** on the right lists the actual messages from that round. Public messages are marked with a red bar on the left.
-- Below the network, a highlighted prior-incident card flags the 29 May warning, when an agent publicly tagged the counterparty CEO a week before the crisis. It is the one earlier moment an agent put merger-adjacent intent into public, and what prompted the compliance monitor to be assigned.
+## How colour is used
 
-The tab is built so the surge is visible as you scrub: the baseline rounds are quiet, and the volume and public posting climb sharply once you pass the crisis-day line.
+Colour is semantic and consistent across the application, the project site, and the poster.
 
-# The Norm
+| Colour | Meaning |
+|----------------------------------|--------------------------------------|
+| Navy | Structure, navigation, and the current position in time |
+| Grey | Baseline and ordinary activity |
+| Amber | Heightened activity, the person of interest, and the concealed advocacy. Amber marks what deserves attention. It does not mark guilt. |
+| Green | Consent and cleared evidence |
+| Blue | Reduced activity |
+| Red | Reserved for the actual public breach: the SaltWind scoop and leak events only |
 
-The second tab compares each agent's normal behaviour against the crisis day.
+## Module 1 · The Day
 
-![The Norm tab: the agent selector, the baseline-versus-crisis metric cards, and the per-round anomaly chart.](image/guide_norm_new.png)
+**Question: what happened, hour by hour?**
 
-**How to use it.** Pick an agent from the dropdown on the left. The four cards along the top show that agent's shift from baseline to crisis: messages per round, public share, anonymous posts, and the peak anomaly score. The red triangles show the size and direction of each change.
+![Module 1, The Day, positioned at round 20 (4:00 PM on the crisis day).](/image/01-the-day.png){alt="Module 1, The Day, positioned at round 20 (4:00 PM on the crisis day)."}
 
-Below the cards, the **anomaly chart** plots each round's deviation from that agent's own baseline average. Bars to the right of the dashed line are the crisis day, shown in red. For Legal, the crisis bars sit far above the baseline, which is the behavioural signature the investigation looks for.
+What you are looking at:
 
-![Lower on the same tab: the dumbbell comparison of all agents, and the per-agent summary table with sparklines.](image/guide_norm2_new.png)
+1.  **Timeline slider** (top). 23 rounds: 0 to 12 are the baseline days, 13 to 22 are the crisis-day hours. Drag it, or press the play button beside it to animate through the day.
+2.  **Event pins.** Six key moments. Pins fill in as the slider passes them. Leak-related pins are red-toned; the current hour is navy.
+3.  **Message volume chart.** Dark bars are elapsed rounds, light bars are still ahead, and the navy line is the current position. The dashed line marks where the crisis day begins.
+4.  **Reply network.** Who replied to whom in the current round. Node size is messages sent. Legal is amber because it is the investigation's central agent, not because the network establishes guilt.
+5.  **Message feed** (right). Up to ten messages from the current round. Public posts carry an amber left edge.
+6.  **Prior incident card** (bottom). The 29 May warning sign: Social-Manager publicly tagged the CivicLoom CEO, the post was deleted within fourteen minutes, and the Judge was assigned as compliance monitor as a result.
 
-Scrolling down, two more views compare all seven agents at once. The **dumbbell chart** shows each agent's move from baseline to crisis, with red for the agents that surged and blue for those that reduced activity. The **summary table** gives each agent's net change, colour-coded, alongside a sparkline of their full trajectory across all 23 rounds.
+How to use it: drag the slider to round 21 (5:00 PM). The SaltWind pin activates, public posting spikes, and the network reorganises around Legal.
 
-# The Intent
+**Finding: the agents' merger-confirming posts follow SaltWind's 5 PM scoop, they do not precede it.**
 
-The third tab presents the planned response and the question of who was really posting.
+## Module 2 · The Baseline
 
-![The Intent tab: the six-step intent chain on the left, and the anonymous channel with the reveal button on the right.](image/guide_intent_new.png)
+**Question: who behaved differently?**
 
-**How to use it.** The left column is the **intent chain**, six messages from Legal's own communications in order. Read them top to bottom. The first cards are the planning, and the final two, tagged in red, fire only after the merger was already public.
+![Module 2, The Baseline, with Legal-Agent selected. The agent summary table sits in the sidebar.](/image/02-the-baseline.png){alt="Module 2, The Baseline, with Legal-Agent selected. The agent summary table sits in the sidebar."}
 
-The right column is the **anonymous channel**, twelve posts that appeared to the public as neutral third-party commentary during the embargo. Click the red **Reveal authors** button to unmask who actually wrote them. Click **Reset** to hide the authors again. The reveal is the point of the tab, so it is worth reading a few posts as anonymous first, then revealing.
+What you are looking at:
 
-# **The Verdict**
+1.  **Agent selector** (sidebar). Any of the seven agents. Legal-Agent is the default.
+2.  **Agent summary table** (sidebar). Every agent's net change per round, colour-coded amber for increases and blue for decreases, with a sparkline of all 23 rounds.
+3.  **Metric cards.** Four baseline to crisis comparisons for the selected agent: messages per round, public share, anonymous posts, and peak crisis z-score.
+4.  **Z-score chart.** Each round's deviation from the selected agent's own baseline mean. Crisis-day bars are amber.
+5.  **Dumbbell chart.** Every agent at once. The grey dot is baseline, the coloured dot is crisis. Amber rows surged; blue rows reduced activity.
 
-The fourth tab lets you build the answer from the evidence, one layer at a time.
+Reading notes:
 
-![The Verdict tab: the four evidence-layer toggles on the left, and the three readouts plus the interpretation on the right.](image/guide_verdict_new.png)
+- Baseline rounds are daily and crisis rounds are hourly, so figures are messages per simulation round. Read them as direction and magnitude, not as time-based rates.
+- A high z-score means unusual volume relative to that agent's own normal. It is not proof of wrongdoing.
 
-**How to use it.** Tick the evidence layers on the left to admit them into the analysis. As you do, the three readouts on the right update: whether an agent caused the embargo breach, what separate concealed conduct the investigation uncovered, and whether there were warning signs that oversight covered. The interpretation box at the bottom names which reading the current evidence reproduces.
+**Finding: Legal rose from 6.9 to 17.6 messages per round (peak +7.8 sigma) while the oversight agents reduced activity.**
 
-The tab is designed to be explored:
+## Module 3 · The Trail
 
-- Admit only the public timeline and behavioural anomalies (layers 1 and 2) and the analysis reproduces the first report's reading, an external leak and a containment failure.
+**Question: who was really posting?**
 
-- Admit only the intent chain (layer 3) and it reproduces the second report's reading, a deliberate leak.
+![The Trail before the reveal: all twelve posts read as Anonymous.](/image/03-the-trail-before.png){alt="The Trail before the reveal: all twelve posts read as Anonymous."}
 
-- Use Admit all four to see the full synthesis, where the primary answer and the secondary finding separate cleanly.
+![The Trail after Reveal authors: every post resolves to Legal-Agent.](/image/04-the-trail-after.png){alt="The Trail after Reveal authors: every post resolves to Legal-Agent."}
 
-This is the novel piece of the application. It shows not just the conclusion, but why two careful analysts, each holding part of the evidence, reached opposite verdicts.
+What you are looking at:
+
+1.  **The intent chain** (left). Six messages, in fixed order, from Legal's own communications. Steps 5 and 6 are green: consent confirmed at 5:21 PM and the go order at 5:23 PM, both after the 5:00 scoop.
+2.  **The anonymous channel** (right). Twelve posts that appeared to the public as neutral, third-party commentary across the crisis day.
+3.  **Reveal authors.** The amber button joins each post to its recorded author in the dataset.
+4.  **Reset.** Hides the authors again.
+
+How to read it: briefing outside counsel the day before could look like Legal planned the breach, but by then a leak was clearly coming. The chain shows a planned response, not a planned leak, and the trigger fires only after the scoop and after consent. The reveal shows recorded authorship: all twelve posts resolve to Legal.
+
+**Finding: Legal's response was planned but consent-gated. Separately, all twelve anonymous posts trace to Legal.**
+
+## Module 4 · The Verdict
+
+**Question: what does it all mean?**
+
+![The Verdict with two of four layers admitted. Partial evidence yields a partial verdict.](/image/07 - Verdict Partial.png){alt="The Verdict with two of four layers admitted. Partial evidence yields a partial verdict."}
+
+![The Verdict with all four layers admitted: the primary answer and the secondary finding separate.](/image/05-the-verdict.png){alt="The Verdict with all four layers admitted: the primary answer and the secondary finding separate."}
+
+What you are looking at:
+
+1.  **Evidence layers** (sidebar). Four checkboxes, one per layer: public timeline, behavioural anomalies, intent chain, anonymous authorship. Admit all four and Clear sit below them.
+2.  **Primary question card.** Did an agent cause the embargo breach?
+3.  **Secondary finding card.** What separate concealed conduct did the investigation uncover?
+4.  **Leading indicator card.** Were there warning signs, and did oversight cover them?
+5.  **Interpretation panel.** Names the analyst's report your current selection reproduces, and the synthesis once all four layers are in.
+
+How to use it: tick the layers in numerical order for the intended experience. Layers 1 and 2 alone reproduce Report A (a containment failure). Layer 3 alone reproduces Report B (a deliberate leak). All four together separate the primary answer from the secondary finding.
+
+**Finding: partial evidence yields a partial answer. The full evidence base separates the primary answer from the secondary finding.**
+
+## Try this investigation
+
+A scripted route through the argument, about five minutes:
+
+1.  Open **The Day**. Press play, or drag the slider to round 21 (5:00 PM). Watch the SaltWind pin activate and the network reorganise around Legal.
+2.  Stay at round 21 and read the **message feed**. The consent confirmation (5:21 PM) and the go order (5:23 PM) both sit after the 5:00 scoop.
+3.  Open **The Baseline** with Legal-Agent selected: 6.9 to 17.6 messages per round, peak +7.8 sigma. Then select Platform-Trust-Agent and watch the direction reverse.
+4.  Open **The Trail**. Read the six steps in order and note that steps 5 and 6 are green. Click **Reveal authors**.
+5.  Open **The Verdict**. Tick the four layers one at a time, in order, and watch the answers take shape. Finish with **Admit all four**.
+
+## FAQ
+
+**Why are figures shown per simulation round rather than per hour?** Because the baseline rounds are daily while the crisis rounds are hourly. Per-round figures keep the comparison honest: read them as direction and magnitude.
+
+**Does a high z-score mean an agent caused the leak?** No. It indicates unusual communication volume relative to that agent's own baseline. Anomaly is a reason to look closer, not a verdict.
+
+**Why is Legal highlighted in amber?** Legal is the central subject of the investigation and authored the concealed posts. The logs do not support Legal as the origin of the embargo breach, which is why the highlight is amber (attention), not red (breach).
+
+**Why do the verdicts change as I tick layers?** Each layer answers a different part of the investigation. Partial evidence produces a partial conclusion. That behaviour is the point of the module.
+
+**Does the absence of recorded Judge participation prove the Judge could not access the anonymous channel?** No. It establishes only that no Judge participation was recorded there. Whether the Judge could read the channel is not established by the logs.
+
+## Limitations
+
+1.  The logs record agent activity but not SaltWind's upstream source, so the external-origin reading rests on timing and environment fields, not a recorded source.
+2.  No recorded Judge participation on the anonymous channel indicates a potential blind spot, but does not establish whether the Judge could read it.
+3.  The market price field is unreliable on the crisis day and was excluded, so no price-reaction analysis was attempted.
+4.  The intent chain is a curated selection of six messages, chosen as the planning sequence, not a computed result.
+
+## Links
+
+- Application: <https://isss608amk.shinyapps.io/isss608-finalproject>
+- Project site: <https://isss608finalprojectajp.vercel.app>
+- Code: <https://github.com/levitus1990/isss608_final_project_ajp>
